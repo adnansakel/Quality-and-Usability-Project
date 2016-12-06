@@ -1,0 +1,33 @@
+2016-12-06 21:51:46,982 [Worker-1] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2016-12-06 21:52:11,617 [Worker-14] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.studyproject.tuberlin:bingoapp:0.0.1-SNAPSHOT @ /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/pom.xml.
+2016-12-06 21:52:12,739 [Worker-14] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2016-12-06 21:52:12,745 [Worker-14] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource to /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/target/classes
+2016-12-06 21:52:12,772 [Worker-14] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2016-12-06 21:52:12,772 [Worker-14] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/src/test/resources
+2016-12-06 21:52:13,584 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.studyproject.tuberlin:bingoapp:0.0.1-SNAPSHOT @ /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/pom.xml.
+2016-12-06 21:52:14,651 [Worker-5] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2016-12-06 21:52:14,660 [Worker-5] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource to /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/target/classes
+2016-12-06 21:52:14,671 [Worker-5] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2016-12-06 21:52:14,671 [Worker-5] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/src/test/resources
+2016-12-06 21:52:31,777 [Worker-14] INFO  o.e.m.c.i.p.ProjectConfigurationManager - Update started
+2016-12-06 21:52:32,374 [Worker-14] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.studyproject.tuberlin:bingoapp:0.0.1-SNAPSHOT @ /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/pom.xml.
+2016-12-06 21:52:32,920 [Worker-14] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /bingoapp/src/main/java
+2016-12-06 21:52:32,921 [Worker-14] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /bingoapp/src/main/resources/config
+2016-12-06 21:52:32,921 [Worker-14] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /bingoapp/src/test/java
+2016-12-06 21:52:32,928 [Worker-14] INFO  o.e.m.c.i.p.ProjectConfigurationManager - Update completed: 1 sec
+2016-12-06 21:52:33,692 [Worker-4] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2016-12-06 21:52:33,693 [Worker-4] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource to /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/target/classes
+2016-12-06 21:52:33,702 [Worker-4] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2016-12-06 21:52:33,703 [Worker-4] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/src/test/resources
+2016-12-06 21:52:35,185 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2016-12-06 21:52:35,185 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource to /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/target/classes
+2016-12-06 21:52:35,188 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2016-12-06 21:52:35,188 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/src/test/resources
+2016-12-06 21:53:20,993 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2016-12-06 21:53:20,993 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource to /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/target/classes
+2016-12-06 21:53:20,998 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2016-12-06 21:53:20,998 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/src/test/resources
+2016-12-06 21:53:47,584 [Worker-13] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2016-12-06 21:53:47,584 [Worker-13] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource to /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/target/classes
+2016-12-06 21:53:47,587 [Worker-13] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2016-12-06 21:53:47,587 [Worker-13] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /Users/admin/Documents/Android/Quality-and-Usability-Project/bingoapp/src/test/resources

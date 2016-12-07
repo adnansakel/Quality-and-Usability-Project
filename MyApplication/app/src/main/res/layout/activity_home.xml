@@ -11,13 +11,15 @@
     android:background="#8CCC8F"
     tools:context="com.example.adnansakel.bingo.HomeActivity"
     android:id="@+id/rl_home_view">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerVertical="true"
 
-        >
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +53,6 @@
             android:gravity="center"
             android:text="@string/join_game"/>
     </LinearLayout>
-
 
 
 </RelativeLayout>

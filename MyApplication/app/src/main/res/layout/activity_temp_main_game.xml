@@ -43,7 +43,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/b_block"/>
 
             <TextView
                 android:id="@+id/txt_2"
@@ -54,7 +54,7 @@
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/b_block"/>
             <TextView
                 android:id="@+id/txt_3"
                 android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/b_block"/>
             <TextView
                 android:id="@+id/txt_4"
                 android:layout_width="match_parent"
@@ -74,7 +74,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/b_block"/>
             <TextView
                 android:id="@+id/txt_5"
                 android:layout_width="match_parent"
@@ -84,7 +84,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/b_block"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/llNumberGrid_Collumn_two"
@@ -101,7 +101,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/i_block"/>
 
             <TextView
                 android:id="@+id/txt_7"
@@ -112,7 +112,7 @@
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/i_block"/>
             <TextView
                 android:id="@+id/txt_8"
                 android:layout_width="match_parent"
@@ -122,7 +122,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/i_block"/>
             <TextView
                 android:id="@+id/txt_9"
                 android:layout_width="match_parent"
@@ -132,7 +132,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/i_block"/>
             <TextView
                 android:id="@+id/txt_10"
                 android:layout_width="match_parent"
@@ -142,7 +142,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/i_block"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/llNumberGrid_Collumn_three"
@@ -159,7 +159,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/n_block"/>
 
             <TextView
                 android:id="@+id/txt_12"
@@ -170,7 +170,7 @@
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/n_block"/>
             <TextView
                 android:id="@+id/txt_13"
                 android:layout_width="match_parent"
@@ -190,7 +190,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/n_block"/>
             <TextView
                 android:id="@+id/txt_15"
                 android:layout_width="match_parent"
@@ -200,7 +200,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/n_block"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/llNumberGrid_Collumn_four"
@@ -217,7 +217,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/g_block"/>
 
             <TextView
                 android:id="@+id/txt_17"
@@ -228,7 +228,7 @@
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/g_block"/>
             <TextView
                 android:id="@+id/txt_18"
                 android:layout_width="match_parent"
@@ -238,7 +238,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/g_block"/>
             <TextView
                 android:id="@+id/txt_19"
                 android:layout_width="match_parent"
@@ -248,7 +248,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/g_block"/>
             <TextView
                 android:id="@+id/txt_20"
                 android:layout_width="match_parent"
@@ -258,7 +258,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/g_block"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/llNumberGrid_Collumn_five"
@@ -275,7 +275,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/o_block"/>
 
             <TextView
                 android:id="@+id/txt_22"
@@ -286,7 +286,7 @@
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/o_block"/>
             <TextView
                 android:id="@+id/txt_23"
                 android:layout_width="match_parent"
@@ -296,7 +296,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/o_block"/>
             <TextView
                 android:id="@+id/txt_24"
                 android:layout_width="match_parent"
@@ -306,7 +306,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/o_block"/>
             <TextView
                 android:id="@+id/txt_25"
                 android:layout_width="match_parent"
@@ -316,17 +316,17 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:background="@drawable/rect_background"/>
+                android:background="@mipmap/o_block"/>
         </LinearLayout>
     </LinearLayout>
     <Button
         android:id="@+id/btn_say_bingo"
         android:layout_width="match_parent"
+        android:background="@mipmap/bingo_button"
         android:layout_height="80dp"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         android:layout_alignParentBottom="true"
         android:textSize="50sp"
-        android:text="say bingo !!"
         android:layout_marginBottom="10dp"/>
 </RelativeLayout>

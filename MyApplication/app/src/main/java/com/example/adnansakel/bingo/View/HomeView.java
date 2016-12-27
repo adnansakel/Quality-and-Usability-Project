@@ -28,7 +28,7 @@ public class HomeView implements Observer{
     }
 
     private void initialize(){
-        txtGameTitle = (TextView)view.findViewById(R.id.txt_game_title);
+       // txtGameTitle = (TextView)view.findViewById(R.id.txt_game_title);
         btnCreateGame = (Button)view.findViewById(R.id.btn_create_game);
         btnJoinGame = (Button)view.findViewById(R.id.btn_join_game);
     }

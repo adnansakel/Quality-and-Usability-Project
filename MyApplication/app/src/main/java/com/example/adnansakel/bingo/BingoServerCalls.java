@@ -21,7 +21,7 @@ public class BingoServerCalls {
         this.bingoGameModel = bingoGameModel;
     }
 
-    public void getShuffledCalledNumberSequence(){
+    /*public void getShuffledCalledNumberSequence(){
      //a get request is sent to the serever to get the numbers
         String shuffledNumberSequence = "";
         List<Integer> numberSequence = new ArrayList<Integer>();
@@ -39,7 +39,7 @@ public class BingoServerCalls {
 
         //return shuffledNumberSequence;
         //return "";
-    }
+    }*/
 
     public void setShuffledNumberSequence(String shuffledNumberSequence){
         //a post request is sent to server

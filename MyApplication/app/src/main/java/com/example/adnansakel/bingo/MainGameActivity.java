@@ -58,10 +58,11 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temp_main_game);
         sequencenumberList = new ArrayList<Integer>();
-        //new MainGameView(findViewById(R.id.rl_home_view),((MyApplication)getApplication()).getBingoGameModel());
+        new MainGameView(findViewById(R.id.rl_main_game_view),((MyApplication)getApplication()).getBingoGameModel());
         handler = new Handler();
         setShuffledNumberSequenceonCard();
-        new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this).getShuffledCalledNumberSequence();
+        setShuffledCalledNumberSequence();
+        //new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this).getShuffledCalledNumberSequence();
         //setShuffledNumberSequenceonCard();
         ((MyApplication)getApplication()).getBingoGameModel().initializeBingoPatternSsearchGrid();
 
@@ -72,6 +73,8 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
 
 
     }
+
+
 
     private void initialize(){
         txt_one = (TextView)findViewById(R.id.txt_1);
@@ -130,6 +133,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         txt_twentifive.setOnClickListener(this);
 
 
+        /*
         sequencenumberList = ((MyApplication)getApplication()).getBingoGameModel().getShuffledNumberSequence();
         System.out.println("Total numbers:"+sequencenumberList.size());
         txt_one.setText(""+sequencenumberList.get(0));
@@ -159,8 +163,28 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         txt_twentifive.setText(""+sequencenumberList.get(24));
 
         btnSayBingo.setVisibility(View.GONE);
+*/
 
+    }
 
+    public void setShuffledCalledNumberSequence(){
+        //a get request is sent to the serever to get the numbers
+        String shuffledNumberSequence = "";
+        List<Integer> numberSequence = new ArrayList<Integer>();
+        //shuffledNumberSequence = "1, ";
+        for(int i = 1; i <= 65; i++){
+            numberSequence.add(i);
+        }
+        //shuffledNumberSequence +=" 65";
+        Collections.shuffle(numberSequence);
+        for(int i =0; i < 65; i++){
+            System.out.println("Numbers: "+numberSequence.get(i));
+        }
+        ((MyApplication)getApplication()).getBingoGameModel().setShuffledCalledNumberSequence(numberSequence);
+        //this string should be got from server
+
+        //return shuffledNumberSequence;
+        //return "";
     }
 
     private void setShuffledNumberSequenceonCard(){
@@ -235,21 +259,26 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                         System.out.println("Indexes: " + (counter/5));
                         int index = counter/5;
                         int m = ((MyApplication)getApplication()).getBingoGameModel().getShuffledCalledNumberSequence().get(index);
-                        txtCalledNumber.setText(""+m);
+                        //txtCalledNumber.setText(""+m);
+                        ((MyApplication)getApplication()).getBingoGameModel().setCalledNumber(m);
                         txtCalledNumber.setTextColor(Color.parseColor("#008000"));
                     }
                 }
                 if(counter % 5 == 1){
-                    txtCalledNumber.setTextColor(Color.parseColor("#00FF00"));
+                    ((MyApplication)getApplication()).getBingoGameModel().setCalledNumberColor("#00FF00");
+                    //txtCalledNumber.setTextColor(Color.parseColor("#00FF00"));
                 }
                 if(counter % 5 == 2){
-                    txtCalledNumber.setTextColor(Color.parseColor("#FFFF00"));
+                    ((MyApplication)getApplication()).getBingoGameModel().setCalledNumberColor("#FFFF00");
+                    //txtCalledNumber.setTextColor(Color.parseColor("#FFFF00"));
                 }
                 if(counter % 5 == 3){
-                    txtCalledNumber.setTextColor(Color.parseColor("#FFA500"));
+                    ((MyApplication)getApplication()).getBingoGameModel().setCalledNumberColor("#FFA500");
+                    //txtCalledNumber.setTextColor(Color.parseColor("#FFA500"));
                 }
                 if(counter % 5 == 4){
-                    txtCalledNumber.setTextColor(Color.parseColor("#FF0000"));
+                    ((MyApplication)getApplication()).getBingoGameModel().setCalledNumberColor("#FF0000");
+                    //txtCalledNumber.setTextColor(Color.parseColor("#FF0000"));
                 }
                 if (!mStopHandler) {
                     counter++;
@@ -271,7 +300,9 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
 
         }
         else{
-            if(((TextView)view).getText()!="*"){
+            if(((TextView)view).getText()!="*"
+                    //&& ((TextView)view).getText()==txtCalledNumber.getText().toString()
+                    ){
                 int id = view.getId();
                 String id_name = getResources().getResourceName(id);
                 System.out.println("Clicked:" + id_name.substring(36));
@@ -280,7 +311,8 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                 ((TextView)view).setText("*");
 
                 if(IsBingo()){
-                    btnSayBingo.setVisibility(View.VISIBLE);
+                    //btnSayBingo.setVisibility(View.VISIBLE);
+                    ((MyApplication)getApplication()).getBingoGameModel().setIfBingoIsFound(true);
                     AppConstants.IF_BINGO_FOUND = 1;
                 }
             }

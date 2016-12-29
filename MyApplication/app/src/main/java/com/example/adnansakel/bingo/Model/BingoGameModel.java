@@ -16,8 +16,19 @@ public class BingoGameModel extends Observable{
     private String winner;
     private int calledNumber;
     private String calledNumberColor;
+    private Player myPlayer;
+    private Game myGame = new Game();
     private int[][] bingo_pattern_search_grid;
 
+    private List<Game> gamelist = new ArrayList<Game>();
+    private List<Player> playerlist = new ArrayList<Player>();
+
+    private String longestMatchPlayerInfo = "";
+
+    //making the class singleton
+    private static BingoGameModel bingoGameModel = new BingoGameModel();
+    private BingoGameModel(){}
+    public static BingoGameModel getInstance(){return bingoGameModel;}
 
     public void initializeBingoPatternSsearchGrid(){
         bingo_pattern_search_grid = new int[AppConstants.BINGO_GRID_SIZE][AppConstants.BINGO_GRID_SIZE];
@@ -100,6 +111,71 @@ public class BingoGameModel extends Observable{
         this.calledNumberColor = calledNumberColor;
         this.setChanged();
         this.notifyObservers(AppConstants.CHANGE_CALLED_NUMBER_COLOR);
+    }
+
+    public Player getMyPlayer() {
+        return myPlayer;
+    }
+
+    public void setMyPlayer(Player myPlayer) {
+        this.myPlayer = myPlayer;
+    }
+
+    public List<Game> getGamelist() {
+        return gamelist;
+    }
+
+    public void setGamelist(List<Game> gamelist) {
+        this.gamelist = gamelist;
+    }
+
+    public Game getMyGame() {
+        return myGame;
+    }
+
+    public void setMyGame(Game myGame) {
+        this.myGame = myGame;
+    }
+
+    public int getmyLongestMatch(){
+        int [][] bingo_grid = getBingoPatternSearchGrid();
+
+        //check for rows
+        int row_sum;
+        int col_sum;
+        int row_sum_max = 0;
+        int col_sum_max = 0;
+        for(int i = 0; i < AppConstants.BINGO_GRID_SIZE; i++){
+            row_sum = 0;
+            col_sum = 0;
+            for(int j = 0; j < AppConstants.BINGO_GRID_SIZE; j++){
+                row_sum += bingo_grid[i][j];
+                col_sum +=bingo_grid[j][i];
+            }
+            if(row_sum > row_sum_max){ row_sum_max = row_sum;}
+            if(col_sum > col_sum_max){col_sum_max = col_sum;}
+
+        }
+        if(row_sum_max > col_sum_max) {
+            return row_sum_max;
+        }
+        return col_sum_max;
+    }
+
+    public List<Player> getPlayerlist() {
+        return playerlist;
+    }
+
+    public void setPlayerlist(List<Player> playerlist) {
+        this.playerlist = playerlist;
+    }
+
+    public String getLongestMatchPlayerInfo() {
+        return longestMatchPlayerInfo;
+    }
+
+    public void setLongestMatchPlayerInfo(String longestMatchPlayerInfo) {
+        this.longestMatchPlayerInfo = longestMatchPlayerInfo;
     }
 }
 

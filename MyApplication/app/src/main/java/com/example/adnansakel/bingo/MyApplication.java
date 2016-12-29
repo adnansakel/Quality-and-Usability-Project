@@ -9,7 +9,7 @@ import com.example.adnansakel.bingo.Model.BingoGameModel;
  */
 public class MyApplication extends Application {
 
-    private BingoGameModel bingoGameModel = new BingoGameModel();
+    private BingoGameModel bingoGameModel = BingoGameModel.getInstance();
 
     public BingoGameModel getBingoGameModel(){
         return bingoGameModel;

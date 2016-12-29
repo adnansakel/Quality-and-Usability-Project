@@ -8,9 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.adnansakel.bingo.HttpHelper.BingoServerClient;
+import com.example.adnansakel.bingo.Model.Player;
 import com.example.adnansakel.bingo.Util.AppConstants;
 import com.example.adnansakel.bingo.View.HomeView;
 import com.example.adnansakel.bingo.View.MainGameView;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,6 +57,8 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     Button btnSayBingo;
 
     List<Integer> sequencenumberList;
+
+    BingoServerCalls bingoServerCalls;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,11 +72,19 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         //setShuffledNumberSequenceonCard();
         ((MyApplication)getApplication()).getBingoGameModel().initializeBingoPatternSsearchGrid();
 
+        bingoServerCalls = new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this);
 
         initialize();
         counter = 0;
         callNumbersinInterval(1500);
-
+        /*
+        BingoServerCalls bingoServerCalls = new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this);
+        try {
+            bingoServerCalls.registerUser(new Player());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        */
 
     }
 
@@ -168,7 +182,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void setShuffledCalledNumberSequence(){
-        //a get request is sent to the serever to get the numbers
+
         String shuffledNumberSequence = "";
         List<Integer> numberSequence = new ArrayList<Integer>();
         //shuffledNumberSequence = "1, ";
@@ -180,7 +194,14 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         for(int i =0; i < 65; i++){
             System.out.println("Numbers: "+numberSequence.get(i));
         }
-        ((MyApplication)getApplication()).getBingoGameModel().setShuffledCalledNumberSequence(numberSequence);
+        //((MyApplication)getApplication()).getBingoGameModel().setShuffledCalledNumberSequence(numberSequence);
+
+        ((MyApplication)getApplication()).getBingoGameModel().getMyGame().setCallingNumberlist(numberSequence);//this is here for testing
+        //the above block of code should be removed as the number sequence will be got from server
+
+        ((MyApplication)getApplication()).getBingoGameModel().setShuffledCalledNumberSequence(
+                ((MyApplication)getApplication()).getBingoGameModel().getMyGame().getCallingNumberlist());
+        //MyGame should contain the calling number sequence got from server while in join game or create game;
         //this string should be got from server
 
         //return shuffledNumberSequence;
@@ -262,6 +283,13 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                         //txtCalledNumber.setText(""+m);
                         ((MyApplication)getApplication()).getBingoGameModel().setCalledNumber(m);
                         txtCalledNumber.setTextColor(Color.parseColor("#008000"));
+
+                        try {
+                            bingoServerCalls.postLongestMatch(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer(),
+                                    ((MyApplication)getApplication()).getBingoGameModel().getmyLongestMatch());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 if(counter % 5 == 1){
@@ -297,7 +325,11 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View view) {
         if(view == btnSayBingo){
-
+            try {
+                bingoServerCalls.sayBingo(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         else{
             if(((TextView)view).getText()!="*"
@@ -309,7 +341,12 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                 ((MyApplication)getApplication()).getBingoGameModel()
                         .updateBingoPatternSearcgGrid(Integer.valueOf(id_name.substring(36).toString()),1);
                 ((TextView)view).setText("*");
-
+                try {
+                    bingoServerCalls.postLongestMatch(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer(),
+                            ((MyApplication)getApplication()).getBingoGameModel().getmyLongestMatch());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 if(IsBingo()){
                     //btnSayBingo.setVisibility(View.VISIBLE);
                     ((MyApplication)getApplication()).getBingoGameModel().setIfBingoIsFound(true);

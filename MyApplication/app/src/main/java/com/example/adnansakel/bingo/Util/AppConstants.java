@@ -14,4 +14,24 @@ public class AppConstants {
     public static String GRID_ = "grid clicked";
     public static String CHANGE_CALLED_NUMBER_COLOR = "change called number color";
     public static String BINGO_FOUND = "bingo found";
+    public static String NAME = "Name";
+    public static String EMAIL = "Email";
+    public static String GENDER = "Gender";
+    public static String AGE = "Age";
+    public static String PLAYER_ID = "PlayerID";
+    public static String GAME_ID = "GameID";
+    public static String CALLING_NUMBERS = "CallingNumbers";
+    public static String IF_BINGO = "IfBingo";
+    public static String WINNER = "Winner";
+    public static String LONGEST_MATCH = "LongestMatch";
+    public static String CREATOR_ID = "creatorID";
+    public static String REGISTRATION_URL = "/players/customers";
+    public static String GAME_CREATION_URL = "/game/creation";
+    public static String GAME_LIST_URL = "/gamelist_to_join";
+    public static String GAME_PLAYER_URL = "/game_player";
+    public static String LOBBY_URL = "/lobby";
+    public static String IFBINGO_URL = "/ifbingo";
+    public static String SAY_BINGO_URL = "/saybingo";
+    public static String PLAYER_PHOTO_URL = "/player_photo";
+
 }

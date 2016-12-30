@@ -16,7 +16,7 @@ public class BingoGameModel extends Observable{
     private String winner;
     private int calledNumber;
     private String calledNumberColor;
-    private Player myPlayer;
+    private Player myPlayer = new Player();
     private Game myGame = new Game();
     private int[][] bingo_pattern_search_grid;
 

@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.adnansakel.bingo.HttpHelper.BingoServerClient;
+import com.example.adnansakel.bingo.Model.Game;
 import com.example.adnansakel.bingo.Model.Player;
 import com.example.adnansakel.bingo.Util.AppConstants;
 import com.example.adnansakel.bingo.View.HomeView;
@@ -66,6 +67,8 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         sequencenumberList = new ArrayList<Integer>();
         new MainGameView(findViewById(R.id.rl_main_game_view),((MyApplication)getApplication()).getBingoGameModel());
         handler = new Handler();
+
+        //((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().setPlayerID("101");
         setShuffledNumberSequenceonCard();
         setShuffledCalledNumberSequence();
         //new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this).getShuffledCalledNumberSequence();
@@ -77,6 +80,16 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         initialize();
         counter = 0;
         callNumbersinInterval(1500);
+        //((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().setPlayerID("2017");
+        //((MyApplication)getApplication()).getBingoGameModel().getMyGame().setGameID("555");
+
+        /*
+        try {
+            bingoServerCalls.selectGame(new Player(),new Game());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
+
         /*
         BingoServerCalls bingoServerCalls = new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this);
         try {
@@ -283,13 +296,13 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                         //txtCalledNumber.setText(""+m);
                         ((MyApplication)getApplication()).getBingoGameModel().setCalledNumber(m);
                         txtCalledNumber.setTextColor(Color.parseColor("#008000"));
-
+                        /*
                         try {
                             bingoServerCalls.postLongestMatch(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer(),
                                     ((MyApplication)getApplication()).getBingoGameModel().getmyLongestMatch());
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }
+                        }*/
                     }
                 }
                 if(counter % 5 == 1){
@@ -341,12 +354,13 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                 ((MyApplication)getApplication()).getBingoGameModel()
                         .updateBingoPatternSearcgGrid(Integer.valueOf(id_name.substring(36).toString()),1);
                 ((TextView)view).setText("*");
+                /*
                 try {
                     bingoServerCalls.postLongestMatch(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer(),
                             ((MyApplication)getApplication()).getBingoGameModel().getmyLongestMatch());
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
                 if(IsBingo()){
                     //btnSayBingo.setVisibility(View.VISIBLE);
                     ((MyApplication)getApplication()).getBingoGameModel().setIfBingoIsFound(true);

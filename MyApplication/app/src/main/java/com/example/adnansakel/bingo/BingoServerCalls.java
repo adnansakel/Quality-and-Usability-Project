@@ -1,6 +1,7 @@
 package com.example.adnansakel.bingo;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.example.adnansakel.bingo.HttpHelper.BingoServerClient;
 import com.example.adnansakel.bingo.Model.BingoGameModel;
@@ -20,6 +21,8 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
+import cz.msebera.android.httpclient.message.BasicHeader;
+import cz.msebera.android.httpclient.protocol.HTTP;
 
 
 /**
@@ -151,21 +154,42 @@ public class BingoServerCalls {
 
     public void selectGame(Player myPlayer, Game myGame)throws JSONException{
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(AppConstants.PLAYER_ID,myPlayer.getPlayerID());
-        jsonObject.put(AppConstants.GAME_ID,myGame.getGameID());
+        //jsonObject.put(AppConstants.PLAYER_ID,myPlayer.getPlayerID());
+        jsonObject.put(AppConstants.PLAYER_ID,"2017");
+        //jsonObject.put(AppConstants.GAME_ID,myGame.getGameID());
+        jsonObject.put(AppConstants.GAME_ID,"556");
 
         StringEntity entity = null;
         try {
+
             entity = new StringEntity(jsonObject.toString());
+            //entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            //entity.setContentEncoding("UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
+        /*
+        BingoServerClient.post(AppConstants.GAME_PLAYER_ADD_URL+"1092/555",null,new JsonHttpResponseHandler(){
+            @Override
+         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
-        BingoServerClient.post(context,AppConstants.GAME_PLAYER_URL,entity,new JsonHttpResponseHandler(){
+        Toast.makeText(context,response.toString(),Toast.LENGTH_LONG);
+        System.out.println("Response:"+response.toString());
+    }
+
+    @Override
+    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+        System.out.println(""+statusCode);
+    }
+    });*/
+
+
+        BingoServerClient.post(context,AppConstants.GAME_PLAYER_ADD_URL,entity,new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
+                Toast.makeText(context,response.toString(),Toast.LENGTH_LONG);
             }
 
             @Override
@@ -173,6 +197,7 @@ public class BingoServerCalls {
                 System.out.println(""+statusCode);
             }
         });
+
     }
 
     public void getPlayersInLobby(){

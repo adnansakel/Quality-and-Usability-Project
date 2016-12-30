@@ -6,6 +6,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.example.adnansakel.bingo.Util.AppConstants;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -18,7 +19,7 @@ import cz.msebera.android.httpclient.entity.StringEntity;
  * Created by Adnan Sakel on 12/27/2016.
  */
 public class BingoServerClient {
-    private static final String BASE_URL = "http://10.0.2.2:8080/queuedb/";//testing
+   // private static final String BASE_URL = "http://10.0.2.2:8080/queuedb/";//testing
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
@@ -33,12 +34,12 @@ public class BingoServerClient {
         client.post(context,getAbsoluteUrl(url),jsonObjectStringentity,"application/json",responseHandler);
     }
 
-    /*public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+    public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.setBasicAuth("paksom","cheska");
         client.post(getAbsoluteUrl(url), params, responseHandler);
-    }*/
+    }
 
     private static String getAbsoluteUrl(String relativeUrl) {
-        return BASE_URL + relativeUrl;
+        return AppConstants.BASE_URL + relativeUrl;
     }
 }

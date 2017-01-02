@@ -23,8 +23,8 @@ public class GamePlayerService {
 		this.gamePlayerRepository = gamePlayerRepository;
 	}*/
 	
-	public GamePlayer savePlayer(String gameId, String playerId){
-		return gamePlayerRepository.save(new GamePlayer(gameId, playerId));
+	public GamePlayer savePlayer(GamePlayer gamePlayer){
+		return gamePlayerRepository.save(gamePlayer);
 	}
 	
 	public int deletePlayerFromGame(String gameId, String playerId){

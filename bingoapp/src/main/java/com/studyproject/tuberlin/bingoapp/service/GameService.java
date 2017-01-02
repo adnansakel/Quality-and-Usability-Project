@@ -1,0 +1,57 @@
+package com.studyproject.tuberlin.bingoapp.service;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.studyproject.tuberlin.bingoapp.entity.Game;
+import com.studyproject.tuberlin.bingoapp.repository.GameRepository;
+
+@Service
+public class GameService {
+
+	@Inject
+    GameRepository gameRepository;
+	
+	/*@Autowired
+	public GameService(GameRepository gameRepository){
+		this.gameRepository = gameRepository;
+	}*/
+	GameService(){
+		
+	}
+	
+	public Game registerPlayer(Game game) {
+		long millis = System.currentTimeMillis() + 5000000;
+		game.setGameId(millis+"");
+		game.setCallingNumbers(getShuffledNumbers());
+		game.setCreationTime(System.currentTimeMillis()+"");
+		return gameRepository.save(game);
+	}
+
+	/**
+	 * returning the shuffled numbers from 1 to 75 
+	 * These numbers are the calling numbers (displayed in the screen to the players used to strike-out the numbers in their card)
+	 * @return
+	 */
+	private String getShuffledNumbers() {
+		String shuffledNumbers = null;
+		List<Integer> dataList = new ArrayList<Integer>();
+	    for (int i = 1; i <= 75; i++) {
+	      dataList.add(i);
+	    }
+	    Collections.shuffle(dataList);
+	    for (int i = 0; i < dataList.size(); i++) {
+	    	shuffledNumbers = shuffledNumbers+"," + dataList.get(i);
+	    }
+	    int index = shuffledNumbers.indexOf(",");
+	    shuffledNumbers = shuffledNumbers.substring(index+1, shuffledNumbers.length());
+		return shuffledNumbers;
+	}
+
+}

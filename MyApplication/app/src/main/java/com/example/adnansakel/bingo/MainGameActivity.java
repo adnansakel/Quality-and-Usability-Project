@@ -195,7 +195,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void setShuffledCalledNumberSequence(){
-
+        /*
         String shuffledNumberSequence = "";
         List<Integer> numberSequence = new ArrayList<Integer>();
         //shuffledNumberSequence = "1, ";
@@ -211,7 +211,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
 
         ((MyApplication)getApplication()).getBingoGameModel().getMyGame().setCallingNumberlist(numberSequence);//this is here for testing
         //the above block of code should be removed as the number sequence will be got from server
-
+        */
         ((MyApplication)getApplication()).getBingoGameModel().setShuffledCalledNumberSequence(
                 ((MyApplication)getApplication()).getBingoGameModel().getMyGame().getCallingNumberlist());
         //MyGame should contain the calling number sequence got from server while in join game or create game;

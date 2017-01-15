@@ -27,4 +27,5 @@
     android:textColor="#ffffff"
     android:text="Wating for players ... "
     android:background="#88ff0000"/>
+
 </LinearLayout>

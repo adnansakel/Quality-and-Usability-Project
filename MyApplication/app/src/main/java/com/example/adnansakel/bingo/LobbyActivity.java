@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,12 +18,14 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
 
     LinearLayout llPlayerList;
     TextView txtWaiting;
+    Button btnStartGame;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
 
         new LobbyView(findViewById(R.id.ll_lobby_view),((MyApplication)getApplication()).getBingoGameModel(),this);
+        System.out.println("From Lobby"+((MyApplication) getApplication()).getBingoGameModel().getMyGame().getCallingNumberlist().toString());
         initialize();
     }
 
@@ -30,6 +33,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         llPlayerList = (LinearLayout)findViewById(R.id.llPlayersinLobby);
         txtWaiting = (TextView)findViewById(R.id.txtWaiting);
         txtWaiting.setOnClickListener(this);
+        btnStartGame.setOnClickListener(this);
         /*
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         layoutParams.setMargins(2, 0, 2, 0);

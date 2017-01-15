@@ -9,6 +9,8 @@ import android.widget.Button;
 import com.example.adnansakel.bingo.Util.AppConstants;
 import com.example.adnansakel.bingo.View.HomeView;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,12 +19,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     Button btnCreateGame;
     Button btnJoinGame;
+    BingoServerCalls bingoServerCalls;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
         new HomeView(findViewById(R.id.rl_home_view),((MyApplication)getApplication()).getBingoGameModel());
+        //System.out.println("Player at home: "+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getPlayerID());
+        bingoServerCalls = new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this);
         initialize();
     }
 
@@ -38,7 +43,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if(view == btnCreateGame){
-            startActivity(new Intent(HomeActivity.this,LobbyActivity.class));
+            try {
+                bingoServerCalls.createGame(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
         else if(view == btnJoinGame){
             startActivity(new Intent(HomeActivity.this,JoinGameActivity.class));

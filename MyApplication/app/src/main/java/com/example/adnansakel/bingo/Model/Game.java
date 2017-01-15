@@ -13,6 +13,8 @@ public class Game {
     private String Winner = "";
     private String LongestMatch = "";
     private String CreatorID = "";
+    private String CreationTime = "";
+    private String Status = "";
 
     public String getGameID() {
         return GameID;
@@ -60,5 +62,21 @@ public class Game {
 
     public void setCreatorID(String creatorID) {
         CreatorID = creatorID;
+    }
+
+    public String getCreationTime() {
+        return CreationTime;
+    }
+
+    public void setCreationTime(String creationTime) {
+        CreationTime = creationTime;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
     }
 }

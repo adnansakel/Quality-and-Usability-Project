@@ -1,6 +1,8 @@
 package com.example.adnansakel.bingo;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.example.adnansakel.bingo.HttpHelper.BingoServerClient;
@@ -79,9 +81,11 @@ public class BingoServerCalls {
         jsonObject.put(AppConstants.AGE,player.getAge());
         jsonObject.put(AppConstants.EMAIL,player.getEmail());
         jsonObject.put(AppConstants.GENDER,player.getGender());
+
         StringEntity entity = null;
         try {
             entity = new StringEntity(jsonObject.toString());
+            //System.out.println(jsonObject.toString());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -90,6 +94,29 @@ public class BingoServerCalls {
         BingoServerClient.post(context,AppConstants.REGISTRATION_URL,entity,new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                try {
+                    bingoGameModel.getMyPlayer().setName((String)response.get(AppConstants.NAME));
+                    bingoGameModel.getMyPlayer().setAge((String)response.get(AppConstants.AGE));
+                    bingoGameModel.getMyPlayer().setPlayerID((String)response.get(AppConstants.PLAYER_ID));
+                    bingoGameModel.getMyPlayer().setGender((String)response.get(AppConstants.GENDER));
+
+                    SharedPreferences sharedPreferences = context.getSharedPreferences(AppConstants.PLAYER_INFO,Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editUserinfo = sharedPreferences.edit();
+
+                    editUserinfo.putString(AppConstants.PLAYER_ID,(String)response.get(AppConstants.PLAYER_ID));
+                    editUserinfo.putString(AppConstants.NAME,(String)response.get(AppConstants.NAME));
+                    editUserinfo.putString(AppConstants.AGE,(String)response.get(AppConstants.AGE));
+                    editUserinfo.putString(AppConstants.GENDER,(String)response.get(AppConstants.GENDER));
+
+                    context.startActivity(new Intent(context, HomeActivity.class));
+                    ((RegistrationActivity)context).finish();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(response);
+
+
 
             }
 
@@ -114,11 +141,12 @@ public class BingoServerCalls {
 
     public void createGame(Player myPlayer) throws JSONException{
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(AppConstants.PLAYER_ID,myPlayer.getPlayerID());
-
+        jsonObject.put(AppConstants.CREATOR_ID,myPlayer.getPlayerID());
+        System.out.println("CreatorID:"+myPlayer.getPlayerID());
         StringEntity entity = null;
         try {
             entity = new StringEntity(jsonObject.toString());
+            System.out.println(jsonObject.toString());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -127,7 +155,37 @@ public class BingoServerCalls {
         BingoServerClient.post(context,AppConstants.GAME_CREATION_URL,entity,new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                System.out.println(response);
+                try {
+                    bingoGameModel.getMyGame().setGameID((String)response.get(AppConstants.GAME_ID));
 
+                    bingoGameModel.getMyGame().setCallingNumberlist(getCallingNumberList(
+                            (String)response.get(AppConstants.CALLING_NUMBERS)));
+                    System.out.println(response.get(AppConstants.IF_BINGO).toString());
+                    if(response.get(AppConstants.IF_BINGO).toString()!="null"){
+                        bingoGameModel.getMyGame().setIfBingo((String)response.get(AppConstants.IF_BINGO));
+                    }
+
+                    if(response.get(AppConstants.WINNER).toString()!="null"){
+                        bingoGameModel.getMyGame().setWinner((String)response.get(AppConstants.WINNER));
+                    }
+
+                    if(response.get(AppConstants.LONGEST_MATCH).toString()!="null"){
+                        bingoGameModel.getMyGame().setLongestMatch((String)response.get(AppConstants.LONGEST_MATCH));
+                    }
+                    if(response.get(AppConstants.CREATOR_ID).toString()!="null"){
+                        bingoGameModel.getMyGame().setCreatorID((String)response.get(AppConstants.CREATOR_ID));
+                    }
+                    if(response.get(AppConstants.CREATION_TIME).toString()!="null"){
+                        bingoGameModel.getMyGame().setCreationTime((String)response.get(AppConstants.CREATION_TIME));
+                    }
+                    if(response.get(AppConstants.STATUS).toString()!="null"){
+                        bingoGameModel.getMyGame().setStatus((String)response.get(AppConstants.STATUS));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                context.startActivity(new Intent(context,LobbyActivity.class));
             }
 
             @Override
@@ -136,6 +194,15 @@ public class BingoServerCalls {
             }
         });
 
+    }
+
+    private List<Integer> getCallingNumberList(String sequence){
+        List<Integer> callingnumList = new ArrayList<Integer>();
+        String [] numbers = sequence.split(",");
+        for(String num : numbers){
+            callingnumList.add(Integer.valueOf(num));
+        }
+        return  callingnumList;
     }
 
     public void getAvailableGamelist(){

@@ -40,6 +40,7 @@ public class BingoServerClient {
     }
 
     private static String getAbsoluteUrl(String relativeUrl) {
+        System.out.println(AppConstants.BASE_URL + relativeUrl);
         return AppConstants.BASE_URL + relativeUrl;
     }
 }

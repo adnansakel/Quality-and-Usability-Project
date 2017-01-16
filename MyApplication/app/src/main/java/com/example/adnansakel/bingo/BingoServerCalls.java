@@ -3,6 +3,7 @@ package com.example.adnansakel.bingo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.view.Gravity;
 import android.widget.Toast;
 
 import com.example.adnansakel.bingo.HttpHelper.BingoServerClient;
@@ -103,6 +104,7 @@ public class BingoServerCalls {
 
                     SharedPreferences sharedPreferences = context.getSharedPreferences(AppConstants.PLAYER_INFO,Context.MODE_PRIVATE);
                     SharedPreferences.Editor editUserinfo = sharedPreferences.edit();
+                    editUserinfo.commit();
 
                     editUserinfo.putString(AppConstants.PLAYER_ID,(String)response.get(AppConstants.PLAYER_ID));
                     editUserinfo.putString(AppConstants.NAME,(String)response.get(AppConstants.NAME));
@@ -143,7 +145,8 @@ public class BingoServerCalls {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(AppConstants.CREATOR_ID,myPlayer.getPlayerID());
         jsonObject.put(AppConstants.CREATOR_NAME,myPlayer.getName());
-        System.out.println("CreatorID:"+myPlayer.getPlayerID());
+        jsonObject.put(AppConstants.IF_BINGO,AppConstants.FALSE);
+        //System.out.println("CreatorID:"+myPlayer.getPlayerID());
         StringEntity entity = null;
         try {
             entity = new StringEntity(jsonObject.toString());
@@ -414,8 +417,10 @@ public class BingoServerCalls {
 
     public void postLongestMatch(Player myPlayer, int longestMatch)throws JSONException{
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(AppConstants.NAME,myPlayer.getName());
-        jsonObject.put(AppConstants.LONGEST_MATCH,longestMatch);
+        //jsonObject.put(AppConstants.NAME,myPlayer.getName());
+        jsonObject.put(AppConstants.LONGEST_MATCH,myPlayer.getName()+","+longestMatch);
+        jsonObject.put(AppConstants.GAME_ID,bingoGameModel.getMyGame().getGameID());
+
 
         StringEntity entity = null;
         try {
@@ -428,7 +433,26 @@ public class BingoServerCalls {
         BingoServerClient.post(context,AppConstants.IFBINGO_URL,entity,new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    if(response.get(AppConstants.IF_BINGO).toString()!=null){
+                        if(response.get(AppConstants.IF_BINGO).toString().equals(AppConstants.TRUE)){
+                            AppConstants.IF_BINGO_FOUND = 1;
+                        }
+                    }
+                    if(response.get(AppConstants.LONGEST_MATCH).toString()!=null){
+                        String [] str = response.get(AppConstants.LONGEST_MATCH).toString().split(",");
+                        String name = str[0];
+                        String score = str[1];//.replaceAll("\\s+","");
+                        System.out.println(name+" "+"needs"+Integer.valueOf(str[1])+"more match only!");
+                        Toast toast = Toast.makeText(context,name+" "+"needs "+(5-Integer.valueOf(str[1]))+" more match only!",Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM,0,0);
+                        toast.show();
 
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -442,7 +466,8 @@ public class BingoServerCalls {
     public void sayBingo(Player myPlayer) throws JSONException{
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(AppConstants.WINNER,myPlayer.getName());
-        jsonObject.put(AppConstants.IF_BINGO,true);
+        jsonObject.put(AppConstants.IF_BINGO,AppConstants.TRUE);
+        jsonObject.put(AppConstants.GAME_ID,bingoGameModel.getMyGame().getGameID());
 
         StringEntity entity = null;
         try {
@@ -455,11 +480,22 @@ public class BingoServerCalls {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
+                try {
+                    if(response.get(AppConstants.WINNER).toString()!=null){
+                        Toast.makeText(context,"Congrasulations !!!"+response.get(AppConstants.WINNER).toString(),Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        Toast.makeText(context,"Congrasulations !!!",Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
-                System.out.println(""+statusCode);
+                Toast.makeText(context,"Could not say bingo. Please try again",Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -38,9 +38,12 @@ public class AppConstants {
     public static String GAME_LIST_URL = "/gamelist_to_join/";
     public static String GAME_PLAYER_ADD_URL = "/game_player/add/";
     public static String LOBBY_URL = "/lobby/";
-    public static String IFBINGO_URL = "/ifbingo";
-    public static String SAY_BINGO_URL = "/saybingo";
+    public static String IFBINGO_URL = "/ifbingo/";
+    public static String SAY_BINGO_URL = "/saybingo/";
     public static String PLAYER_PHOTO_URL = "/player_photo";
+
+    public static String TRUE = "true";
+    public static String FALSE = "false";
 
 
 }

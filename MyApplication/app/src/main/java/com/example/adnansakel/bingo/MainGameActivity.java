@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.adnansakel.bingo.HttpHelper.BingoServerClient;
 import com.example.adnansakel.bingo.Model.Game;
@@ -158,7 +159,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         txt_twentithree.setOnClickListener(this);
         txt_twentifour.setOnClickListener(this);
         txt_twentifive.setOnClickListener(this);
-
+        btnSayBingo.setOnClickListener(this);
 
         /*
         sequencenumberList = ((MyApplication)getApplication()).getBingoGameModel().getShuffledNumberSequence();
@@ -287,6 +288,10 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                     //progress.dismiss();
                     mStopHandler = true;
 
+                    if(counter>5*65){
+                        Toast.makeText(MainGameActivity.this,"Game over without a Bingo !!",Toast.LENGTH_LONG).show();
+                    }
+
                 }
                 if(counter % 5 == 0){
                     if(counter/5 < 65){
@@ -296,13 +301,12 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                         //txtCalledNumber.setText(""+m);
                         ((MyApplication)getApplication()).getBingoGameModel().setCalledNumber(m);
                         txtCalledNumber.setTextColor(Color.parseColor("#008000"));
-                        /*
                         try {
                             bingoServerCalls.postLongestMatch(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer(),
                                     ((MyApplication)getApplication()).getBingoGameModel().getmyLongestMatch());
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }*/
+                        }
                     }
                 }
                 if(counter % 5 == 1){
@@ -335,11 +339,13 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+
     @Override
     public void onClick(View view) {
         if(view == btnSayBingo){
             try {
                 bingoServerCalls.sayBingo(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer());
+                System.out.println("Say Bingo !!");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

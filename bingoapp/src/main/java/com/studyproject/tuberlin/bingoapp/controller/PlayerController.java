@@ -33,7 +33,6 @@ public class PlayerController {
 	public ResponseEntity<Player> get() {
 
 	    Player player = new Player();
-	    player.setName("Sauand");
 	    player.setEmail("ss@gmail.com");
 	    player.setAge("56");
 	    player.setGender("Male");

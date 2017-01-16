@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.studyproject.tuberlin.bingoapp.entity.Game;
+import com.studyproject.tuberlin.bingoapp.helpers.GameStatus;
 import com.studyproject.tuberlin.bingoapp.repository.GameRepository;
 
 @Service
@@ -31,6 +32,7 @@ public class GameService {
 		game.setGameId(millis+"");
 		game.setCallingNumbers(getShuffledNumbers());
 		game.setCreationTime(System.currentTimeMillis()+"");
+		game.setStatus(GameStatus.INACTIVE.toString());
 		return gameRepository.save(game);
 	}
 
@@ -52,6 +54,46 @@ public class GameService {
 	    int index = shuffledNumbers.indexOf(",");
 	    shuffledNumbers = shuffledNumbers.substring(index+1, shuffledNumbers.length());
 		return shuffledNumbers;
+	}
+
+	public List<Game> getInActiveGames() {
+		return gameRepository.findGamebyStatus(GameStatus.INACTIVE.toString());
+	}
+
+	public int updateForSayBingo(String gameId, String ifBingo, String winner) {
+		return gameRepository.updateForSayBingo(gameId, ifBingo, winner);
+	}
+	
+	public int updateLongestMatch(String gameId, String longestMatch) {
+		return gameRepository.updateLongestMatch(gameId, longestMatch);
+	}
+
+	public Game findGame(String gameId) {
+		return gameRepository.findGame(gameId);
+	}
+
+	public int updateStatusCompleted(String gameId) {
+		return gameRepository.updateStatus(gameId, GameStatus.COMPLETED.toString());
+	}
+	
+	public boolean checkNewValueIsLongestMatch(String newLongestMatch, String oldLongestMatch) {
+		int newValue = getValueFromLongestMatch(newLongestMatch);
+		int oldValue = getValueFromLongestMatch(oldLongestMatch);
+		if(newValue > oldValue){
+			return true;
+		}
+		return false;
+	}
+
+	private int getValueFromLongestMatch(String longestMatch) {
+		int value = -1;
+		if(longestMatch != null && !longestMatch.equals("null")){
+			int idx = longestMatch.indexOf(",");
+			if(idx != -1){
+				value = Integer.parseInt(longestMatch.substring(idx+1,longestMatch.length()));
+			}
+		}
+		return value;
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.studyproject.tuberlin.bingoapp.service;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,4 +32,9 @@ public class GamePlayerService {
 	public int deletePlayerFromGame(String gameId, String playerId){
 		return gamePlayerRepository.deletePlayerFromGame(gameId, playerId);
 	}
+	
+	public List<GamePlayer> getPlayersInSpecificGame(String gameId) {
+		return gamePlayerRepository.getPlayersInSpecificGame(gameId);
+	}
+	
 }

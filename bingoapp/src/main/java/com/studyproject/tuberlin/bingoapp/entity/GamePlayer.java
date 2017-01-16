@@ -26,13 +26,16 @@ public class GamePlayer {
 	private String gameId;
 	@Column(name = "playerid", nullable = false)
 	private String playerId;
+	@Column(name = "player_name")
+	private String playerName;
 	
 	public GamePlayer(){	
 	}
 	
-	public GamePlayer(String gameId, String playerId){
+	public GamePlayer(String gameId, String playerId, String playerName){
 		this.gameId = gameId;
 		this.playerId = playerId;
+		this.playerName = playerName;
 	}
 	
 	public Long getId() {
@@ -57,5 +60,19 @@ public class GamePlayer {
 	
 	public void setPlayerId(String playerId) {
 		this.playerId = playerId;
+	}
+
+	public String getPlayerName() {
+		return playerName;
+	}
+
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
+	}
+
+	@Override
+	public String toString() {
+		return "GamePlayer [id=" + id + ", gameId=" + gameId + ", playerId=" + playerId + ", playerName=" + playerName
+				+ "]";
 	}
 }

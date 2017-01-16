@@ -32,25 +32,33 @@ public class Game {
 	@Column(name = "longest_match")
 	private String longestMatch;
 	
-	@Column(name = "createrid", nullable = false)
-    private String createrId;
+	@Column(name = "creatorid", nullable = false)
+    private String creatorId;
 	
 	@Column(name = "creation_time")
     private String creationTime;
+	
+	@Column(name = "status")
+    private String status;
+	
+	@Column(name = "creator_name")
+	private String creatorName;
 	
 	public Game(){	
 	}
 
 	public Game(String gameId, String callingNumbers, String ifBingo, String winner, String longestMatch,
-			String createrId, String creationTime) {
+			String creatorId, String creationTime, String status, String creatorName) {
 		super();
 		this.gameId = gameId;
 		this.callingNumbers = callingNumbers;
 		this.ifBingo = ifBingo;
 		this.winner = winner;
 		this.longestMatch = longestMatch;
-		this.createrId = createrId;
+		this.creatorId = creatorId;
 		this.creationTime = creationTime;
+		this.status = status;
+		this.creatorName = creatorName;
 	}
 
 	public String getGameId() {
@@ -93,12 +101,12 @@ public class Game {
 		this.longestMatch = longestMatch;
 	}
 
-	public String getCreaterId() {
-		return createrId;
+	public String getCreatorId() {
+		return creatorId;
 	}
 
-	public void setCreaterId(String createrId) {
-		this.createrId = createrId;
+	public void setCreatorId(String creatorId) {
+		this.creatorId = creatorId;
 	}
 
 	public String getCreationTime() {
@@ -109,11 +117,26 @@ public class Game {
 		this.creationTime = creationTime;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getCreatorName() {
+		return creatorName;
+	}
+
+	public void setCreatorName(String creatorName) {
+		this.creatorName = creatorName;
+	}
+
 	@Override
 	public String toString() {
 		return "Game [gameId=" + gameId + ", callingNumbers=" + callingNumbers + ", ifBingo=" + ifBingo + ", winner="
-				+ winner + ", longestMatch=" + longestMatch + ", createrId=" + createrId + ", creationTime="
-				+ creationTime + "]";
+				+ winner + ", longestMatch=" + longestMatch + ", creatorId=" + creatorId + ", creationTime="
+				+ creationTime + ", status=" + status + ", creatorName=" + creatorName + "]";
 	}
-
 }

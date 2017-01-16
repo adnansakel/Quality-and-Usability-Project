@@ -125,6 +125,18 @@ public class BingoGameModel extends Observable{
         return gamelist;
     }
 
+    public void addGame(Game game){
+        gamelist.add(game);
+        this.setChanged();
+        this.notifyObservers(AppConstants.GAME_LIST_UPDATED);
+    }
+
+    public void addPlayer(Player player){
+        playerlist.add(player);
+        this.setChanged();
+        this.notifyObservers(AppConstants.PLAYER_LIST_UPDATED);
+    }
+
     public void setGamelist(List<Game> gamelist) {
         this.gamelist = gamelist;
     }

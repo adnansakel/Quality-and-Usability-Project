@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.example.adnansakel.bingo.View.LobbyView;
 
+import org.json.JSONException;
+
 /**
  * Created by Adnan Sakel on 11/26/2016.
  */
@@ -19,21 +21,29 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
     LinearLayout llPlayerList;
     TextView txtWaiting;
     Button btnStartGame;
+    BingoServerCalls bingoServerCalls;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
-
+        bingoServerCalls = new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this);
         new LobbyView(findViewById(R.id.ll_lobby_view),((MyApplication)getApplication()).getBingoGameModel(),this);
         System.out.println("From Lobby"+((MyApplication) getApplication()).getBingoGameModel().getMyGame().getCallingNumberlist().toString());
         initialize();
+        try {
+            bingoServerCalls.getPlayersInLobby(((MyApplication)getApplication()).getBingoGameModel().getMyGame());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void initialize(){
         llPlayerList = (LinearLayout)findViewById(R.id.llPlayersinLobby);
         txtWaiting = (TextView)findViewById(R.id.txtWaiting);
+
         txtWaiting.setOnClickListener(this);
-        btnStartGame.setOnClickListener(this);
+        //btnStartGame.setOnClickListener(this);
         /*
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         layoutParams.setMargins(2, 0, 2, 0);

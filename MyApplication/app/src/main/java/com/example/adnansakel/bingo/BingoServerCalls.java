@@ -139,9 +139,10 @@ public class BingoServerCalls {
         });*/
     }
 
-    public void createGame(Player myPlayer) throws JSONException{
+    public void createGame(final Player myPlayer) throws JSONException{
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(AppConstants.CREATOR_ID,myPlayer.getPlayerID());
+        jsonObject.put(AppConstants.CREATOR_NAME,myPlayer.getName());
         System.out.println("CreatorID:"+myPlayer.getPlayerID());
         StringEntity entity = null;
         try {
@@ -162,6 +163,9 @@ public class BingoServerCalls {
                     bingoGameModel.getMyGame().setCallingNumberlist(getCallingNumberList(
                             (String)response.get(AppConstants.CALLING_NUMBERS)));
                     System.out.println(response.get(AppConstants.IF_BINGO).toString());
+                    if(response.get(AppConstants.CREATOR_NAME).toString()!="null"){
+                        bingoGameModel.getMyGame().setCreatorName((String)response.get(AppConstants.CREATOR_NAME));
+                    }
                     if(response.get(AppConstants.IF_BINGO).toString()!="null"){
                         bingoGameModel.getMyGame().setIfBingo((String)response.get(AppConstants.IF_BINGO));
                     }
@@ -182,10 +186,15 @@ public class BingoServerCalls {
                     if(response.get(AppConstants.STATUS).toString()!="null"){
                         bingoGameModel.getMyGame().setStatus((String)response.get(AppConstants.STATUS));
                     }
+
+                    if(((String)response.get(AppConstants.GAME_ID)).length()>0){
+                        selectGameRequestbyCreator(myPlayer,bingoGameModel.getMyGame());
+
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                context.startActivity(new Intent(context,LobbyActivity.class));
+
             }
 
             @Override
@@ -196,35 +205,13 @@ public class BingoServerCalls {
 
     }
 
-    private List<Integer> getCallingNumberList(String sequence){
-        List<Integer> callingnumList = new ArrayList<Integer>();
-        String [] numbers = sequence.split(",");
-        for(String num : numbers){
-            callingnumList.add(Integer.valueOf(num));
-        }
-        return  callingnumList;
-    }
-
-    public void getAvailableGamelist(){
-            BingoServerClient.get(AppConstants.GAME_LIST_URL,null,new JsonHttpResponseHandler(){
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
-                    System.out.println(""+statusCode);
-                }
-            });
-    }
-
-    public void selectGame(Player myPlayer, Game myGame)throws JSONException{
+    private void selectGameRequestbyCreator(Player myPlayer, final Game myGame) throws JSONException{
         JSONObject jsonObject = new JSONObject();
         //jsonObject.put(AppConstants.PLAYER_ID,myPlayer.getPlayerID());
-        jsonObject.put(AppConstants.PLAYER_ID,"2017");
+        jsonObject.put(AppConstants.NAME,""+myPlayer.getName());
+        jsonObject.put(AppConstants.PLAYER_ID,""+myPlayer.getPlayerID());
         //jsonObject.put(AppConstants.GAME_ID,myGame.getGameID());
-        jsonObject.put(AppConstants.GAME_ID,"556");
+        jsonObject.put(AppConstants.GAME_ID,""+myGame.getGameID());
 
         StringEntity entity = null;
         try {
@@ -256,7 +243,130 @@ public class BingoServerCalls {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
-                Toast.makeText(context,response.toString(),Toast.LENGTH_LONG);
+                //Toast.makeText(context,response.toString(),Toast.LENGTH_LONG);
+                bingoGameModel.setMyGame(myGame);
+                context.startActivity(new Intent(context,LobbyActivity.class));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+                System.out.println(""+statusCode);
+            }
+        });
+    }
+
+    private List<Integer> getCallingNumberList(String sequence){
+        List<Integer> callingnumList = new ArrayList<Integer>();
+        String [] numbers = sequence.split(",");
+        for(String num : numbers){
+            callingnumList.add(Integer.valueOf(num));
+        }
+        return  callingnumList;
+    }
+
+    public void getAvailableGamelist(){
+            BingoServerClient.get(AppConstants.GAME_LIST_URL,null,new JsonHttpResponseHandler(){
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+
+                    //System.out.println(response.toString());
+                    bingoGameModel.getGamelist().clear();
+                    for(int i = 0; i < response.length(); i++){
+                        Game mgame = new Game();
+                        try {
+                            JSONObject gameObj = response.getJSONObject(i);
+
+                            if(gameObj.get(AppConstants.GAME_ID).toString()!="null"){
+                                mgame.setGameID((String)gameObj.get(AppConstants.GAME_ID));
+                            }
+                            if(gameObj.get(AppConstants.CREATOR_NAME).toString()!="null"){
+                                mgame.setCreatorName((String)gameObj.get(AppConstants.CREATOR_NAME));
+                            }
+                            if(gameObj.get(AppConstants.IF_BINGO).toString()!="null"){
+                                mgame.setIfBingo((String)gameObj.get(AppConstants.IF_BINGO));
+                            }
+
+                            if(gameObj.get(AppConstants.WINNER).toString()!="null"){
+                                mgame.setWinner((String)gameObj.get(AppConstants.WINNER));
+                            }
+
+                            if(gameObj.get(AppConstants.LONGEST_MATCH).toString()!="null"){
+                                mgame.setLongestMatch((String)gameObj.get(AppConstants.LONGEST_MATCH));
+                            }
+                            if(gameObj.get(AppConstants.CREATOR_ID).toString()!="null"){
+                                mgame.setCreatorID((String)gameObj.get(AppConstants.CREATOR_ID));
+                            }
+                            if(gameObj.get(AppConstants.CREATION_TIME).toString()!="null"){
+                                mgame.setCreationTime((String)gameObj.get(AppConstants.CREATION_TIME));
+                            }
+                            if(gameObj.get(AppConstants.STATUS).toString()!="null"){
+                                mgame.setStatus((String)gameObj.get(AppConstants.STATUS));
+                            }
+
+                            if(gameObj.get(AppConstants.CALLING_NUMBERS).toString()!=null){
+                                mgame.setCallingNumberlist(getCallingNumberList(
+                                        (String)gameObj.get(AppConstants.CALLING_NUMBERS)));
+                            }
+
+                            bingoGameModel.addGame(mgame);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+                    System.out.println(""+statusCode);
+                }
+            });
+    }
+
+    public void selectGame(Player myPlayer, final Game myGame)throws JSONException{
+        System.out.println("Game selection:"+"Game ID:"+myGame.getGameID()+"sequence:"+myGame.getCallingNumberlist().toString());
+        JSONObject jsonObject = new JSONObject();
+        //jsonObject.put(AppConstants.PLAYER_ID,myPlayer.getPlayerID());
+        jsonObject.put(AppConstants.NAME,""+myPlayer.getName());
+        jsonObject.put(AppConstants.PLAYER_ID,""+myPlayer.getPlayerID());
+        //jsonObject.put(AppConstants.GAME_ID,myGame.getGameID());
+        jsonObject.put(AppConstants.GAME_ID,""+myGame.getGameID());
+
+        StringEntity entity = null;
+        try {
+
+            entity = new StringEntity(jsonObject.toString());
+            //entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            //entity.setContentEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        /*
+        BingoServerClient.post(AppConstants.GAME_PLAYER_ADD_URL+"1092/555",null,new JsonHttpResponseHandler(){
+            @Override
+         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+        Toast.makeText(context,response.toString(),Toast.LENGTH_LONG);
+        System.out.println("Response:"+response.toString());
+    }
+
+    @Override
+    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+        System.out.println(""+statusCode);
+    }
+    });*/
+
+
+        BingoServerClient.post(context,AppConstants.GAME_PLAYER_ADD_URL,entity,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                //Toast.makeText(context,response.toString(),Toast.LENGTH_LONG);
+                bingoGameModel.setMyGame(myGame);
+                context.startActivity(new Intent(context,LobbyActivity.class));
+                ((JoinGameActivity)context).finish();
             }
 
             @Override
@@ -267,11 +377,32 @@ public class BingoServerCalls {
 
     }
 
-    public void getPlayersInLobby(){
-        BingoServerClient.get(AppConstants.LOBBY_URL,null,new JsonHttpResponseHandler(){
+    public void getPlayersInLobby(Game myGame) throws JSONException{
+        BingoServerClient.get(AppConstants.LOBBY_URL+myGame.getGameID(),null,new JsonHttpResponseHandler(){
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                bingoGameModel.getPlayerlist().clear();
+                for(int i = 0; i < response.length(); i++){
+                    try {
+                        JSONObject jplayer = response.getJSONObject(i);
+                        Player player = new Player();
+                        if(jplayer.get(AppConstants.NAME).toString()!=null){
+                            player.setName(jplayer.get(AppConstants.NAME).toString());
+                        }
+                        if(jplayer.get(AppConstants.PLAYER_ID).toString()!=null){
+                            player.setPlayerID(jplayer.get(AppConstants.PLAYER_ID).toString());
+                        }
 
+                        /*if(jplayer.get(AppConstants.NAME).toString()!=null){
+                            player.setName(jplayer.get(AppConstants.NAME).toString());
+                        }*/
+
+                        bingoGameModel.addPlayer(player);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             @Override

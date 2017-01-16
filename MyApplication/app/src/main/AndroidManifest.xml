@@ -21,8 +21,8 @@
 
         <activity android:name=".MainGameActivity"></activity>
         <activity android:name=".LobbyActivity"></activity>
-        <activity android:name=".JoinGameActivity"></activity>
         <activity android:name=".HomeActivity"></activity>
+        <activity android:name=".JoinGameActivity"></activity>
     </application>
 
 </manifest>

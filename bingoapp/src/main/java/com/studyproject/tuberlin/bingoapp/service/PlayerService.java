@@ -28,4 +28,8 @@ public class PlayerService {
 		return playerRepository.save(player);
 	}
 
+	public Player getPlayerProfilePicture(String playerId) {
+		return playerRepository.getPlayerProfilePicture(playerId);
+	}
+
 }

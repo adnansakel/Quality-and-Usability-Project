@@ -1,5 +1,7 @@
 package com.studyproject.tuberlin.bingoapp.entity;
 
+import java.util.Arrays;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -105,8 +107,7 @@ public class Player {
 
 	@Override
 	public String toString() {
-		return "Player [playerId=" + playerId + ", playerName=" + playerName + ", email=" + email + ", gender=" + gender + ", age="
-				+ age + "]";
+		return "Player [playerId=" + playerId + ", playerName=" + playerName + ", email=" + email + ", gender=" + gender
+				+ ", age=" + age + ", profilePicture=" + Arrays.toString(profilePicture) + "]";
 	}
-
 }

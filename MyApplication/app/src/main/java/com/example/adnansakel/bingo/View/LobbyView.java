@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
+import com.example.adnansakel.bingo.HttpHelper.MySingleton;
 import com.example.adnansakel.bingo.Model.BingoGameModel;
 import com.example.adnansakel.bingo.Model.Game;
 import com.example.adnansakel.bingo.Model.Player;
+import com.example.adnansakel.bingo.MyApplication;
 import com.example.adnansakel.bingo.R;
 import com.example.adnansakel.bingo.Util.AppConstants;
 
@@ -62,8 +65,12 @@ public class LobbyView implements Observer {
                     item_playerlist.setTag(mplayer);
                     //i++;
                     ((TextView)item_playerlist.findViewById(R.id.txtName)).setText(mplayer.getName());
+                    NetworkImageView mNetworkImageView = (NetworkImageView)item_playerlist.findViewById(R.id.imageViewPlayerImage);
+                    mNetworkImageView.setImageUrl(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+mplayer.getPlayerID(), MySingleton.getInstance(context).getImageLoader());
                     //item_playerlist.setOnClickListener(this);
                     llPlayerList.addView(item_playerlist,layoutParams);
+
+
                 }
                 //game = new Game();
                 //game.setGameID("103");

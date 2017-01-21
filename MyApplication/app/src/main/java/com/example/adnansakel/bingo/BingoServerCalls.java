@@ -3,6 +3,7 @@ package com.example.adnansakel.bingo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.*;
 import com.loopj.android.http.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,6 +84,14 @@ public class BingoServerCalls {
         jsonObject.put(AppConstants.AGE,player.getAge());
         jsonObject.put(AppConstants.EMAIL,player.getEmail());
         jsonObject.put(AppConstants.GENDER,player.getGender());
+        System.out.println("ProfPhoto test");
+        if(player.getBmpProfilePhoto()!=null){
+            System.out.println("Converted to byte array");
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            player.getBmpProfilePhoto().compress(Bitmap.CompressFormat.JPEG, 10, bytes);
+            jsonObject.put(AppConstants.PROFILE_PHOTO,Base64.encodeToString(bytes.toByteArray(), Base64.DEFAULT));
+
+        }
 
         StringEntity entity = null;
         try {
@@ -104,13 +114,13 @@ public class BingoServerCalls {
 
                     SharedPreferences sharedPreferences = context.getSharedPreferences(AppConstants.PLAYER_INFO,Context.MODE_PRIVATE);
                     SharedPreferences.Editor editUserinfo = sharedPreferences.edit();
-                    editUserinfo.commit();
+
 
                     editUserinfo.putString(AppConstants.PLAYER_ID,(String)response.get(AppConstants.PLAYER_ID));
                     editUserinfo.putString(AppConstants.NAME,(String)response.get(AppConstants.NAME));
                     editUserinfo.putString(AppConstants.AGE,(String)response.get(AppConstants.AGE));
                     editUserinfo.putString(AppConstants.GENDER,(String)response.get(AppConstants.GENDER));
-
+                    editUserinfo.commit();
                     context.startActivity(new Intent(context, HomeActivity.class));
                     ((RegistrationActivity)context).finish();
                 } catch (JSONException e) {
@@ -437,6 +447,11 @@ public class BingoServerCalls {
                     if(response.get(AppConstants.IF_BINGO).toString()!=null){
                         if(response.get(AppConstants.IF_BINGO).toString().equals(AppConstants.TRUE)){
                             AppConstants.IF_BINGO_FOUND = 1;
+                            if(response.get(AppConstants.WINNER).toString()!=null){
+                                bingoGameModel.getMyGame().setWinner(response.get(AppConstants.WINNER).toString());
+                            }
+
+                            return;
                         }
                     }
                     if(response.get(AppConstants.LONGEST_MATCH).toString()!=null){

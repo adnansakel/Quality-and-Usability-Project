@@ -40,10 +40,13 @@ public class AppConstants {
     public static String LOBBY_URL = "/lobby/";
     public static String IFBINGO_URL = "/ifbingo/";
     public static String SAY_BINGO_URL = "/saybingo/";
-    public static String PLAYER_PHOTO_URL = "/player_photo";
+    public static String PLAYER_PHOTO_URL = "/profile_photo";
 
     public static String TRUE = "true";
     public static String FALSE = "false";
+    public static String PROFILE_PHOTO = "profilePicture";
+
+    //public static int IMAGE_TAKEN = 9;
 
 
 }

@@ -1,5 +1,7 @@
 package com.example.adnansakel.bingo.Model;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Adnan Sakel on 12/28/2016.
  */
@@ -9,6 +11,7 @@ public class Player {
     private String Age="";
     private String Email="";
     private String Gender="";
+    private Bitmap bmpProfilePhoto = null;
 
 
     public String getPlayerID() {
@@ -49,5 +52,13 @@ public class Player {
 
     public void setGender(String gender) {
         Gender = gender;
+    }
+
+    public Bitmap getBmpProfilePhoto() {
+        return bmpProfilePhoto;
+    }
+
+    public void setBmpProfilePhoto(Bitmap bmpProfilePhoto) {
+        this.bmpProfilePhoto = bmpProfilePhoto;
     }
 }

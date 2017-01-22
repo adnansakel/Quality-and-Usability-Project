@@ -4,9 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.example.adnansakel.bingo.HttpHelper.MySingleton;
 import com.example.adnansakel.bingo.Model.BingoGameModel;
@@ -65,9 +67,12 @@ public class LobbyView implements Observer {
                     item_playerlist.setTag(mplayer);
                     //i++;
                     ((TextView)item_playerlist.findViewById(R.id.txtName)).setText(mplayer.getName());
-                    NetworkImageView mNetworkImageView = (NetworkImageView)item_playerlist.findViewById(R.id.imageViewPlayerImage);
-                    mNetworkImageView.setImageUrl(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+mplayer.getPlayerID(), MySingleton.getInstance(context).getImageLoader());
+                    ImageView profPhotoImageView = (ImageView)item_playerlist.findViewById(R.id.imageViewPlayerImage);
+                   // mNetworkImageView.setImageUrl(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+mplayer.getPlayerID(), MySingleton.getInstance(context).getImageLoader());
                     //item_playerlist.setOnClickListener(this);
+                    MySingleton.getInstance(context).getImageLoader().get(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+mplayer.getPlayerID(),
+                            ImageLoader.getImageListener(profPhotoImageView,
+                            R.drawable.user, R.drawable.user));
                     llPlayerList.addView(item_playerlist,layoutParams);
 
 

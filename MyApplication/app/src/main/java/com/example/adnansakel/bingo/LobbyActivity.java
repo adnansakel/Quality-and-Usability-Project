@@ -2,6 +2,7 @@ package com.example.adnansakel.bingo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
     TextView txtWaiting;
     Button btnStartGame;
     BingoServerCalls bingoServerCalls;
+    Handler handler;
+    Runnable runnable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,11 +33,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         new LobbyView(findViewById(R.id.ll_lobby_view),((MyApplication)getApplication()).getBingoGameModel(),this);
         System.out.println("From Lobby"+((MyApplication) getApplication()).getBingoGameModel().getMyGame().getCallingNumberlist().toString());
         initialize();
-        try {
-            bingoServerCalls.getPlayersInLobby(((MyApplication)getApplication()).getBingoGameModel().getMyGame());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        checkforPlayers(2000);//checks for players after each two seconds;
 
     }
 
@@ -43,6 +42,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         txtWaiting = (TextView)findViewById(R.id.txtWaiting);
 
         txtWaiting.setOnClickListener(this);
+        handler = new Handler();
         //btnStartGame.setOnClickListener(this);
         /*
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -57,9 +57,40 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    private void checkforPlayers(final int milliseconds){
+        runnable = new Runnable() {
+
+            @Override
+            public void run() {
+                // do your stuff - don't create a new runnable here!
+
+                    //System.out.println(counter);
+                try {
+
+                    bingoServerCalls.getPlayersInLobby(((MyApplication)getApplication()).getBingoGameModel().getMyGame());
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                handler.postDelayed(this, milliseconds);
+
+
+            }
+        };
+
+// start it with:
+        handler.post(runnable);
+    }
+
     @Override
     public void onClick(View view) {
+        if(handler!=null){
+            if(runnable!=null)handler.removeCallbacks(runnable);
+        }
         startActivity(new Intent(LobbyActivity.this,MainGameActivity.class));
         this.finish();
     }
+
+
 }

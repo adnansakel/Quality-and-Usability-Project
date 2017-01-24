@@ -6,10 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.example.adnansakel.bingo.BingoServerCalls;
+import com.example.adnansakel.bingo.HttpHelper.MySingleton;
 import com.example.adnansakel.bingo.JoinGameActivity;
 import com.example.adnansakel.bingo.LobbyActivity;
 import com.example.adnansakel.bingo.Model.BingoGameModel;
@@ -84,6 +87,11 @@ public class JoinGameView implements Observer, View.OnClickListener {
                     ((TextView)item_gamelist.findViewById(R.id.txtGameID)).setText(mgame.getGameID());
                     ((TextView)item_gamelist.findViewById(R.id.txtCreatorName)).setText(mgame.getCreatorName());
                     item_gamelist.setOnClickListener(this);
+                    ImageView profPhotoImageView = (ImageView)item_gamelist.findViewById(R.id.imageViewPlayerImage);
+                    MySingleton.getInstance(context).getImageLoader().get(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+mgame.getCreatorID(),
+                            ImageLoader.getImageListener(profPhotoImageView,
+                                    R.drawable.user, R.drawable.user));
+
                     llGameList.addView(item_gamelist,layoutParams);
                 }
                 //game = new Game();

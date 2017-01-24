@@ -38,6 +38,7 @@ import java.io.IOException;
 public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btnSignIn;
+    Button btnUploadPhoto;
     EditText editTextName;
     EditText editTextAge;
     EditText editTextGender;
@@ -65,6 +66,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         editTextGender = (EditText)findViewById(R.id.editTextGender);
         editTextEmail = (EditText)findViewById(R.id.editTextEmail);
         btnSignIn = (Button)findViewById(R.id.btnSignIn);
+        btnUploadPhoto = (Button)findViewById(R.id.btnPhotoUpload);
+        btnUploadPhoto.setVisibility(View.GONE);
 
         imgProfilePhoto = (ImageView)findViewById(R.id.imgProfilePhoto);
         imgProfilePhoto.setOnClickListener(this);
@@ -200,6 +203,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 //finish();
 
             } else if (requestCode == SELECT_FILE) {
+                System.out.println("Photo selected");
                 Uri selectedImageUri = data.getData();
                 String[] projection = {MediaStore.MediaColumns.DATA};
                 CursorLoader cursorLoader = new CursorLoader(this, selectedImageUri, projection, null, null,
@@ -230,6 +234,9 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 setResult(RESULT_OK, intent);
                 finish();*/
 
+            }
+            else{
+                System.out.println("Photo not selected "+requestCode);
             }
         }
     }

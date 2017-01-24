@@ -32,7 +32,7 @@ public class AppConstants {
     public static String STATUS = "status";
     public static String GAME_LIST_UPDATED = "game list updated";
     public static String PLAYER_LIST_UPDATED = "player list updated";
-    public static String BASE_URL = "http://192.168.1.13:8080/bingodb";
+    public static String BASE_URL = "http://192.168.43.171:8080/bingodb";//http://192.168.1.13:8080/bingodb";
     public static String REGISTRATION_URL = "/player/registration/";
     public static String GAME_CREATION_URL = "/game/creation/";
     public static String GAME_LIST_URL = "/gamelist_to_join/";

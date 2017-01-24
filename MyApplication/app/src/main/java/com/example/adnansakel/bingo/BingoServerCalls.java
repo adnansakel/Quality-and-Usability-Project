@@ -1,5 +1,6 @@
 package com.example.adnansakel.bingo;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,9 +39,12 @@ public class BingoServerCalls {
     private BingoGameModel bingoGameModel;
     private Context context;
 
+    ProgressDialog progress;
+
     public BingoServerCalls(BingoGameModel bingoGameModel, Context context){
         this.context = context;
         this.bingoGameModel = bingoGameModel;
+
     }
 
     /*public void getShuffledCalledNumberSequence(){
@@ -74,6 +78,10 @@ public class BingoServerCalls {
     }
 
     public void registerUser(Player player) throws JSONException{
+        progress = ProgressDialog.show(context, null,
+                null, true);
+        progress.setContentView(R.layout.progressdialogview);
+        progress.setCancelable(true);
         /*RequestParams params = new RequestParams();
         params.put("FirstName","Sayem");
         params.put("LastName","Siam");
@@ -106,6 +114,8 @@ public class BingoServerCalls {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
+                progress.dismiss();
+
                 try {
                     bingoGameModel.getMyPlayer().setName((String)response.get(AppConstants.NAME));
                     bingoGameModel.getMyPlayer().setAge((String)response.get(AppConstants.AGE));
@@ -134,6 +144,9 @@ public class BingoServerCalls {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+
+                progress.dismiss();
+
                 System.out.println(""+statusCode);
             }
         });
@@ -152,6 +165,12 @@ public class BingoServerCalls {
     }
 
     public void createGame(final Player myPlayer) throws JSONException{
+
+        progress = ProgressDialog.show(context, null,
+                null, true);
+        progress.setContentView(R.layout.progressdialogview);
+        progress.setCancelable(true);
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(AppConstants.CREATOR_ID,myPlayer.getPlayerID());
         jsonObject.put(AppConstants.CREATOR_NAME,myPlayer.getName());
@@ -169,7 +188,11 @@ public class BingoServerCalls {
         BingoServerClient.post(context,AppConstants.GAME_CREATION_URL,entity,new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                progress.dismiss();
+
                 System.out.println(response);
+
                 try {
                     bingoGameModel.getMyGame().setGameID((String)response.get(AppConstants.GAME_ID));
 
@@ -212,6 +235,9 @@ public class BingoServerCalls {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+
+                progress.dismiss();
+
                 System.out.println(""+statusCode);
             }
         });
@@ -219,6 +245,15 @@ public class BingoServerCalls {
     }
 
     private void selectGameRequestbyCreator(Player myPlayer, final Game myGame) throws JSONException{
+        /*
+        * This method is called when user creates a game and application receives the successful response from server
+        * This method then adds the creator into the game without user intervention
+        * */
+        progress = ProgressDialog.show(context, null,
+                null, true);
+        progress.setContentView(R.layout.progressdialogview);
+        progress.setCancelable(true);
+
         JSONObject jsonObject = new JSONObject();
         //jsonObject.put(AppConstants.PLAYER_ID,myPlayer.getPlayerID());
         jsonObject.put(AppConstants.NAME,""+myPlayer.getName());
@@ -255,7 +290,7 @@ public class BingoServerCalls {
         BingoServerClient.post(context,AppConstants.GAME_PLAYER_ADD_URL,entity,new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-
+                progress.dismiss();
                 //Toast.makeText(context,response.toString(),Toast.LENGTH_LONG);
                 bingoGameModel.setMyGame(myGame);
                 context.startActivity(new Intent(context,LobbyActivity.class));
@@ -263,6 +298,9 @@ public class BingoServerCalls {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+
+                progress.dismiss();
+
                 System.out.println(""+statusCode);
             }
         });
@@ -278,10 +316,18 @@ public class BingoServerCalls {
     }
 
     public void getAvailableGamelist(){
-            BingoServerClient.get(AppConstants.GAME_LIST_URL,null,new JsonHttpResponseHandler(){
+
+        progress = ProgressDialog.show(context, null,
+                null, true);
+        progress.setContentView(R.layout.progressdialogview);
+        progress.setCancelable(true);
+
+        BingoServerClient.get(AppConstants.GAME_LIST_URL,null,new JsonHttpResponseHandler(){
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+
+                    if(progress!=null){progress.dismiss();}
 
                     //System.out.println(response.toString());
                     bingoGameModel.getGamelist().clear();
@@ -332,12 +378,20 @@ public class BingoServerCalls {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+
+                    if(progress!=null){progress.dismiss();}
                     System.out.println(""+statusCode);
                 }
             });
     }
 
     public void selectGame(Player myPlayer, final Game myGame)throws JSONException{
+
+        progress = ProgressDialog.show(context, null,
+                null, true);
+        progress.setContentView(R.layout.progressdialogview);
+        progress.setCancelable(true);
+
         System.out.println("Game selection:"+"Game ID:"+myGame.getGameID()+"sequence:"+myGame.getCallingNumberlist().toString());
         JSONObject jsonObject = new JSONObject();
         //jsonObject.put(AppConstants.PLAYER_ID,myPlayer.getPlayerID());
@@ -375,7 +429,7 @@ public class BingoServerCalls {
         BingoServerClient.post(context,AppConstants.GAME_PLAYER_ADD_URL,entity,new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-
+                if(progress!=null){progress.dismiss();}
                 //Toast.makeText(context,response.toString(),Toast.LENGTH_LONG);
                 bingoGameModel.setMyGame(myGame);
                 context.startActivity(new Intent(context,LobbyActivity.class));
@@ -384,6 +438,9 @@ public class BingoServerCalls {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+
+                if(progress != null){progress.dismiss();}
+
                 System.out.println(""+statusCode);
             }
         });
@@ -391,9 +448,13 @@ public class BingoServerCalls {
     }
 
     public void getPlayersInLobby(Game myGame) throws JSONException{
+
+
         BingoServerClient.get(AppConstants.LOBBY_URL+myGame.getGameID(),null,new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+
+
                 bingoGameModel.getPlayerlist().clear();
                 for(int i = 0; i < response.length(); i++){
                     try {
@@ -420,6 +481,7 @@ public class BingoServerCalls {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+
                 System.out.println(""+statusCode);
             }
         });
@@ -479,6 +541,12 @@ public class BingoServerCalls {
     }
 
     public void sayBingo(Player myPlayer) throws JSONException{
+
+        progress = ProgressDialog.show(context, null,
+                null, true);
+        progress.setContentView(R.layout.progressdialogview);
+        progress.setCancelable(true);
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(AppConstants.WINNER,myPlayer.getName());
         jsonObject.put(AppConstants.IF_BINGO,AppConstants.TRUE);
@@ -495,6 +563,8 @@ public class BingoServerCalls {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
+                if(progress != null){progress.dismiss();}
+
                 try {
                     if(response.get(AppConstants.WINNER).toString()!=null){
                         Toast.makeText(context,"Congrasulations !!!"+response.get(AppConstants.WINNER).toString(),Toast.LENGTH_LONG).show();
@@ -510,6 +580,7 @@ public class BingoServerCalls {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+                if(progress != null){progress.dismiss();}
                 Toast.makeText(context,"Could not say bingo. Please try again",Toast.LENGTH_SHORT).show();
             }
         });

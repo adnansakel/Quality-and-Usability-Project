@@ -1,8 +1,12 @@
 package com.example.adnansakel.bingo;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.tts.TextToSpeech;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +25,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 /**
@@ -58,6 +63,8 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     TextView txtCalledNumber;
     Button btnSayBingo;
 
+    TextToSpeech textToSpeechCallNumber;
+
     List<Integer> sequencenumberList;
 
     BingoServerCalls bingoServerCalls;
@@ -65,6 +72,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temp_main_game);
+        getSupportActionBar().setTitle("Game Bingo");
         sequencenumberList = new ArrayList<Integer>();
         new MainGameView(findViewById(R.id.rl_main_game_view),((MyApplication)getApplication()).getBingoGameModel());
         handler = new Handler();
@@ -77,6 +85,15 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         ((MyApplication)getApplication()).getBingoGameModel().initializeBingoPatternSsearchGrid();
 
         bingoServerCalls = new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this);
+
+        textToSpeechCallNumber = new TextToSpeech(getApplicationContext(),new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    textToSpeechCallNumber.setLanguage(Locale.UK);
+                }
+            }
+        });
 
         initialize();
         counter = 0;
@@ -275,9 +292,10 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     }
 
     int counter = 0;
+    Runnable runnable;
     private void callNumbersinInterval(final int milliseconds){
 
-        Runnable runnable = new Runnable() {
+        runnable = new Runnable() {
 
             @Override
             public void run() {
@@ -292,6 +310,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                         Toast.makeText(MainGameActivity.this,"Game over without a Bingo !!",Toast.LENGTH_LONG).show();
                     }
 
+                    return;
                 }
                 if(counter % 5 == 0){
                     if(counter/5 < 65){
@@ -301,6 +320,12 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                         //txtCalledNumber.setText(""+m);
                         ((MyApplication)getApplication()).getBingoGameModel().setCalledNumber(m);
                         txtCalledNumber.setTextColor(Color.parseColor("#008000"));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            textToSpeechCallNumber.speak(""+m,TextToSpeech.QUEUE_FLUSH,null,""+m);
+                        }
+                        else{
+                            textToSpeechCallNumber.speak("22",TextToSpeech.QUEUE_FLUSH,null);
+                        }
                         try {
                             bingoServerCalls.postLongestMatch(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer(),
                                     ((MyApplication)getApplication()).getBingoGameModel().getmyLongestMatch());
@@ -374,5 +399,26 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                 }
             }
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        //Toast.makeText(this,"This activity will exit",Toast.LENGTH_LONG).show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmation");
+        builder.setMessage("Are you sure want to exit this game?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(handler!=null && runnable!=null){
+                    handler.removeCallbacks(runnable);
+                }
+                MainGameActivity.super.onBackPressed();
+            }
+        });
+        builder.setNegativeButton("No", null);
+        builder.setCancelable(true);
+        builder.show();
     }
 }

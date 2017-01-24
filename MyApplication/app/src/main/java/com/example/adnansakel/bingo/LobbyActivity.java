@@ -1,14 +1,17 @@
 package com.example.adnansakel.bingo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.adnansakel.bingo.View.LobbyView;
 
@@ -29,6 +32,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
+        getSupportActionBar().setTitle("Lobby");
         bingoServerCalls = new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this);
         new LobbyView(findViewById(R.id.ll_lobby_view),((MyApplication)getApplication()).getBingoGameModel(),this);
         System.out.println("From Lobby"+((MyApplication) getApplication()).getBingoGameModel().getMyGame().getCallingNumberlist().toString());
@@ -67,7 +71,16 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
                     //System.out.println(counter);
                 try {
 
+                    if(((MyApplication)getApplication()).getBingoGameModel().getPlayerlist().size()>4){
+
+                        handler.removeCallbacks(this);
+                        startActivity(new Intent(LobbyActivity.this,MainGameActivity.class));
+                        LobbyActivity.this.finish();
+                        return;
+                    }
+
                     bingoServerCalls.getPlayersInLobby(((MyApplication)getApplication()).getBingoGameModel().getMyGame());
+
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
@@ -85,11 +98,36 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
+        if(((MyApplication)getApplication()).getBingoGameModel().getPlayerlist().size()<2){
+            Toast.makeText(this,"You need at least two players to start the game.",Toast.LENGTH_LONG).show();
+            return;
+        }
         if(handler!=null){
             if(runnable!=null)handler.removeCallbacks(runnable);
         }
         startActivity(new Intent(LobbyActivity.this,MainGameActivity.class));
         this.finish();
+    }
+
+    @Override
+    public void onBackPressed(){
+        //Toast.makeText(this,"This activity will exit",Toast.LENGTH_LONG).show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmation");
+        builder.setMessage("Are you sure want to exit Lobby of this game?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(handler!=null && runnable!=null){
+                    handler.removeCallbacks(runnable);
+                }
+                LobbyActivity.super.onBackPressed();
+            }
+        });
+        builder.setNegativeButton("No", null);
+        builder.setCancelable(true);
+        builder.show();
     }
 
 

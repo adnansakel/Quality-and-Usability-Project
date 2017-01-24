@@ -18,6 +18,7 @@ public class JoinGameActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_game);
+        getSupportActionBar().setTitle("Join Game");
         bingoServerCalls = new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this);
         new JoinGameView(findViewById(R.id.ll_join_game_view),((MyApplication)getApplication()).getBingoGameModel(),this);
         initialize();

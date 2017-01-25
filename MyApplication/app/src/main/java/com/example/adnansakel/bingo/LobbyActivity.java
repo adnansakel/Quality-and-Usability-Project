@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.adnansakel.bingo.Util.AppConstants;
 import com.example.adnansakel.bingo.View.LobbyView;
 
 import org.json.JSONException;
@@ -28,6 +29,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
     BingoServerCalls bingoServerCalls;
     Handler handler;
     Runnable runnable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,8 +46,14 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
     private void initialize(){
         llPlayerList = (LinearLayout)findViewById(R.id.llPlayersinLobby);
         txtWaiting = (TextView)findViewById(R.id.txtWaiting);
+        btnStartGame = (Button)findViewById(R.id.btnStartGame);
 
-        txtWaiting.setOnClickListener(this);
+        //txtWaiting.setOnClickListener(this);
+        btnStartGame.setOnClickListener(this);
+        if(!((MyApplication) getApplication()).getBingoGameModel().getMyPlayer().getPlayerID().equals(
+                ((MyApplication) getApplication()).getBingoGameModel().getMyGame().getCreatorID())){
+            btnStartGame.setVisibility(View.GONE);
+        }
         handler = new Handler();
         //btnStartGame.setOnClickListener(this);
         /*
@@ -73,6 +81,19 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
 
                     if(((MyApplication)getApplication()).getBingoGameModel().getPlayerlist().size()>4){
 
+                        /*handler.removeCallbacks(this);
+                        startActivity(new Intent(LobbyActivity.this,MainGameActivity.class));
+                        LobbyActivity.this.finish();*/
+                        try {
+
+                            bingoServerCalls.notifyGameStatus(((MyApplication)getApplication()).getBingoGameModel().getMyGame(),handler,runnable);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return;
+                    }
+
+                    if(((MyApplication)getApplication()).getBingoGameModel().getMyGame().getStatus().equals(AppConstants.ACTIVE)){
                         handler.removeCallbacks(this);
                         startActivity(new Intent(LobbyActivity.this,MainGameActivity.class));
                         LobbyActivity.this.finish();
@@ -102,11 +123,15 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(this,"You need at least two players to start the game.",Toast.LENGTH_LONG).show();
             return;
         }
-        if(handler!=null){
-            if(runnable!=null)handler.removeCallbacks(runnable);
+
+
+        try {
+
+            bingoServerCalls.notifyGameStatus(((MyApplication)getApplication()).getBingoGameModel().getMyGame(),handler,runnable);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        startActivity(new Intent(LobbyActivity.this,MainGameActivity.class));
-        this.finish();
+
     }
 
     @Override
@@ -119,10 +144,12 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(handler!=null && runnable!=null){
-                    handler.removeCallbacks(runnable);
+                try {
+                    bingoServerCalls.removeFromGame(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer(),
+                            ((MyApplication)getApplication()).getBingoGameModel().getMyGame(),handler,runnable);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                LobbyActivity.super.onBackPressed();
             }
         });
         builder.setNegativeButton("No", null);

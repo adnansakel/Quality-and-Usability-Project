@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Handler;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -164,7 +165,7 @@ public class BingoServerCalls {
         });*/
     }
 
-    public void createGame(final Player myPlayer) throws JSONException{
+    public void createGame(Game myGame, final Player myPlayer) throws JSONException{
 
         progress = ProgressDialog.show(context, null,
                 null, true);
@@ -175,6 +176,8 @@ public class BingoServerCalls {
         jsonObject.put(AppConstants.CREATOR_ID,myPlayer.getPlayerID());
         jsonObject.put(AppConstants.CREATOR_NAME,myPlayer.getName());
         jsonObject.put(AppConstants.IF_BINGO,AppConstants.FALSE);
+        jsonObject.put(AppConstants.STATUS,AppConstants.INACTIVE);
+        jsonObject.put(AppConstants.GAME_NAME,myGame.getGameName());
         //System.out.println("CreatorID:"+myPlayer.getPlayerID());
         StringEntity entity = null;
         try {
@@ -363,6 +366,10 @@ public class BingoServerCalls {
                                 mgame.setStatus((String)gameObj.get(AppConstants.STATUS));
                             }
 
+                            if(gameObj.get(AppConstants.GAME_NAME).toString()!="null"){
+                                mgame.setGameName((String)gameObj.get(AppConstants.GAME_NAME));
+                            }
+
                             if(gameObj.get(AppConstants.CALLING_NUMBERS).toString()!=null){
                                 mgame.setCallingNumberlist(getCallingNumberList(
                                         (String)gameObj.get(AppConstants.CALLING_NUMBERS)));
@@ -431,6 +438,15 @@ public class BingoServerCalls {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 if(progress!=null){progress.dismiss();}
                 //Toast.makeText(context,response.toString(),Toast.LENGTH_LONG);
+                try {
+                    if(response.get(AppConstants.GAME_ID).toString().equals(null)||response.get(AppConstants.GAME_ID).toString().equals("null")){
+                        Toast.makeText(context,"This game is already active or completed. You cannot join.",Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("response : "+response.toString());
                 bingoGameModel.setMyGame(myGame);
                 context.startActivity(new Intent(context,LobbyActivity.class));
                 ((JoinGameActivity)context).finish();
@@ -443,6 +459,12 @@ public class BingoServerCalls {
 
                 System.out.println(""+statusCode);
             }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String string, Throwable throwable){
+                if(progress != null){progress.dismiss();}
+                //System.out.println("response on failure: "+statusCode+","+headers.toString()+","+toString());
+
+            }
         });
 
     }
@@ -452,13 +474,15 @@ public class BingoServerCalls {
 
         BingoServerClient.get(AppConstants.LOBBY_URL+myGame.getGameID(),null,new JsonHttpResponseHandler(){
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
-
+                //System.out.println(""+response.toString());
+                try {
+                JSONArray mjsonArray = response.getJSONArray(AppConstants.GAME_PLAYER);
                 bingoGameModel.getPlayerlist().clear();
-                for(int i = 0; i < response.length(); i++){
-                    try {
-                        JSONObject jplayer = response.getJSONObject(i);
+                for(int i = 0; i < mjsonArray.length(); i++){
+
+                        JSONObject jplayer = mjsonArray.getJSONObject(i);
                         Player player = new Player();
                         if(jplayer.get(AppConstants.NAME).toString()!=null){
                             player.setName(jplayer.get(AppConstants.NAME).toString());
@@ -467,15 +491,19 @@ public class BingoServerCalls {
                             player.setPlayerID(jplayer.get(AppConstants.PLAYER_ID).toString());
                         }
 
-                        /*if(jplayer.get(AppConstants.NAME).toString()!=null){
-                            player.setName(jplayer.get(AppConstants.NAME).toString());
-                        }*/
+
 
                         bingoGameModel.addPlayer(player);
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+
+
+                }
+
+                if(response.get(AppConstants.GAME_STATUS).toString()!=null){
+                    bingoGameModel.getMyGame().setStatus(response.get(AppConstants.GAME_STATUS).toString());
+                }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -516,12 +544,13 @@ public class BingoServerCalls {
                             return;
                         }
                     }
-                    if(response.get(AppConstants.LONGEST_MATCH).toString()!=null){
+                    if(response.get(AppConstants.LONGEST_MATCH).toString()!=null && !response.get(AppConstants.LONGEST_MATCH).toString().equalsIgnoreCase("null")){
                         String [] str = response.get(AppConstants.LONGEST_MATCH).toString().split(",");
+                        System.out.println("Longest match:" + response.get(AppConstants.LONGEST_MATCH).toString());
                         String name = str[0];
                         String score = str[1];//.replaceAll("\\s+","");
                         System.out.println(name+" "+"needs"+Integer.valueOf(str[1])+"more match only!");
-                        Toast toast = Toast.makeText(context,name+" "+"needs "+(5-Integer.valueOf(str[1]))+" more match only!",Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(context,name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!",Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.BOTTOM,0,0);
                         toast.show();
 
@@ -599,6 +628,114 @@ public class BingoServerCalls {
             }
         });
     }
+
+    public void removeFromGame(Player myPlayer, Game myGame, final Handler handler, final Runnable runnable) throws JSONException{
+
+        progress = ProgressDialog.show(context, null,
+                null, true);
+        progress.setContentView(R.layout.progressdialogview);
+        progress.setCancelable(true);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(AppConstants.PLAYER_ID,myPlayer.getPlayerID());
+        jsonObject.put(AppConstants.GAME_ID,myGame.getGameID());
+        //jsonObject.put(AppConstants.GAME_ID,bingoGameModel.getMyGame().getGameID());
+
+        StringEntity entity = null;
+        try {
+            entity = new StringEntity(jsonObject.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        BingoServerClient.post(context,AppConstants.REMOVE_PLAYER_FROM_GAME_URL,entity,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                if(progress != null){progress.dismiss();}
+
+
+
+                try {
+                    //System.out.println(response.get(AppConstants.MESSAGE).toString());
+                    if(response.get(AppConstants.MESSAGE).toString().equals(AppConstants.SUCCESS)){
+                        if(handler!=null && runnable!=null){
+                            handler.removeCallbacks(runnable);
+                        }
+
+                        ((LobbyActivity)context).finish();
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+                if(progress != null){progress.dismiss();}
+                Toast.makeText(context,"Sorry. Could remove you from this game. Please try again",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void notifyGameStatus(Game myGame, final Handler handler, final Runnable runnable) throws JSONException{
+
+        progress = ProgressDialog.show(context, null,
+                null, true);
+        progress.setContentView(R.layout.progressdialogview);
+        progress.setCancelable(true);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(AppConstants.STATUS,myGame.getStatus());
+        jsonObject.put(AppConstants.GAME_ID,myGame.getGameID());
+        //jsonObject.put(AppConstants.GAME_ID,bingoGameModel.getMyGame().getGameID());
+
+        StringEntity entity = null;
+        try {
+            entity = new StringEntity(jsonObject.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        BingoServerClient.post(context,AppConstants.GAME_STATUS_URL,entity,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                if(progress != null){progress.dismiss();}
+
+                try {
+                    if(response.get(AppConstants.MESSAGE).toString().equals(AppConstants.SUCCESS)){
+                        if(handler!=null){
+                            if(runnable!=null)handler.removeCallbacks(runnable);
+                        }
+                        bingoGameModel.getMyGame().setStatus(AppConstants.INACTIVE);
+                        context.startActivity(new Intent(context,MainGameActivity.class));
+                        ((LobbyActivity)context).finish();
+                    }
+                    else{
+                        Toast.makeText(context,"Could not start the game. Please try again",Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+                if(progress != null){progress.dismiss();}
+                Toast.makeText(context,"Could not start the game. Please try again",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
 
 
 }

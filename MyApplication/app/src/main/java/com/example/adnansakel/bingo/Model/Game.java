@@ -16,6 +16,7 @@ public class Game {
     private String CreatorName = "";
     private String CreationTime = "";
     private String Status = "";
+    private String GameName = "";
 
     public String getGameID() {
         return GameID;
@@ -87,5 +88,13 @@ public class Game {
 
     public void setCreatorName(String creatorName) {
         CreatorName = creatorName;
+    }
+
+    public String getGameName() {
+        return GameName;
+    }
+
+    public void setGameName(String gameName) {
+        GameName = gameName;
     }
 }

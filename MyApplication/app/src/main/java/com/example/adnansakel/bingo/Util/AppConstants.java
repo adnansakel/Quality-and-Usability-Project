@@ -32,20 +32,28 @@ public class AppConstants {
     public static String STATUS = "status";
     public static String GAME_LIST_UPDATED = "game list updated";
     public static String PLAYER_LIST_UPDATED = "player list updated";
-    public static String BASE_URL = "http://192.168.43.171:8080/bingodb";//http://192.168.1.13:8080/bingodb";
+    public static String BASE_URL = "http://192.168.1.13:8080/bingodb";//"http://192.168.43.171:8080/bingodb";
     public static String REGISTRATION_URL = "/player/registration/";
     public static String GAME_CREATION_URL = "/game/creation/";
     public static String GAME_LIST_URL = "/gamelist_to_join/";
     public static String GAME_PLAYER_ADD_URL = "/game_player/add/";
+    public static String REMOVE_PLAYER_FROM_GAME_URL = "/game_player/delete/";
+    public static String GAME_STATUS_URL = "/game_status_to_active/";
     public static String LOBBY_URL = "/lobby/";
     public static String IFBINGO_URL = "/ifbingo/";
     public static String SAY_BINGO_URL = "/saybingo/";
     public static String PLAYER_PHOTO_URL = "/profile_photo";
+    public static String GAME_PLAYER = "gamePlayer";
+    public static String GAME_STATUS = "gameStatus";
 
     public static String TRUE = "true";
     public static String FALSE = "false";
     public static String PROFILE_PHOTO = "profilePicture";
-
+    public static String ACTIVE = "ACTIVE";
+    public static String INACTIVE = "INACTIVE";
+    public static String COMPLETED = "COMPLETED";
+    public static String MESSAGE = "message";
+    public static String SUCCESS = "Success";
     //public static int IMAGE_TAKEN = 9;
 
 

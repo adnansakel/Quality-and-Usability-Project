@@ -324,7 +324,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                             textToSpeechCallNumber.speak(""+m,TextToSpeech.QUEUE_FLUSH,null,""+m);
                         }
                         else{
-                            textToSpeechCallNumber.speak("22",TextToSpeech.QUEUE_FLUSH,null);
+                            textToSpeechCallNumber.speak(""+m,TextToSpeech.QUEUE_FLUSH,null);
                         }
                         try {
                             bingoServerCalls.postLongestMatch(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer(),

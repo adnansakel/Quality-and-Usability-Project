@@ -81,11 +81,12 @@ public class JoinGameView implements Observer, View.OnClickListener {
                 layoutParams.setMargins(2, 0, 2, 0);
                 //int i = 0;
                 for(Game mgame : bingoGameModel.getGamelist()){
+                    if(mgame.getCreatorID().equals(bingoGameModel.getMyPlayer().getPlayerID())){continue;}
                     View item_gamelist =  ((LayoutInflater)view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.list_view_item_gamelist,null);
                     item_gamelist.setTag(mgame);
                     //i++;
-                    ((TextView)item_gamelist.findViewById(R.id.txtGameID)).setText(mgame.getGameID());
-                    ((TextView)item_gamelist.findViewById(R.id.txtCreatorName)).setText(mgame.getCreatorName());
+                    ((TextView)item_gamelist.findViewById(R.id.txtGameID)).setText(mgame.getGameName());//instead of GameID showing game name
+                    ((TextView)item_gamelist.findViewById(R.id.txtCreatorName)).setText("Created by "+mgame.getCreatorName());
                     item_gamelist.setOnClickListener(this);
                     ImageView profPhotoImageView = (ImageView)item_gamelist.findViewById(R.id.imageViewPlayerImage);
                     MySingleton.getInstance(context).getImageLoader().get(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+mgame.getCreatorID(),

@@ -5,7 +5,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -55,8 +54,11 @@ public class PlayerController {
 	@RequestMapping(value = "/bingodb/player/registration/", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<Player> registerPlayer(@RequestBody Player player) throws Exception{
 		Player savedPlayer = playerService.registerPlayer(player);
-		BufferedImage image = ImageIO.read(new ByteArrayInputStream(player.getProfilePicture()));
-		ImageIO.write(image, "jpeg", new File("images"+File.separator+savedPlayer.getPlayerId()+".jpeg"));
+		if(player.getProfilePicture() != null)
+		{
+			BufferedImage image = ImageIO.read(new ByteArrayInputStream(player.getProfilePicture()));
+			ImageIO.write(image, "jpeg", new File("images" + File.separator + savedPlayer.getPlayerId() + ".jpeg"));
+		}
 		return new ResponseEntity<Player> (savedPlayer, HttpStatus.OK);
 	}
 	
@@ -67,7 +69,7 @@ public class PlayerController {
 		try{
 			Path currentRelativePath = Paths.get("");
 			String directoryPath = currentRelativePath.toAbsolutePath().toString();
-			InputStream inputStream = new FileInputStream(directoryPath+File.separator+"images"+File.separator+playerId+".jpeg");
+			InputStream inputStream = new FileInputStream(directoryPath + File.separator + "images" + File.separator+playerId + ".jpeg");
 			BufferedImage image =  ImageIO.read(inputStream);
 			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			ImageIO.write(image, "jpeg", byteArrayOutputStream);

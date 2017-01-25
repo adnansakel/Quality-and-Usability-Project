@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.studyproject.tuberlin.bingoapp.entity.Game;
+import com.studyproject.tuberlin.bingoapp.helpers.DatabaseStatus;
 import com.studyproject.tuberlin.bingoapp.service.GameService;
 
 /**
@@ -51,12 +52,24 @@ public class GameController {
 		  return new ResponseEntity<List<Game>> (g, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/bingodb/game_status_to_active/", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<DatabaseStatus> setGameStatusToActive(@RequestBody Game game){
+		String gameId = game.getGameId();
+		int result = gameService.updateStatusActive(gameId);
+		DatabaseStatus status = new DatabaseStatus();
+		if(result == 1){
+			status.setMessage("Success");
+		}else{
+			status.setMessage("Error");
+		}
+		return new ResponseEntity<DatabaseStatus> (status, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/bingodb/saybingo/", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<Game> sayBingo(@RequestBody Game game){
 		  String ifBingo = game.getIfBingo();
 		  String gameId = game.getGameId();
 		  String winner = game.getWinner();
-		  System.out.println("Result >>>>>>>>>>"+ifBingo+" ,,,, "+winner);
 		  gameService.updateForSayBingo(gameId, ifBingo, winner);
 		  Game p = gameService.findGame(gameId);
 		  gameService.updateStatusCompleted(gameId);

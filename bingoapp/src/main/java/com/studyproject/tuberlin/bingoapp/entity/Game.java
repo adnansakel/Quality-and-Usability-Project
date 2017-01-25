@@ -44,11 +44,14 @@ public class Game {
 	@Column(name = "creator_name")
 	private String creatorName;
 	
+	@Column(name = "game_name")
+	private String gameName;
+	
 	public Game(){	
 	}
 
 	public Game(String gameId, String callingNumbers, String ifBingo, String winner, String longestMatch,
-			String creatorId, String creationTime, String status, String creatorName) {
+			String creatorId, String creationTime, String status, String creatorName, String gameName) {
 		super();
 		this.gameId = gameId;
 		this.callingNumbers = callingNumbers;
@@ -59,7 +62,10 @@ public class Game {
 		this.creationTime = creationTime;
 		this.status = status;
 		this.creatorName = creatorName;
+		this.gameName = gameName;
 	}
+
+
 
 	public String getGameId() {
 		return gameId;
@@ -133,10 +139,18 @@ public class Game {
 		this.creatorName = creatorName;
 	}
 
+	public String getGameName() {
+		return gameName;
+	}
+
+	public void setGameName(String gameName) {
+		this.gameName = gameName;
+	}
+
 	@Override
 	public String toString() {
 		return "Game [gameId=" + gameId + ", callingNumbers=" + callingNumbers + ", ifBingo=" + ifBingo + ", winner="
 				+ winner + ", longestMatch=" + longestMatch + ", creatorId=" + creatorId + ", creationTime="
-				+ creationTime + ", status=" + status + ", creatorName=" + creatorName + "]";
+				+ creationTime + ", status=" + status + ", creatorName=" + creatorName + ", gameName=" + gameName + "]";
 	}
 }

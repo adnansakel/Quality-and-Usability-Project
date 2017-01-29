@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#8CCC8F"
+    android:background="#FDFEFE"
     tools:context="com.example.adnansakel.bingo.HomeActivity"
     android:id="@+id/rl_home_view">
 
@@ -22,26 +22,27 @@
         android:layout_alignParentStart="true"
         android:weightSum="1">
 
-        <ImageView
-            android:layout_width="239dp"
-            android:layout_height="80dp"
-            app:srcCompat="@mipmap/bingo_logo"
-            android:layout_above="@+id/linearLayout"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="30dp"
-            android:layout_marginStart="154dp"
-            android:id="@+id/imageView" />
 
         <TextView
-            android:id="@+id/txt_game_won"
+            android:id="@+id/txt_game_loose"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="25sp"
             android:textColor="#016773"
-            android:textStyle="italic|bold"
-            android:text="Sorry! Someone was faster!"
+            android:textStyle="bold"
+            android:text="TOO BAD!"
+            android:layout_weight="1.58" />
+
+        <TextView
+            android:id="@+id/txt_game_loose2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textColor="#016773"
+            android:textStyle="bold"
+            android:text="SOMEONE WAS FASTER"
             android:layout_weight="1.58" />
 
         <TextView
@@ -51,28 +52,27 @@
             android:gravity="center"
             android:textSize="25sp"
             android:textColor="#016773"
-            android:textStyle="italic|bold"
+            android:textStyle="bold"
             android:text="@string/game_notice"
             android:layout_weight="1.58" />
 
         <Button
             android:id="@+id/btn_join_game"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="100dp"
+            android:layout_width="348dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="120dp"
             android:drawableLeft="@mipmap/restart_button"
             />
 
         <Button
             android:id="@+id/btn_leave"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="140dp"
             android:drawableLeft="@mipmap/quit_button"
-        />
-
+            />
     </LinearLayout>
 
 

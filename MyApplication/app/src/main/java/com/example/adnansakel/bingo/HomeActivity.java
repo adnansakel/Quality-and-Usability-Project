@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -99,11 +100,22 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         btnJoinGame = (Button)findViewById(R.id.btn_join_game);
 
         llAnimationTest = findViewById(R.id.llAnimationTest);
-        llAnimationTest.setVisibility(View.INVISIBLE);
-        llAnimationTest.setTranslationX(llAnimationTest.getWidth());
         llAnimationTest.setVisibility(View.VISIBLE);
-        llAnimationTest.setTranslationX(llAnimationTest.getWidth());
-        llAnimationTest.setVisibility(View.INVISIBLE);
+        //llAnimationTest.setTranslationY(0);
+        //llAnimationTest.setVisibility(View.INVISIBLE);
+        //llAnimationTest.setVisibility(View.VISIBLE);
+
+        llAnimationTest.startAnimation(AnimationUtils.loadAnimation(this,
+                R.anim.slide_down));
+        /*llAnimationTest.animate().translationY(llAnimationTest.getHeight())
+                .setDuration(3000).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                llAnimationTest.setVisibility(View.INVISIBLE);
+
+            }
+        });*/
 
 
         //an.MakeInVisibleWithSlideRight();
@@ -131,6 +143,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         toast.show();
 
 
+
+
         btnCreateGame.setOnClickListener(this);
         btnJoinGame.setOnClickListener(this);
     }
@@ -147,6 +161,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             else{
                 textToSpeechtest.speak("22",TextToSpeech.QUEUE_FLUSH,null);
             }*/
+
             if(!connectionCheck.isConnected()){return;}
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

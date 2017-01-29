@@ -1,27 +1,30 @@
 package com.example.adnansakel.bingo;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
+import android.graphics.Color;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.adnansakel.bingo.Util.AppConstants;
+import com.example.adnansakel.bingo.Util.ConnectionCheck;
 import com.example.adnansakel.bingo.View.HomeView;
 
 import org.json.JSONException;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,6 +33,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     BingoServerCalls bingoServerCalls;
     TextToSpeech textToSpeechtest;
     Handler handler;
+    ProgressBar progressBarTest;
+    ConnectionCheck connectionCheck;
+    View llAnimationTest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +44,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         new HomeView(findViewById(R.id.rl_home_view),((MyApplication)getApplication()).getBingoGameModel());
         //System.out.println("Player at home: "+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getPlayerID());
         bingoServerCalls = new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this);
+        connectionCheck = new ConnectionCheck(this);
         initialize();
-        //handler = new Handler();
-        //handlerTest();
+        handler = new Handler();
+        handlerTest();
         /*
         textToSpeechtest = new TextToSpeech(getApplicationContext(),new TextToSpeech.OnInitListener() {
             @Override
@@ -52,7 +59,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         });*/
     }
 
-    /*
+
     int counter = 0;
     Runnable runnable;
     private void handlerTest(){
@@ -64,14 +71,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
                 //System.out.println(counter);
 
-                if(counter > 5){
+                if(counter > 4){
                     handler.removeCallbacks(this);
-                    Toast.makeText(HomeActivity.this,"After callback removed "+counter,Toast.LENGTH_LONG).show();
-                    HomeActivity.this.finish();
+                    progressBarTest.setProgress(100-(counter*2*10));
+                   // Toast.makeText(HomeActivity.this,"After callback removed "+counter,Toast.LENGTH_LONG).show();
+                   // HomeActivity.this.finish();
                     return;
                 }
+                progressBarTest.setProgress(100-(counter*2*10));
+                //System.out.println("Handler running "+ counter);
 
-                System.out.println("Handler running "+ counter);
 
                 handler.postDelayed(this, 1000);
                 counter++;
@@ -83,11 +92,44 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 // start it with:
         handler.post(runnable);
     }
-    */
+
 
     private void initialize(){
         btnCreateGame = (Button)findViewById(R.id.btn_create_game);
         btnJoinGame = (Button)findViewById(R.id.btn_join_game);
+
+        llAnimationTest = findViewById(R.id.llAnimationTest);
+        llAnimationTest.setVisibility(View.INVISIBLE);
+        llAnimationTest.setTranslationX(llAnimationTest.getWidth());
+        llAnimationTest.setVisibility(View.VISIBLE);
+        llAnimationTest.setTranslationX(llAnimationTest.getWidth());
+        llAnimationTest.setVisibility(View.INVISIBLE);
+
+
+        //an.MakeInVisibleWithSlideRight();
+        //an.MakeVisibleWithSlideLeft();
+        progressBarTest = (ProgressBar)findViewById(R.id.progressBarTest);
+        progressBarTest.setMax(100);
+        progressBarTest.setProgress(100);
+        progressBarTest.getProgressDrawable().setColorFilter(
+                Color.parseColor("#ff0000"), android.graphics.PorterDuff.Mode.SRC_IN);
+
+
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.notifcation,
+                (ViewGroup) findViewById(R.id.ll_toast_item));
+
+        ImageView image = (ImageView) layout.findViewById(R.id.image);
+        //image.setImageResource(R.drawable.android);
+        //TextView text = (TextView) layout.findViewById(R.id.text);
+        //text.setText("Hello! This is a custom toast!");
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.TOP|Gravity.RIGHT, 20, 150);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+
 
         btnCreateGame.setOnClickListener(this);
         btnJoinGame.setOnClickListener(this);
@@ -105,6 +147,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             else{
                 textToSpeechtest.speak("22",TextToSpeech.QUEUE_FLUSH,null);
             }*/
+            if(!connectionCheck.isConnected()){return;}
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             final View mview = View.inflate(this,R.layout.creategame_dialog_view,null);

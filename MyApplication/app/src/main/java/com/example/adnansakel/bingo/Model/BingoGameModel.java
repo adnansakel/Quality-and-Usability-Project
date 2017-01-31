@@ -13,7 +13,8 @@ public class BingoGameModel extends Observable{
     private List<Integer> shuffledNumberSequence = new ArrayList<Integer>();
     private List<Integer> shuffledCalledNumberSequence = new ArrayList<Integer>();
     private boolean ifBingoIsFound = false;
-    private String winner;
+    private String winner = "";
+    private String notificationText = "";
     private int calledNumber;
     private String calledNumberColor;
     private Player myPlayer = new Player();
@@ -42,6 +43,14 @@ public class BingoGameModel extends Observable{
         }
     }
 
+    public String getPlayerNamebyID(String ID){
+        for(int i = 0; i < playerlist.size(); i++){
+            if(playerlist.get(i).getPlayerID().equals(ID)){
+                return playerlist.get(i).getName();
+            }
+        }
+        return "";
+    }
     public int[][] getBingoPatternSearchGrid(){
         return bingo_pattern_search_grid;
     }
@@ -69,6 +78,8 @@ public class BingoGameModel extends Observable{
 
     public void setWinner(String winner) {
         this.winner = winner;
+        this.setChanged();
+        this.notifyObservers(AppConstants.WINNER_FOUND);
     }
 
 
@@ -188,6 +199,16 @@ public class BingoGameModel extends Observable{
 
     public void setLongestMatchPlayerInfo(String longestMatchPlayerInfo) {
         this.longestMatchPlayerInfo = longestMatchPlayerInfo;
+    }
+
+    public String getNotificationText() {
+        return notificationText;
+    }
+
+    public void setNotificationText(String notificationText) {
+        this.notificationText = notificationText;
+        this.setChanged();
+        this.notifyObservers(AppConstants.SHOW_NOTIFICATION);
     }
 }
 

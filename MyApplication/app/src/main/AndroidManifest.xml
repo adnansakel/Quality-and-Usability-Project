@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".RegistrationActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,17 +22,17 @@
         </activity>
 
         <activity android:name=".MainGameActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="landscape">
 
         </activity>
         <activity android:name=".LobbyActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="landscape"></activity>
         <activity android:name=".HomeActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="landscape"></activity>
         <activity android:name=".JoinGameActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="landscape"></activity>
         <activity android:name=".CreateGameActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

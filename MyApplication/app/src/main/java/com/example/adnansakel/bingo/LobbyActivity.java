@@ -8,10 +8,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.example.adnansakel.bingo.HttpHelper.MySingleton;
 import com.example.adnansakel.bingo.Util.AppConstants;
 import com.example.adnansakel.bingo.View.LobbyView;
 
@@ -29,10 +32,15 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
     Handler handler;
     Runnable runnable;
 
+    ImageView imgGender;
+    TextView txtNameAge;
+    String nameage = "";
+    ImageView imgUserPhoto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lobby_guest);
+        setContentView(R.layout.activity_lobby);
         getSupportActionBar().setTitle("Lobby");
         bingoServerCalls = new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this);
         new LobbyView(findViewById(R.id.ll_lobby_view),((MyApplication)getApplication()).getBingoGameModel(),this);
@@ -46,14 +54,48 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         llPlayerList = (LinearLayout)findViewById(R.id.llPlayersinLobby);
         txtWaiting = (TextView)findViewById(R.id.txtWaiting);
         btnStartGame = (Button)findViewById(R.id.btnStartGame);
+        imgGender = (ImageView)findViewById(R.id.imgGender);
+        imgUserPhoto = (ImageView)findViewById(R.id.imageUser);
+        txtNameAge = (TextView)findViewById(R.id.txtNameAge);
 
-        //txtWaiting.setOnClickListener(this);
+        if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getName()!=null){
+            nameage = ((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getName();
+        }
+
+        if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getAge()!=null){
+            nameage = nameage+","+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getAge();
+        }
+
+        if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getGender()!=null){
+            if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getGender().equals(AppConstants.MALE)){
+                imgGender.setImageResource(R.mipmap.male_mark);
+            }
+            if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getGender().equals(AppConstants.FEMALE)){
+                imgGender.setImageResource(R.mipmap.female_mark);
+            }
+            else{
+                imgGender.setVisibility(View.GONE);
+            }
+        }
+        else{
+            imgGender.setVisibility(View.GONE);
+        }
+
+
         btnStartGame.setOnClickListener(this);
         if(!((MyApplication) getApplication()).getBingoGameModel().getMyPlayer().getPlayerID().equals(
                 ((MyApplication) getApplication()).getBingoGameModel().getMyGame().getCreatorID())){
             btnStartGame.setVisibility(View.GONE);
         }
         handler = new Handler();
+
+        MySingleton.getInstance(this).getImageLoader().get(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+
+                        ((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getPlayerID(),
+                ImageLoader.getImageListener((ImageView)findViewById(R.id.imageUser),
+                        R.drawable.user, R.drawable.user));
+
+        //txtWaiting.setOnClickListener(this);
+
         //btnStartGame.setOnClickListener(this);
         /*
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);

@@ -54,6 +54,11 @@ public class AppConstants {
     public static String COMPLETED = "COMPLETED";
     public static String MESSAGE = "message";
     public static String SUCCESS = "Success";
+    public static String MALE = "Male";
+    public static String FEMALE = "Female";
+    public static String WINNER_FOUND = "winnerfound";
+    public static String SHOW_NOTIFICATION = "shownotification";
+    public static int IF_WINNER_FOUND = 0;
     //public static int IMAGE_TAKEN = 9;
 
 

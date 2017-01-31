@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.adnansakel.bingo.Model.Player;
@@ -46,6 +47,9 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     BingoServerCalls bingoServerCalls;
     ImageView imgProfilePhoto;
 
+    RadioButton rdbtnMale;
+    RadioButton rdbtnFemale;
+
     private static final int REQUEST_CAMERA = 0;
     private static final int SELECT_FILE = 1;
 
@@ -64,10 +68,12 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private void initialize(){
         editTextName = (EditText)findViewById(R.id.editTextName);
         editTextAge = (EditText)findViewById(R.id.editTextAge);
-        editTextGender = (EditText)findViewById(R.id.editTextGender);
+        //editTextGender = (EditText)findViewById(R.id.editTextGender);
         editTextEmail = (EditText)findViewById(R.id.editTextEmail);
         btnSignIn = (Button)findViewById(R.id.btnSignIn);
         btnUploadPhoto = (Button)findViewById(R.id.btnPhotoUpload);
+        rdbtnFemale = (RadioButton)findViewById(R.id.radioButton_Female);
+        rdbtnMale = (RadioButton)findViewById(R.id.radioButton_Male);
         btnUploadPhoto.setVisibility(View.GONE);
 
         imgProfilePhoto = (ImageView)findViewById(R.id.imgProfilePhoto);
@@ -82,6 +88,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         String name = sharedPreferences.getString(AppConstants.NAME,"");
         String gender = sharedPreferences.getString(AppConstants.GENDER,"");
         String age = sharedPreferences.getString(AppConstants.AGE,"");
+        String email = sharedPreferences.getString(AppConstants.EMAIL,"");
 
 
         if(userID.length()>0){
@@ -95,6 +102,9 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         }
         if(gender.length()>0){
             ((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().setGender(gender);
+        }
+        if(email.length()>0){
+            ((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().setEmail(email);
         }
 
         if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getPlayerID().length()>0){
@@ -110,19 +120,33 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             if(editTextName.getText().length()>0){
                 //making server call to register user
                 Player player = new Player();
-                player.setName(editTextName.getText().toString());
+                if(editTextName.getText().toString()!=null){player.setName(editTextName.getText().toString());}
+                else {player.setName("");}
                 if(editTextAge.getText().toString()!=null){player.setAge(editTextAge.getText().toString());}
                 else{player.setAge("");}
-                if(editTextGender.getText().toString()!=null){player.setGender(editTextGender.getText().toString());}
-                else{player.setGender("");}
+                //if(editTextGender.getText().toString()!=null){player.setGender(editTextGender.getText().toString());}
+                //else{player.setGender("");}
                 if(editTextEmail.getText().toString()!=null){player.setEmail(editTextEmail.getText().toString());}
                 else{player.setEmail("");}
                 if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getBmpProfilePhoto()!=null){
                     player.setBmpProfilePhoto(
                             ((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getBmpProfilePhoto());
                 }
-                ((MyApplication)getApplication()).getBingoGameModel().setMyPlayer(player);
+
+                if(rdbtnMale.isChecked()){
+                    player.setGender(AppConstants.MALE);
+                    Toast.makeText(this,"Male",Toast.LENGTH_SHORT).show();
+                }
+                else if(rdbtnFemale.isChecked()){
+                    player.setGender(AppConstants.FEMALE);
+                    Toast.makeText(this,"Female",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    player.setGender("");
+                }
+
                 try {
+                    ((MyApplication)getApplication()).getBingoGameModel().setMyPlayer(player);
                     bingoServerCalls.registerUser(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer());
                 } catch (JSONException e) {
                     e.printStackTrace();

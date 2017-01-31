@@ -14,7 +14,7 @@ public class ConnectionCheck {
 
     public ConnectionCheck(Context context){
         this._context = context;
-        Toast.makeText(_context, "From connection check", Toast.LENGTH_LONG).show();
+        //Toast.makeText(_context, "From connection check", Toast.LENGTH_LONG).show();
     }
 
     public boolean isConnected(){
@@ -25,7 +25,7 @@ public class ConnectionCheck {
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         if (!isConnected) {
-            Toast.makeText(_context, "No Internet Connection Found. Please connect to the internet and try again.", Toast.LENGTH_LONG).show();
+            Toast.makeText(_context, "Your device seems to be not connected to internet. Please connect to the internet and try again.", Toast.LENGTH_LONG).show();
             System.out.println("Toastcheck");
         }
 

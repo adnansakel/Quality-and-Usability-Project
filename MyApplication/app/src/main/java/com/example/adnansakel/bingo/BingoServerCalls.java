@@ -118,19 +118,43 @@ public class BingoServerCalls {
                 progress.dismiss();
 
                 try {
-                    bingoGameModel.getMyPlayer().setName((String)response.get(AppConstants.NAME));
-                    bingoGameModel.getMyPlayer().setAge((String)response.get(AppConstants.AGE));
-                    bingoGameModel.getMyPlayer().setPlayerID((String)response.get(AppConstants.PLAYER_ID));
-                    bingoGameModel.getMyPlayer().setGender((String)response.get(AppConstants.GENDER));
 
                     SharedPreferences sharedPreferences = context.getSharedPreferences(AppConstants.PLAYER_INFO,Context.MODE_PRIVATE);
                     SharedPreferences.Editor editUserinfo = sharedPreferences.edit();
 
+                    if(response.get(AppConstants.NAME).toString()!=null && !response.get(AppConstants.NAME).toString().equals("null")){
+                        bingoGameModel.getMyPlayer().setName((String)response.get(AppConstants.NAME));
+                        editUserinfo.putString(AppConstants.NAME,(String)response.get(AppConstants.NAME));
+                    }
 
-                    editUserinfo.putString(AppConstants.PLAYER_ID,(String)response.get(AppConstants.PLAYER_ID));
-                    editUserinfo.putString(AppConstants.NAME,(String)response.get(AppConstants.NAME));
-                    editUserinfo.putString(AppConstants.AGE,(String)response.get(AppConstants.AGE));
-                    editUserinfo.putString(AppConstants.GENDER,(String)response.get(AppConstants.GENDER));
+                    if(response.get(AppConstants.PLAYER_ID).toString()!=null && !response.get(AppConstants.PLAYER_ID).toString().equals("null")){
+                        bingoGameModel.getMyPlayer().setPlayerID((String)response.get(AppConstants.PLAYER_ID));
+                        editUserinfo.putString(AppConstants.PLAYER_ID,(String)response.get(AppConstants.PLAYER_ID));
+                    }
+
+                    if(response.get(AppConstants.AGE).toString()!=null && !response.get(AppConstants.AGE).toString().equals("null")){
+                        bingoGameModel.getMyPlayer().setAge((String)response.get(AppConstants.AGE));
+                        editUserinfo.putString(AppConstants.AGE,(String)response.get(AppConstants.AGE));
+                    }
+
+                    if(response.get(AppConstants.GENDER).toString()!=null && !response.get(AppConstants.GENDER).toString().equals("null")){
+                        bingoGameModel.getMyPlayer().setGender((String)response.get(AppConstants.GENDER));
+                        editUserinfo.putString(AppConstants.GENDER,(String)response.get(AppConstants.GENDER));
+                    }
+
+                    if(response.get(AppConstants.EMAIL).toString()!=null && !response.get(AppConstants.EMAIL).toString().equals("null")){
+                        bingoGameModel.getMyPlayer().setEmail((String)response.get(AppConstants.EMAIL));
+                        editUserinfo.putString(AppConstants.EMAIL,(String)response.get(AppConstants.EMAIL));
+
+                    }
+                    //bingoGameModel.getMyPlayer().setAge((String)response.get(AppConstants.AGE));
+                    //bingoGameModel.getMyPlayer().setPlayerID((String)response.get(AppConstants.PLAYER_ID));
+                    //bingoGameModel.getMyPlayer().setGender((String)response.get(AppConstants.GENDER));
+                    //editUserinfo.putString(AppConstants.PLAYER_ID,(String)response.get(AppConstants.PLAYER_ID));
+
+                    //editUserinfo.putString(AppConstants.AGE,(String)response.get(AppConstants.AGE));
+                    //editUserinfo.putString(AppConstants.GENDER,(String)response.get(AppConstants.GENDER));
+
                     editUserinfo.commit();
                     context.startActivity(new Intent(context, HomeActivity.class));
                     ((RegistrationActivity)context).finish();
@@ -537,7 +561,9 @@ public class BingoServerCalls {
                     if(response.get(AppConstants.IF_BINGO).toString()!=null){
                         if(response.get(AppConstants.IF_BINGO).toString().equals(AppConstants.TRUE)){
                             AppConstants.IF_BINGO_FOUND = 1;
+                            System.out.println("Bingo found from other" + response.get(AppConstants.WINNER).toString());
                             if(response.get(AppConstants.WINNER).toString()!=null){
+                                System.out.println("winner found from other");
                                 bingoGameModel.getMyGame().setWinner(response.get(AppConstants.WINNER).toString());
                             }
 
@@ -550,9 +576,13 @@ public class BingoServerCalls {
                         String name = str[0];
                         String score = str[1];//.replaceAll("\\s+","");
                         System.out.println(name+" "+"needs"+Integer.valueOf(str[1])+"more match only!");
-                        Toast toast = Toast.makeText(context,name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!",Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.BOTTOM,0,0);
-                        toast.show();
+
+
+                        //Toast toast = Toast.makeText(context,name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!",Toast.LENGTH_SHORT);
+                        //toast.setGravity(Gravity.BOTTOM,0,0);
+                        //toast.show();
+
+                        bingoGameModel.setNotificationText(name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!");
 
 
                     }
@@ -577,7 +607,7 @@ public class BingoServerCalls {
         progress.setCancelable(true);
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(AppConstants.WINNER,myPlayer.getName());
+        jsonObject.put(AppConstants.WINNER,myPlayer.getPlayerID());
         jsonObject.put(AppConstants.IF_BINGO,AppConstants.TRUE);
         jsonObject.put(AppConstants.GAME_ID,bingoGameModel.getMyGame().getGameID());
 
@@ -595,11 +625,14 @@ public class BingoServerCalls {
                 if(progress != null){progress.dismiss();}
 
                 try {
-                    if(response.get(AppConstants.WINNER).toString()!=null){
-                        Toast.makeText(context,"Congrasulations !!!"+response.get(AppConstants.WINNER).toString(),Toast.LENGTH_LONG).show();
+                    if(response.get(AppConstants.WINNER).toString()!=null && !response.get(AppConstants.WINNER).toString().equals("null")){
+
+                        bingoGameModel.setWinner(response.get(AppConstants.WINNER).toString());
+                        //Toast.makeText(context,"Congrasulations !!!"+response.get(AppConstants.WINNER).toString(),Toast.LENGTH_LONG).show();
                     }
                     else{
-                        Toast.makeText(context,"Congrasulations !!!",Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context,"Congrasulations !!!",Toast.LENGTH_LONG).show();
+                        bingoGameModel.setWinner("");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

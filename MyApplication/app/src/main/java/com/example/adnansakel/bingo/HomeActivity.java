@@ -21,6 +21,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.example.adnansakel.bingo.HttpHelper.MySingleton;
+import com.example.adnansakel.bingo.Util.AppConstants;
 import com.example.adnansakel.bingo.Util.ConnectionCheck;
 import com.example.adnansakel.bingo.View.HomeView;
 
@@ -36,6 +39,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     ProgressBar progressBarTest;
     ConnectionCheck connectionCheck;
     View llAnimationTest;
+    ImageView imgGender;
+    TextView txtNameAge;
+    String nameage = "";
+    ImageView imgUserPhoto;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +53,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         bingoServerCalls = new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this);
         connectionCheck = new ConnectionCheck(this);
         initialize();
-        handler = new Handler();
-        handlerTest();
+        //handler = new Handler();
+        //handlerTest();
         /*
         textToSpeechtest = new TextToSpeech(getApplicationContext(),new TextToSpeech.OnInitListener() {
             @Override
@@ -60,6 +67,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    /* // for testing
     int counter = 0;
     Runnable runnable;
     private void handlerTest(){
@@ -93,11 +101,52 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         handler.post(runnable);
     }
 
+    */
+
 
     private void initialize(){
         btnCreateGame = (Button)findViewById(R.id.btn_create_game);
         btnJoinGame = (Button)findViewById(R.id.btn_join_game);
+        imgGender = (ImageView)findViewById(R.id.imgGender);
+        imgUserPhoto = (ImageView)findViewById(R.id.imageUser);
+        txtNameAge = (TextView)findViewById(R.id.txtNameAge);
 
+        btnCreateGame.setOnClickListener(this);
+        btnJoinGame.setOnClickListener(this);
+
+        if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getName()!=null){
+            nameage = ((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getName();
+            txtNameAge.setText(nameage);
+        }
+
+        if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getAge()!=null){
+            nameage = nameage+","+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getAge();
+            txtNameAge.setText(nameage);
+        }
+
+        if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getGender().toString()!=null){
+            System.out.println("Male or Female: "+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getGender().toString());
+            if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getGender().toString().equals(AppConstants.MALE)){
+                imgGender.setImageResource(R.mipmap.male_mark);
+                System.out.println("Male");
+            }
+            if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getGender().toString().equals(AppConstants.FEMALE)){
+                imgGender.setImageResource(R.mipmap.female_mark);
+            }
+            else{
+                imgGender.setVisibility(View.GONE);
+            }
+        }
+        else{
+            imgGender.setVisibility(View.GONE);
+        }
+
+        MySingleton.getInstance(this).getImageLoader().get(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+
+                        ((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getPlayerID(),
+                ImageLoader.getImageListener((ImageView)findViewById(R.id.imageUser),
+                        R.drawable.user, R.drawable.user));
+
+        /* //testing
         llAnimationTest = findViewById(R.id.llAnimationTest);
         llAnimationTest.setVisibility(View.INVISIBLE);
         llAnimationTest.setTranslationX(llAnimationTest.getWidth());
@@ -129,10 +178,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
         toast.show();
+*/
 
 
-        btnCreateGame.setOnClickListener(this);
-        btnJoinGame.setOnClickListener(this);
+
     }
 
 

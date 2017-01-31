@@ -1,11 +1,24 @@
 package com.example.adnansakel.bingo.View;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.example.adnansakel.bingo.HttpHelper.MySingleton;
+import com.example.adnansakel.bingo.MainGameActivity;
 import com.example.adnansakel.bingo.Model.BingoGameModel;
+import com.example.adnansakel.bingo.Model.Player;
 import com.example.adnansakel.bingo.MyApplication;
 import com.example.adnansakel.bingo.R;
 import com.example.adnansakel.bingo.Util.AppConstants;
@@ -48,15 +61,28 @@ public class MainGameView implements Observer {
     TextView txt_twentifive;
     TextView txtCalledNumber;
     Button btnSayBingo;
+    LinearLayout llPlayerList;
+    ImageView imgCallingNUmberCircle;
+
+    View llendgame;
+
+    ProgressBar progressBarTimer;
+    //TextView txtCalledNumber;
 
     List sequencenumberList;
 
-    public MainGameView(View view, BingoGameModel bingoGameModel){
+    Context context;
+
+    public MainGameView(View view, BingoGameModel bingoGameModel, Context context){
         this.view = view;
+        this.context = context;
         bingoGameModel.addObserver(this);
         this.bingoGameModel = bingoGameModel;
         initialize();
+        populateGamePlayers();
     }
+
+
 
     private void initialize(){
         txt_one = (TextView)view.findViewById(R.id.txt_1);
@@ -86,15 +112,49 @@ public class MainGameView implements Observer {
         txt_twentifive = (TextView)view.findViewById(R.id.txt_25);
         txtCalledNumber = (TextView)view.findViewById(R.id.txtCalledNumber);
         btnSayBingo = (Button)view.findViewById(R.id.btn_say_bingo);
+
+        llPlayerList = (LinearLayout) view.findViewById(R.id.llPlayers);
+
+        llendgame = view.findViewById(R.id.ll_endgame);
+        llendgame.setVisibility(View.GONE);
+
+        imgCallingNUmberCircle = (ImageView)view.findViewById(R.id.imgCallingNUmberCircle);
+        progressBarTimer = (ProgressBar)view.findViewById(R.id.progressBarTimer);
+        progressBarTimer.setMax(100);
+        progressBarTimer.setProgress(0);
+        progressBarTimer.getProgressDrawable().setColorFilter(
+                Color.parseColor("#ffd600"), android.graphics.PorterDuff.Mode.SRC_IN);
         //txt_one = (TextView)findViewById(R.id.txt_one);
 
 
 
         //sequencenumberList = ((MyApplication)getApplication()).getBingoGameModel().getShuffledNumberSequence();
 
-        btnSayBingo.setVisibility(View.GONE);
+        btnSayBingo.setClickable(false);
 
 
+    }
+
+    private void populateGamePlayers(){
+        llPlayerList.removeAllViews();
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        layoutParams.setMargins(2, 0, 2, 0);
+        //int i = 0;
+        for(Player mplayer : bingoGameModel.getPlayerlist()){
+            View item_playerlist =  ((LayoutInflater)view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.item_imageview_playerlist,null);
+            item_playerlist.setTag(mplayer);
+            //i++;
+
+            ImageView profPhotoImageView = (ImageView)item_playerlist.findViewById(R.id.imageViewPlayerImage);
+            // mNetworkImageView.setImageUrl(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+mplayer.getPlayerID(), MySingleton.getInstance(context).getImageLoader());
+            //item_playerlist.setOnClickListener(this);
+            MySingleton.getInstance(context).getImageLoader().get(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+mplayer.getPlayerID(),
+                    ImageLoader.getImageListener(profPhotoImageView,
+                            R.drawable.user, R.drawable.user));
+            llPlayerList.addView(item_playerlist,layoutParams);
+
+
+        }
     }
 
     @Override
@@ -134,14 +194,95 @@ public class MainGameView implements Observer {
 
             if(data.toString()==AppConstants.A_NUMBER_IS_CALLED){
                 txtCalledNumber.setText(""+bingoGameModel.getCalledNumber());
+                progressBarTimer.setProgress(100);
+                if(Integer.valueOf(""+bingoGameModel.getCalledNumber())<16){
+                    imgCallingNUmberCircle.setImageResource(R.mipmap.no_ball_r);
+                    progressBarTimer.getProgressDrawable().setColorFilter(
+                            Color.parseColor("#e57373"), android.graphics.PorterDuff.Mode.SRC_IN);
+                }
+                else if(Integer.valueOf(""+bingoGameModel.getCalledNumber())<31){
+                    imgCallingNUmberCircle.setImageResource(R.mipmap.no_ball_o);
+                    progressBarTimer.getProgressDrawable().setColorFilter(
+                            Color.parseColor("#ffb74d"), android.graphics.PorterDuff.Mode.SRC_IN);
+                }
+                else if(Integer.valueOf(""+bingoGameModel.getCalledNumber())<46){
+                    imgCallingNUmberCircle.setImageResource(R.mipmap.no_ball_y);
+                    progressBarTimer.getProgressDrawable().setColorFilter(
+                            Color.parseColor("#ffd600"), android.graphics.PorterDuff.Mode.SRC_IN);
+                }
+                else if(Integer.valueOf(""+bingoGameModel.getCalledNumber())<61){
+                    imgCallingNUmberCircle.setImageResource(R.mipmap.no_ball_g);
+                    progressBarTimer.getProgressDrawable().setColorFilter(
+                            Color.parseColor("#66bb6a"), android.graphics.PorterDuff.Mode.SRC_IN);
+                }
+                else{
+                    imgCallingNUmberCircle.setImageResource(R.mipmap.no_ball_b);
+                    progressBarTimer.getProgressDrawable().setColorFilter(
+                            Color.parseColor("#4a90e2"), android.graphics.PorterDuff.Mode.SRC_IN);
+                }
             }
 
             if(data.toString()==AppConstants.CHANGE_CALLED_NUMBER_COLOR){
-                txtCalledNumber.setTextColor(Color.parseColor(bingoGameModel.getCalledNumberColor()));
+                //txtCalledNumber.setTextColor(Color.parseColor(bingoGameModel.getCalledNumberColor()));
+                if(progressBarTimer.getProgress()-20>0){
+                    progressBarTimer.setProgress(progressBarTimer.getProgress()-20);
+                }
+                else{
+                    progressBarTimer.setProgress(0);
+                }
             }
 
             if(data.toString() == AppConstants.BINGO_FOUND){
-                btnSayBingo.setVisibility(View.VISIBLE);
+                btnSayBingo.setClickable(true);
+                btnSayBingo.setBackgroundResource(R.mipmap.bingo_button);
+            }
+
+            if(data.toString() == AppConstants.SHOW_NOTIFICATION){
+                LayoutInflater inflater = ((MainGameActivity)context).getLayoutInflater();
+                View layout = inflater.inflate(R.layout.notifcation,
+                        (ViewGroup) view.findViewById(R.id.ll_toast_item));
+
+                ImageView image = (ImageView) layout.findViewById(R.id.imageViewPlayerImage);
+                //image.setImageResource(R.drawable.android);
+                TextView txtName = (TextView) layout.findViewById(R.id.txtName);
+                TextView txtMessage = (TextView) layout.findViewById(R.id.txtMessage);
+                //text.setText("Hello! This is a custom toast!");
+                /*MySingleton.getInstance(context).getImageLoader().get(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+bi.getPlayerID(),
+                        ImageLoader.getImageListener(image,
+                                R.drawable.user, R.drawable.user));
+                                */
+                txtMessage.setText(bingoGameModel.getNotificationText().toString());
+
+                Toast toast = new Toast(((MainGameActivity)context).getApplicationContext());
+                toast.setGravity(Gravity.BOTTOM|Gravity.LEFT, 300, 20);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout);
+                toast.show();
+            }
+
+            if(data.toString() == AppConstants.WINNER_FOUND){
+                //end game screen
+                AppConstants.IF_WINNER_FOUND = 1;
+                if(bingoGameModel.getWinner().equals(bingoGameModel.getMyPlayer().getPlayerID())){
+                    //You win
+                    llendgame.setVisibility(View.VISIBLE);
+                    ((TextView)llendgame.findViewById(R.id.txt_endgame_winner)).setText("You Win");
+                    ((TextView)llendgame.findViewById(R.id.txt_congrats_console)).setText("Well played. Congrasulations !!");
+                    llendgame.startAnimation(AnimationUtils.loadAnimation(context,
+                            R.anim.slid_down));
+
+                }
+                else{
+                    String winnerName = bingoGameModel.getPlayerNamebyID(bingoGameModel.getWinner());
+                    llendgame.setVisibility(View.VISIBLE);
+                    ((TextView)llendgame.findViewById(R.id.txt_endgame_winner)).setText(winnerName+" Wins");
+                    ((TextView)llendgame.findViewById(R.id.txt_congrats_console)).setText("Better luck next time.");
+                    if(winnerName.equalsIgnoreCase("--Nobody")){
+                        ((LinearLayout)llendgame.findViewById(R.id.llUserImage)).setVisibility(View.GONE);
+                    }
+                    llendgame.startAnimation(AnimationUtils.loadAnimation(context,
+                            R.anim.slid_down));
+                }
             }
         }
     }

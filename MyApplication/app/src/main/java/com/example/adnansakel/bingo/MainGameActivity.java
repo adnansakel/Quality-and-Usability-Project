@@ -9,7 +9,9 @@ import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +65,8 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     TextView txtCalledNumber;
     Button btnSayBingo;
 
+    View llendgame;
+
     TextToSpeech textToSpeechCallNumber;
 
     List<Integer> sequencenumberList;
@@ -71,10 +75,10 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_temp_main_game);
+        setContentView(R.layout.activity_maingame_landscape);
         getSupportActionBar().setTitle("Game Bingo");
         sequencenumberList = new ArrayList<Integer>();
-        new MainGameView(findViewById(R.id.rl_main_game_view),((MyApplication)getApplication()).getBingoGameModel());
+        new MainGameView(findViewById(R.id.rl_main_game_view),((MyApplication)getApplication()).getBingoGameModel(),this);
         handler = new Handler();
 
         //((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().setPlayerID("101");
@@ -97,7 +101,10 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
 
         initialize();
         counter = 0;
-        callNumbersinInterval(1500);
+        callNumbersinInterval(1500);//must call this
+        //((MyApplication)getApplication()).getBingoGameModel().setNotificationText("Hello");
+
+
         //((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().setPlayerID("2017");
         //((MyApplication)getApplication()).getBingoGameModel().getMyGame().setGameID("555");
 
@@ -177,6 +184,14 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         txt_twentifour.setOnClickListener(this);
         txt_twentifive.setOnClickListener(this);
         btnSayBingo.setOnClickListener(this);
+
+        AppConstants.IF_BINGO_FOUND = 0;
+        AppConstants.IF_WINNER_FOUND = 0;
+
+        llendgame = findViewById(R.id.ll_endgame);
+        btnSayBingo.setClickable(false);
+        //llendgame.setVisibility(View.VISIBLE);
+
 
         /*
         sequencenumberList = ((MyApplication)getApplication()).getBingoGameModel().getShuffledNumberSequence();
@@ -300,14 +315,16 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void run() {
                 // do your stuff - don't create a new runnable here!
-                if(AppConstants.IF_BINGO_FOUND == 1 || counter > 5*65){
+                if(AppConstants.IF_WINNER_FOUND == 1 || counter > 5*65){
                     handler.removeCallbacks(this);
                     //llBlur.setVisibility(View.GONE);
                     //progress.dismiss();
                     mStopHandler = true;
 
                     if(counter>5*65){
-                        Toast.makeText(MainGameActivity.this,"Game over without a Bingo !!",Toast.LENGTH_LONG).show();
+                        //Toast.makeText(MainGameActivity.this,"Game over without a Bingo !!",Toast.LENGTH_LONG).show();
+                        ((MyApplication)getApplication()).getBingoGameModel().setWinner("--Nobody");
+
                     }
 
                     return;
@@ -376,7 +393,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
             }
         }
         else{
-            if(((TextView)view).getText()!="*"
+            if(((TextView)view).getText().toString().matches("\\d+(?:\\.\\d+)?")
                     //&& ((TextView)view).getText()==txtCalledNumber.getText().toString()
                     ){
                 int id = view.getId();
@@ -384,7 +401,9 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                 System.out.println("Clicked:" + id_name.substring(36));
                 ((MyApplication)getApplication()).getBingoGameModel()
                         .updateBingoPatternSearcgGrid(Integer.valueOf(id_name.substring(36).toString()),1);
-                ((TextView)view).setText("*");
+                ((TextView)view).setBackgroundResource(R.mipmap.mark);
+                //((TextView)view).setTextColor(Color.parseColor("#777777"));
+                ((TextView)view).setText("");
                 /*
                 try {
                     bingoServerCalls.postLongestMatch(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer(),
@@ -396,6 +415,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                     //btnSayBingo.setVisibility(View.VISIBLE);
                     ((MyApplication)getApplication()).getBingoGameModel().setIfBingoIsFound(true);
                     AppConstants.IF_BINGO_FOUND = 1;
+                    //btnSayBingo.setClickable(true);
                 }
             }
         }
@@ -404,21 +424,28 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onBackPressed(){
         //Toast.makeText(this,"This activity will exit",Toast.LENGTH_LONG).show();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Confirmation");
-        builder.setMessage("Are you sure want to exit this game?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        if(llendgame.getVisibility()==View.GONE){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirmation");
+            builder.setMessage("Are you sure want to exit this game?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(handler!=null && runnable!=null){
-                    handler.removeCallbacks(runnable);
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(handler!=null && runnable!=null){
+                        handler.removeCallbacks(runnable);
+                    }
+                    MainGameActivity.super.onBackPressed();
                 }
-                MainGameActivity.super.onBackPressed();
-            }
-        });
-        builder.setNegativeButton("No", null);
-        builder.setCancelable(true);
-        builder.show();
+            });
+            builder.setNegativeButton("No", null);
+            builder.setCancelable(true);
+            builder.show();
+        }
+        else{
+            handler.removeCallbacks(runnable);
+            MainGameActivity.super.onBackPressed();
+        }
+
     }
 }

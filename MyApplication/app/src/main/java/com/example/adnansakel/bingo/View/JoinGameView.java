@@ -34,6 +34,7 @@ public class JoinGameView implements Observer, View.OnClickListener {
     LinearLayout llGameList;
     Context context;
     BingoServerCalls bingoServerCalls;
+    TextView txtGamesAvailable;
     public JoinGameView(View view, BingoGameModel bingoGameModel, Context context){
         this.view = view;
         bingoGameModel.addObserver(this);
@@ -45,6 +46,10 @@ public class JoinGameView implements Observer, View.OnClickListener {
 
     private void initialize(){
         llGameList = (LinearLayout)view.findViewById(R.id.llGamesAvailable);
+        txtGamesAvailable = (TextView)view.findViewById(R.id.txtGamesAvailable);
+        if(bingoGameModel.getGamelist().size()==0){
+            txtGamesAvailable.setText("Sorry, no games available");
+        }
         /*
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         layoutParams.setMargins(2, 0, 2, 0);
@@ -73,7 +78,10 @@ public class JoinGameView implements Observer, View.OnClickListener {
     @Override
     public void update(Observable observable, Object o) {
         if(observable instanceof BingoGameModel){
-            System.out.println("Came here !");
+            //System.out.println("Came here !");
+            if(bingoGameModel.getGamelist().size()==0){
+                txtGamesAvailable.setText("Sorry, no games available");
+            }
             if(o.toString().equals(AppConstants.GAME_LIST_UPDATED)){
                 System.out.println("Came here ! too !!");
                 llGameList.removeAllViews();

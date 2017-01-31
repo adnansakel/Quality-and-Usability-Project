@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#FDFEFE"
-    tools:context="com.example.adnansakel.bingo.HomeActivity"
-    android:id="@+id/rl_loosegame_view">
-
+    android:id="@+id/rl_endgame_view"
+    android:background="#FFFDE7">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,35 +18,50 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="25sp"
-            android:textColor="#016773"
-            android:textStyle="bold"
-            android:text="NOT SO BAD!"
-            android:layout_weight="1.58" />
-
-        <TextView
-            android:id="@+id/txt_game_loose2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
             android:textSize="30sp"
-            android:textColor="#016773"
+            android:textColor="#EF7373"
             android:textStyle="bold"
-            android:text="SOMEONE ELSE HAD BETTER LUCK"
+            android:text="GAME OVER!"
             android:layout_weight="1.58" />
 
         <TextView
-            android:id="@+id/txt_game_notice"
+            android:id="@+id/txt_endgame_winner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="35sp"
+            android:textColor="#016773"
+            android:textStyle="bold"
+            android:text="PLAER2 WINS"
+            android:layout_weight="1.58" />
+
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="120dp"
+            android:id="@+id/llUserImage"
+            android:background="@drawable/congrats_background"
+            android:gravity="center">
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/imageViewPlayerImage"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:src="@drawable/user"
+                app:civ_border_width="1dp"
+                app:civ_border_color="#FF888888"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_congrats_console"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="25sp"
-            android:textColor="#016773"
+            android:textColor="#EF7373"
             android:textStyle="bold"
-            android:text="@string/game_notice"
+            android:text="BETTER LUCK NEXT TIME!!"
             android:layout_weight="1.58" />
 
     </LinearLayout>
-
-
 </RelativeLayout>

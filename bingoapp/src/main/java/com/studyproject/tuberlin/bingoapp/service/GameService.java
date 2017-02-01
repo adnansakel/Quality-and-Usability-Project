@@ -80,6 +80,10 @@ public class GameService {
 		return gameRepository.updateStatus(gameId, GameStatus.ACTIVE.toString());
 	}
 	
+	public int deleteGameData() {
+		return gameRepository.deleteGameData();
+	}
+	
 	public boolean checkNewValueIsLongestMatch(String newLongestMatch, String oldLongestMatch) {
 		int newValue = getValueFromLongestMatch(newLongestMatch);
 		int oldValue = getValueFromLongestMatch(oldLongestMatch);
@@ -99,5 +103,4 @@ public class GameService {
 		}
 		return value;
 	}
-
 }

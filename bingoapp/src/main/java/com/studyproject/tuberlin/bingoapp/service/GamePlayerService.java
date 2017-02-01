@@ -33,6 +33,10 @@ public class GamePlayerService {
 		return gamePlayerRepository.deletePlayerFromGame(gameId, playerId);
 	}
 	
+	public int deleteGamePlayerData(){
+		return gamePlayerRepository.deleteGamePlayerData();
+	}
+	
 	public List<GamePlayer> getPlayersInSpecificGame(String gameId) {
 		return gamePlayerRepository.getPlayersInSpecificGame(gameId);
 	}

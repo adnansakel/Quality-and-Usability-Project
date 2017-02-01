@@ -20,6 +20,11 @@ public interface GamePlayerRepository extends CrudRepository<GamePlayer, Long>{
 	@Query("Delete from game_player gp where gp.gameId = ?1 and gp.playerId= ?2")
 	public int deletePlayerFromGame(String gameId, String playerId);
 	
+	@Modifying
+	@Transactional
+	@Query("Delete from game_player")
+	public int deleteGamePlayerData();
+	
 	@Query("select gp from game_player gp where gp.gameId = :gameId ")
 	  List<GamePlayer> getPlayersInSpecificGame(@Param("gameId") String gameId);
 }

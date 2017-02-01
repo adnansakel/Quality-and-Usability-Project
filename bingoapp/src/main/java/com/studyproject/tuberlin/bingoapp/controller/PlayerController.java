@@ -75,7 +75,7 @@ public class PlayerController {
 			ImageIO.write(image, "jpeg", byteArrayOutputStream);
 			return byteArrayOutputStream.toByteArray();
 		}catch(Exception e){
-			System.out.println("Exception >>>>>>"+e);
+			//System.out.println("Exception >>>>>>"+e.getMessage());
 			throw new RuntimeException(e);
 		}
 	}

@@ -34,4 +34,9 @@ public interface GameRepository extends CrudRepository<Game, String>{
 	@Transactional
 	@Query("update game g set g.status = ?2 where g.gameId = ?1")
 	public int updateStatus(String gameId, String status);
+	
+	@Modifying
+	@Transactional
+	@Query("Delete from game")
+	public int deleteGameData();
 }

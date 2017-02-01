@@ -21,6 +21,7 @@ import com.studyproject.tuberlin.bingoapp.helpers.GameStatus;
 import com.studyproject.tuberlin.bingoapp.helpers.Lobby;
 import com.studyproject.tuberlin.bingoapp.service.GamePlayerService;
 import com.studyproject.tuberlin.bingoapp.service.GameService;
+import com.studyproject.tuberlin.bingoapp.service.PlayerService;
 
 /**
  * This class is a controller for GamePlayer entity (Table)
@@ -33,11 +34,13 @@ public class GamePlayerController {
 	
     GamePlayerService gamePlayerService;
     GameService gameService;
+    PlayerService playerService;
     
     @Autowired
-   public GamePlayerController(GamePlayerService gamePlayerService, GameService gameService) {
+   public GamePlayerController(GamePlayerService gamePlayerService, GameService gameService, PlayerService playerService) {
 		this.gamePlayerService = gamePlayerService;
 		this.gameService = gameService;
+		this.playerService = playerService;
 	}
 	
 	@RequestMapping(value = "/gameplayer", method = RequestMethod.GET)
@@ -94,4 +97,22 @@ public class GamePlayerController {
 		  return new ResponseEntity<Lobby> (lobby, HttpStatus.OK);
 		}
 
+	 @RequestMapping(value = "/bingodb/delete/all/{passcode}", method = RequestMethod.GET)
+		public @ResponseBody ResponseEntity<DatabaseStatus> deleteAllData(@PathVariable String passcode){
+		 DatabaseStatus status = new DatabaseStatus();
+		 status.setMessage("Not Allowed");
+		 if(passcode.equals("QWSSTCM"))
+		 {
+			  int gpResult = gamePlayerService.deleteGamePlayerData();
+			  int gResult = gameService.deleteGameData();
+			  int pResult = playerService.deletePlayerData();
+			  System.out.println("game = "+gResult+", player ="+pResult+", GamePlayer = "+gpResult);
+			  if(gpResult == -1 || gResult == -1 || pResult == -1){
+				  status.setMessage("Error");
+			  }else{
+				  status.setMessage("Success");
+			  }
+		 }
+			  return new ResponseEntity<DatabaseStatus> (status, HttpStatus.OK);
+		} 
 }

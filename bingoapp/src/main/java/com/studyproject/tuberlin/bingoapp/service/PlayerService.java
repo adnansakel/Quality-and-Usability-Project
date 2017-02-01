@@ -32,4 +32,8 @@ public class PlayerService {
 		return playerRepository.getPlayerProfilePicture(playerId);
 	}
 
+	public int deletePlayerData() {
+		return playerRepository.deletePlayerData();
+	}
+
 }

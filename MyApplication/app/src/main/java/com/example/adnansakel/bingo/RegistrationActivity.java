@@ -135,11 +135,11 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
                 if(rdbtnMale.isChecked()){
                     player.setGender(AppConstants.MALE);
-                    Toast.makeText(this,"Male",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this,"Male",Toast.LENGTH_SHORT).show();
                 }
                 else if(rdbtnFemale.isChecked()){
                     player.setGender(AppConstants.FEMALE);
-                    Toast.makeText(this,"Female",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this,"Female",Toast.LENGTH_SHORT).show();
                 }
                 else{
                     player.setGender("");

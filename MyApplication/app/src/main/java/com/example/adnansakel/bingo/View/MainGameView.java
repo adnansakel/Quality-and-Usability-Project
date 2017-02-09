@@ -263,23 +263,34 @@ public class MainGameView implements Observer {
             if(data.toString() == AppConstants.WINNER_FOUND){
                 //end game screen
                 AppConstants.IF_WINNER_FOUND = 1;
+                System.out.println("From view "+AppConstants.IF_BINGO_FOUND);
                 if(bingoGameModel.getWinner().equals(bingoGameModel.getMyPlayer().getPlayerID())){
                     //You win
                     llendgame.setVisibility(View.VISIBLE);
                     ((TextView)llendgame.findViewById(R.id.txt_endgame_winner)).setText("You Win");
                     ((TextView)llendgame.findViewById(R.id.txt_congrats_console)).setText("Well played. Congrasulations !!");
+                    MySingleton.getInstance(context).getImageLoader().get(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+bingoGameModel.getWinner(),
+                            ImageLoader.getImageListener(((ImageView)llendgame.findViewById(R.id.imageViewPlayerImage)),
+                                    R.drawable.user, R.drawable.user));
                     llendgame.startAnimation(AnimationUtils.loadAnimation(context,
                             R.anim.slid_down));
+
 
                 }
                 else{
                     String winnerName = bingoGameModel.getPlayerNamebyID(bingoGameModel.getWinner());
+                    //Toast.makeText(context,"Winner is "+winnerName,Toast.LENGTH_LONG).show();
                     llendgame.setVisibility(View.VISIBLE);
                     ((TextView)llendgame.findViewById(R.id.txt_endgame_winner)).setText(winnerName+" Wins");
                     ((TextView)llendgame.findViewById(R.id.txt_congrats_console)).setText("Better luck next time.");
-                    if(winnerName.equalsIgnoreCase("--Nobody")){
+                    if(bingoGameModel.getWinner().equals("--Nobody")){
+                        ((TextView)llendgame.findViewById(R.id.txt_endgame_winner)).setText(bingoGameModel.getWinner()+" Wins");
                         ((LinearLayout)llendgame.findViewById(R.id.llUserImage)).setVisibility(View.GONE);
+
                     }
+                    MySingleton.getInstance(context).getImageLoader().get(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+bingoGameModel.getWinner(),
+                            ImageLoader.getImageListener(((ImageView)llendgame.findViewById(R.id.imageViewPlayerImage)),
+                                    R.drawable.user, R.drawable.user));
                     llendgame.startAnimation(AnimationUtils.loadAnimation(context,
                             R.anim.slid_down));
                 }

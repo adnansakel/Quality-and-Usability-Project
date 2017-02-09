@@ -565,6 +565,7 @@ public class BingoServerCalls {
                             if(response.get(AppConstants.WINNER).toString()!=null){
                                 System.out.println("winner found from other");
                                 bingoGameModel.getMyGame().setWinner(response.get(AppConstants.WINNER).toString());
+                                bingoGameModel.setWinner(response.get(AppConstants.WINNER).toString());
                             }
 
                             return;

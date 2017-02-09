@@ -58,6 +58,11 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         imgUserPhoto = (ImageView)findViewById(R.id.imageUser);
         txtNameAge = (TextView)findViewById(R.id.txtNameAge);
 
+        imgUserPhoto.setVisibility(View.GONE);
+        imgGender.setVisibility(View.GONE);
+        txtNameAge.setVisibility(View.GONE);
+
+
         if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getName()!=null){
             nameage = ((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getName();
         }

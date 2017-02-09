@@ -82,6 +82,9 @@ public class JoinGameView implements Observer, View.OnClickListener {
             if(bingoGameModel.getGamelist().size()==0){
                 txtGamesAvailable.setText("Sorry, no games available");
             }
+            else{
+                txtGamesAvailable.setText("Available Games");
+            }
             if(o.toString().equals(AppConstants.GAME_LIST_UPDATED)){
                 System.out.println("Came here ! too !!");
                 llGameList.removeAllViews();

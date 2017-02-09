@@ -101,6 +101,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
 
         initialize();
         counter = 0;
+        //((MyApplication)getApplication()).getBingoGameModel().setWinner("--Nobody");
         callNumbersinInterval(1500);//must call this
         //((MyApplication)getApplication()).getBingoGameModel().setNotificationText("Hello");
 

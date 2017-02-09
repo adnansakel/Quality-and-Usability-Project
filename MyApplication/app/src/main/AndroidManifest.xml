@@ -21,13 +21,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainGameActivity"
+        <activity android:name=".LobbyActivity"
             android:screenOrientation="landscape">
 
         </activity>
-        <activity android:name=".LobbyActivity"
-            android:screenOrientation="landscape"></activity>
         <activity android:name=".HomeActivity"
+            android:screenOrientation="landscape"></activity>
+        <activity android:name=".MainGameActivity"
             android:screenOrientation="landscape"></activity>
         <activity android:name=".JoinGameActivity"
             android:screenOrientation="landscape"></activity>

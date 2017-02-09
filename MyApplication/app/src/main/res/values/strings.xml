@@ -4,4 +4,12 @@
     <string name="join_game">Join Game</string>
     <string name="game_title">Hello Bingo!</string>
     <string name="game_notice">WOULD YOU LIKE TO?</string>
+    <string-array name="lobby_messages">
+        <item>Hello</item>
+        <item>Can we start ?</item>
+        <item>Yes</item>
+        <item>No</item>
+        <item>Good luck. Have fun</item>
+        <item>Thank you</item>
+    </string-array>
 </resources>

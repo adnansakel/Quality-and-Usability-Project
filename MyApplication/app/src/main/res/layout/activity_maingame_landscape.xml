@@ -13,7 +13,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight=".45"
+            android:layout_weight=".38"
             android:orientation="vertical"
             android:background="#6F8A70">
             <ImageView
@@ -37,7 +37,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight=".4"
+            android:layout_weight=".3"
             android:orientation="vertical"
             android:gravity="center">
             <FrameLayout
@@ -78,6 +78,102 @@
                     />
             </LinearLayout>
 
+            <ScrollView
+                android:id="@+id/scrlChatList"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/rect_background_green">
+                <LinearLayout
+                    android:id="@+id/ll_chat_msg_maingame"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="50dp">
+
+                </LinearLayout>
+            </ScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:visibility="gone">
+                <TextView
+                    android:id="@+id/txt_Msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="0.2"
+                    ></TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <Button
+                        android:id="@+id/btnMsgSend"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/send_arrow_green"
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <Button
+                        android:id="@+id/btnSayNoChance"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/u_have_no_chance"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <Button
+                        android:id="@+id/btnSayOpinion"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/ur_opinion"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <Button
+                        android:id="@+id/btnSayWellPlayed"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/well_played"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <Button
+                        android:id="@+id/btnSayLoosing"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/loosing"/>
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -100,7 +196,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="20dp"
+                        android:layout_marginBottom="15dp"
                         android:background="@drawable/rect_background">
 
                         <LinearLayout
@@ -116,8 +212,8 @@
                                 android:layout_height="wrap_content"
                                 android:background="@mipmap/b_banner"/>
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="5dp"
                                 android:gravity="center"
@@ -135,8 +231,8 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -153,8 +249,8 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -171,8 +267,8 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -189,8 +285,8 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -221,8 +317,8 @@
                                 android:background="@mipmap/i_banner"/>
 
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="5dp"
                                 android:gravity="center"
@@ -240,8 +336,8 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -257,8 +353,8 @@
                                     />
                             </LinearLayout>
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -274,8 +370,8 @@
                                     />
                             </LinearLayout>
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -291,8 +387,8 @@
                                     />
                             </LinearLayout>
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -324,8 +420,8 @@
                                 android:background="@mipmap/n_banner"/>
 
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginTop="5dp"
@@ -343,8 +439,8 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -361,8 +457,8 @@
                             </LinearLayout>
                             <TextView
                                 android:id="@+id/txt_13"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:layout_marginBottom="1dp"
                                 android:text="No Bingo"
@@ -371,8 +467,8 @@
                                 android:textSize="13sp"
                                 android:background="#aaaaaa"/>
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -388,8 +484,8 @@
                                     />
                             </LinearLayout>
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -420,8 +516,8 @@
                                 android:background="@mipmap/g_banner"/>
 
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginTop="5dp"
@@ -439,8 +535,8 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -456,8 +552,8 @@
                                     />
                             </LinearLayout>
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -473,8 +569,8 @@
                                     />
                             </LinearLayout>
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -490,8 +586,8 @@
                                     />
                             </LinearLayout>
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -522,8 +618,8 @@
                                 android:background="@mipmap/o_banner"/>
 
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginTop="5dp"
@@ -541,8 +637,8 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -558,8 +654,8 @@
                                     />
                             </LinearLayout>
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -576,8 +672,8 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -594,8 +690,8 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="75dp"
+                                android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:layout_marginBottom="1dp"
@@ -620,7 +716,7 @@
                         android:background="@mipmap/bingo_gray_button"
                         android:layout_alignLeft="@+id/llNumberGrid"
                         android:layout_alignRight="@+id/llNumberGrid"
-                        android:layout_height="70dp"
+                        android:layout_height="63dp"
                         android:layout_marginRight="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_alignParentBottom="true"

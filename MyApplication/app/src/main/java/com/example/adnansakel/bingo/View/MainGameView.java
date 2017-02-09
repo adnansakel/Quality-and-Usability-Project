@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +63,7 @@ public class MainGameView implements Observer {
     TextView txtCalledNumber;
     Button btnSayBingo;
     LinearLayout llPlayerList;
+    LinearLayout llChatList;
     ImageView imgCallingNUmberCircle;
 
     View llendgame;
@@ -114,6 +116,7 @@ public class MainGameView implements Observer {
         btnSayBingo = (Button)view.findViewById(R.id.btn_say_bingo);
 
         llPlayerList = (LinearLayout) view.findViewById(R.id.llPlayers);
+        llChatList = (LinearLayout) view.findViewById(R.id.ll_chat_msg_maingame);
 
         llendgame = view.findViewById(R.id.ll_endgame);
         llendgame.setVisibility(View.GONE);
@@ -254,7 +257,7 @@ public class MainGameView implements Observer {
                 txtMessage.setText(bingoGameModel.getNotificationText().toString());
 
                 Toast toast = new Toast(((MainGameActivity)context).getApplicationContext());
-                toast.setGravity(Gravity.BOTTOM|Gravity.LEFT, 300, 20);
+                toast.setGravity(Gravity.TOP|Gravity.LEFT, 300, 20);
                 toast.setDuration(Toast.LENGTH_LONG);
                 toast.setView(layout);
                 toast.show();
@@ -294,6 +297,32 @@ public class MainGameView implements Observer {
                     llendgame.startAnimation(AnimationUtils.loadAnimation(context,
                             R.anim.slid_down));
                 }
+            }
+
+            if(data.toString().equals(AppConstants.UPDATE_MAINGAME_MESSAGE_LIST)){
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+                View item_chatlist =  ((LayoutInflater)view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.item_lobby_message,null);
+                item_chatlist.setLayoutParams(layoutParams);
+                LinearLayout llChat = (LinearLayout)item_chatlist.findViewById(R.id.llChat);
+
+                if(bingoGameModel.getMaingameMessageList().size()%2==0){
+                    llChat.setGravity(Gravity.RIGHT);
+                    ((LinearLayout)item_chatlist.findViewById(R.id.llMsgBackground)).setBackgroundResource(R.drawable.rect_backgroud_orange);
+                }
+                else{
+                    llChat.setGravity(Gravity.LEFT);
+                    ((LinearLayout)item_chatlist.findViewById(R.id.llMsgBackground)).setBackgroundResource(R.drawable.rect_background);
+                }
+                //llChat.setLayoutParams(layoutParams);
+                //llChat.setG
+                ((TextView)item_chatlist.findViewById(R.id.txtName)).setText("MyName");
+                ((TextView)item_chatlist.findViewById(R.id.txtMessage)).setText(bingoGameModel.getMaingameMessageList().get(bingoGameModel.getMaingameMessageList().size()-1));
+                llChatList.addView(item_chatlist);
+                ScrollView ScrlChatList = ((ScrollView)this.view.findViewById(R.id.scrlChatList));
+
+
+                ScrlChatList.fullScroll(View.FOCUS_DOWN);
             }
         }
     }

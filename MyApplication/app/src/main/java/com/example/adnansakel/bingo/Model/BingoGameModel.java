@@ -12,6 +12,8 @@ import java.util.Observable;
 public class BingoGameModel extends Observable{
     private List<Integer> shuffledNumberSequence = new ArrayList<Integer>();
     private List<Integer> shuffledCalledNumberSequence = new ArrayList<Integer>();
+    private List<String> lobbyMessageList = new ArrayList<String>();
+    private List<String> maingameMessageList = new ArrayList<String>();
     private boolean ifBingoIsFound = false;
     private String winner = "";
     private String notificationText = "";
@@ -209,6 +211,34 @@ public class BingoGameModel extends Observable{
         this.notificationText = notificationText;
         this.setChanged();
         this.notifyObservers(AppConstants.SHOW_NOTIFICATION);
+    }
+
+    public List<String> getLobbyMessageList() {
+        return lobbyMessageList;
+    }
+
+    public void setLobbyMessageList(List<String> lobbyMessageList) {
+        this.lobbyMessageList = lobbyMessageList;
+    }
+
+    public void addLobbyMessage(String message){
+        this.lobbyMessageList.add(message);
+        this.setChanged();
+        this.notifyObservers(AppConstants.UPDATE_LOBBY_MESSAGE_LIST);
+    }
+
+    public List<String> getMaingameMessageList() {
+        return maingameMessageList;
+    }
+
+    public void setMaingameMessageList(List<String> maingameMessageList) {
+        this.maingameMessageList = maingameMessageList;
+    }
+
+    public void addMainGameMessage(String message){
+        this.maingameMessageList.add(message);
+        this.setChanged();
+        this.notifyObservers(AppConstants.UPDATE_MAINGAME_MESSAGE_LIST);
     }
 }
 

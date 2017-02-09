@@ -64,6 +64,10 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     TextView txt_twentifive;
     TextView txtCalledNumber;
     Button btnSayBingo;
+    Button btnSayWellPlayed;
+    Button btnSayUrOpinion;
+    Button btnSayUhvNoChance;
+    Button btnSayLoosing;
 
     View llendgame;
 
@@ -77,6 +81,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maingame_landscape);
         getSupportActionBar().setTitle("Game Bingo");
+        getSupportActionBar().hide();
         sequencenumberList = new ArrayList<Integer>();
         new MainGameView(findViewById(R.id.rl_main_game_view),((MyApplication)getApplication()).getBingoGameModel(),this);
         handler = new Handler();
@@ -102,7 +107,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         initialize();
         counter = 0;
         //((MyApplication)getApplication()).getBingoGameModel().setWinner("--Nobody");
-        callNumbersinInterval(1500);//must call this
+        callNumbersinInterval(1500);//must call this; commented for debugging
         //((MyApplication)getApplication()).getBingoGameModel().setNotificationText("Hello");
 
 
@@ -157,6 +162,16 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         txt_twentifive = (TextView)findViewById(R.id.txt_25);
         txtCalledNumber = (TextView)findViewById(R.id.txtCalledNumber);
         btnSayBingo = (Button)findViewById(R.id.btn_say_bingo);
+
+        btnSayLoosing = (Button)findViewById(R.id.btnSayLoosing);
+        btnSayUhvNoChance = (Button)findViewById(R.id.btnSayNoChance);
+        btnSayWellPlayed = (Button)findViewById(R.id.btnSayWellPlayed);
+        btnSayUrOpinion = (Button)findViewById(R.id.btnSayOpinion);
+
+        btnSayUrOpinion.setOnClickListener(this);
+        btnSayWellPlayed.setOnClickListener(this);
+        btnSayLoosing.setOnClickListener(this);
+        btnSayUhvNoChance.setOnClickListener(this);
         //txt_one = (TextView)findViewById(R.id.txt_one);
 
         txt_one.setOnClickListener(this);
@@ -392,6 +407,22 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+        else if(view == btnSayLoosing){
+            String emoji = new String(Character.toChars(0x1F62B));
+            ((MyApplication)getApplication()).getBingoGameModel().addMainGameMessage("I am loosing "+emoji);
+        }
+        else if(view == btnSayUhvNoChance){
+            String emoji = new String(Character.toChars(0x1F608));
+            ((MyApplication)getApplication()).getBingoGameModel().addMainGameMessage("You have no chance winning "+emoji);
+        }
+        else if(view == btnSayWellPlayed){
+            String emoji = new String(Character.toChars(0x1F642));
+            ((MyApplication)getApplication()).getBingoGameModel().addMainGameMessage("Well played "+emoji);
+        }
+        else if(view == btnSayUrOpinion){
+            String emoji = new String(Character.toChars(0x1F620));
+            ((MyApplication)getApplication()).getBingoGameModel().addMainGameMessage("That is only your opinion "+emoji);
         }
         else{
             if(((TextView)view).getText().toString().matches("\\d+(?:\\.\\d+)?")

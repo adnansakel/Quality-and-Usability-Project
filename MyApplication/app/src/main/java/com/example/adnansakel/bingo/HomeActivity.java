@@ -33,6 +33,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     Button btnCreateGame;
     Button btnJoinGame;
+    Button btnHelp;
     BingoServerCalls bingoServerCalls;
     TextToSpeech textToSpeechtest;
     Handler handler;
@@ -110,6 +111,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         imgGender = (ImageView)findViewById(R.id.imgGender);
         imgUserPhoto = (ImageView)findViewById(R.id.imageUser);
         txtNameAge = (TextView)findViewById(R.id.txtNameAge);
+
+        btnHelp = (Button)findViewById(R.id.btnHelp);
+        btnHelp.setOnClickListener(this);
 
         btnCreateGame.setOnClickListener(this);
         btnJoinGame.setOnClickListener(this);
@@ -229,6 +233,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(view == btnJoinGame){
             startActivity(new Intent(HomeActivity.this,JoinGameActivity.class));
+        }
+        else if(view == btnHelp){
+            startActivity(new Intent(HomeActivity.this,HelpActivity.class));
         }
     }
 

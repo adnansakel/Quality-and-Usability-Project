@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="2dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FEF9E7"
+    tools:context="com.example.adnansakel.bingo.HomeActivity"
+    android:id="@+id/rl_home_view">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/txt_game_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="#cd595a"
+            android:textStyle="bold"
+            android:text="Navigation Buttons"
+            android:layout_weight="1.58"
+            android:layout_above="@+id/txt_game_notice"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="left"
+        android:padding="2dp">
+
+        <ImageView
+            android:id="@+id/start_button_img"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:scaleType="centerCrop"
+            android:layout_marginRight="4dp"
+            android:src="@mipmap/start_button" />
+
+        <ImageView
+            android:drawableLeft="@+id/restart_button_button_img"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:scaleType="centerCrop"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/restart_button" />
+
+        <TextView
+            android:id="@+id/txt_first_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="#016773"
+            android:text="With these Buttons you can start and restart your game."
+            android:layout_weight="1.58"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:padding="2dp">
+
+            <ImageView
+                android:id="@+id/quit_button_img"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:scaleType="centerCrop"
+                android:layout_marginRight="4dp"
+                android:src="@mipmap/quit_button" />
+
+            <ImageView
+                android:drawableLeft="@+id/leave_button_button_img"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:scaleType="centerCrop"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/leave_button" />
+
+            <TextView
+                android:id="@+id/txt_second_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="#016773"
+                android:text="With these Buttons you can quit or leave the game."
+                android:layout_weight="1.58"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:padding="2dp">
+
+            <ImageView
+                android:id="@+id/create_button_img"
+                android:layout_width="144dp"
+                android:layout_height="30dp"
+                android:scaleType="centerCrop"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/create_button" />
+
+            <TextView
+                android:id="@+id/txt_third_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="#016773"
+                android:text="With this button you can create new game."
+                android:layout_weight="1.58"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:padding="2dp">
+
+            <ImageView
+                android:drawableLeft="@+id/join_button_button_img"
+                android:layout_width="144dp"
+                android:layout_height="25dp"
+                android:scaleType="centerCrop"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/join_button" />
+
+            <TextView
+                android:id="@+id/txt_fourth_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="#016773"
+                android:text="With this Button you can join one of the existing games."
+                android:layout_weight="1.58"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </LinearLayout>
+
+        <TextView
+        android:id="@+id/txt_game_rules"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="#cd595a"
+        android:textStyle="bold"
+        android:text="Bingo Winning Combinations"
+        android:layout_weight="1.58"
+        android:layout_above="@+id/txt_game_notice"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="left"
+        android:padding="2dp">
+
+        <ImageView
+            android:drawableLeft="@+id/bingo_rules_img"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:scaleType="centerCrop"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/bingo_rules"
+            android:id="@+id/imageView2" />
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

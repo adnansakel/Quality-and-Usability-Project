@@ -1,5 +1,9 @@
 package com.example.adnansakel.bingo.Model;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.widget.Toast;
+
 import com.example.adnansakel.bingo.Util.AppConstants;
 
 import java.util.ArrayList;
@@ -12,8 +16,8 @@ import java.util.Observable;
 public class BingoGameModel extends Observable{
     private List<Integer> shuffledNumberSequence = new ArrayList<Integer>();
     private List<Integer> shuffledCalledNumberSequence = new ArrayList<Integer>();
-    private List<String> lobbyMessageList = new ArrayList<String>();
-    private List<String> maingameMessageList = new ArrayList<String>();
+    private List<Chat> lobbyChatList = new ArrayList<Chat>();
+    private List<Chat> maingameChatList = new ArrayList<Chat>();
     private boolean ifBingoIsFound = false;
     private String winner = "";
     private String notificationText = "";
@@ -213,32 +217,64 @@ public class BingoGameModel extends Observable{
         this.notifyObservers(AppConstants.SHOW_NOTIFICATION);
     }
 
-    public List<String> getLobbyMessageList() {
-        return lobbyMessageList;
+    public List<Chat> getLobbyChatList() {
+        return lobbyChatList;
     }
 
-    public void setLobbyMessageList(List<String> lobbyMessageList) {
-        this.lobbyMessageList = lobbyMessageList;
+    public void setLobbyChatList(List<Chat> lobbyChatList) {
+        this.lobbyChatList = lobbyChatList;
     }
 
-    public void addLobbyMessage(String message){
-        this.lobbyMessageList.add(message);
+    public void addLobbyChat(Chat chat){
+        this.lobbyChatList.add(chat);
         this.setChanged();
         this.notifyObservers(AppConstants.UPDATE_LOBBY_MESSAGE_LIST);
     }
 
-    public List<String> getMaingameMessageList() {
-        return maingameMessageList;
+    public List<Chat> getMaingameChatList() {
+        return maingameChatList;
     }
 
-    public void setMaingameMessageList(List<String> maingameMessageList) {
-        this.maingameMessageList = maingameMessageList;
+    public void setMaingameChatList(List<Chat> maingameMessageList) {
+        this.maingameChatList = maingameMessageList;
     }
 
-    public void addMainGameMessage(String message){
-        this.maingameMessageList.add(message);
+    public void addMainGameChat(Chat chat){
+        this.maingameChatList.add(chat);
         this.setChanged();
         this.notifyObservers(AppConstants.UPDATE_MAINGAME_MESSAGE_LIST);
+    }
+
+    public void updateProfilePhoto(Bitmap bmpProfilePhoto){
+        this.myPlayer.setBmpProfilePhoto(bmpProfilePhoto);
+        this.setChanged();
+        //System.out.print("update photo from game model");
+        //Toast.makeText(context,"update photo from game model",Toast.LENGTH_SHORT).show();
+        this.notifyObservers(AppConstants.UPDATE_PROFILE_PHOTO);
+
+    }
+
+    public boolean isItNewLobbyChat(Chat chat){
+        for(Chat mchat: getLobbyChatList()){
+            if(chat.getPlayerID().equals(getMyPlayer().getPlayerID())){
+                return false;
+            }
+            if(mchat.getTime().length()>0&&mchat.getTime().equals(chat.getTime())){
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean isItNewMainGameChat(Chat chat){
+        for(Chat mchat: getMaingameChatList()){
+            if(chat.getPlayerID().equals(getMyPlayer().getPlayerID())){
+                return false;
+            }
+            if(mchat.getTime().length()>0&&mchat.getTime().equals(chat.getTime())){
+                return false;
+            }
+        }
+        return true;
     }
 }
 

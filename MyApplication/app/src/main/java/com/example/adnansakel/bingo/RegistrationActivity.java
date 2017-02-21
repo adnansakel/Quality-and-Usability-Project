@@ -14,12 +14,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.adnansakel.bingo.Model.Player;
@@ -50,6 +53,11 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     RadioButton rdbtnMale;
     RadioButton rdbtnFemale;
 
+    TextView txtNext;
+    TextView txtUploadPhoto;
+    LinearLayout ll_WelcomeScreen;
+    LinearLayout llRegistartionView;
+
     private static final int REQUEST_CAMERA = 0;
     private static final int SELECT_FILE = 1;
 
@@ -75,11 +83,23 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         btnUploadPhoto = (Button)findViewById(R.id.btnPhotoUpload);
         rdbtnFemale = (RadioButton)findViewById(R.id.radioButton_Female);
         rdbtnMale = (RadioButton)findViewById(R.id.radioButton_Male);
+
+        txtUploadPhoto = (TextView)findViewById(R.id.txtUploadPhoto);
+
+        txtNext = (TextView)findViewById(R.id.txtNext);
+        ll_WelcomeScreen = (LinearLayout)findViewById(R.id.ll_WelcomeScreen);
+        llRegistartionView = (LinearLayout)findViewById(R.id.llRegistrationView);
         btnUploadPhoto.setVisibility(View.GONE);
 
         imgProfilePhoto = (ImageView)findViewById(R.id.imgProfilePhoto);
         imgProfilePhoto.setOnClickListener(this);
         btnSignIn.setOnClickListener(this);
+        txtNext.setOnClickListener(this);
+        txtUploadPhoto.setOnClickListener(this);
+        llRegistartionView.setVisibility(View.GONE);
+
+//        ((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().setBmpProfilePhoto(
+  //              BitmapFactory.decodeResource(getResources(), R.drawable.user));
     }
 
     private void getUserInfo()
@@ -108,8 +128,9 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             ((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().setEmail(email);
         }
 
+
         if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getPlayerID().length()>0){
-            startActivity(new Intent(RegistrationActivity.this, HomeActivity.class));
+            startActivity(new Intent(RegistrationActivity.this, RulesActivity.class));
             this.finish();
         }
 
@@ -127,8 +148,21 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 else{player.setAge("");}
                 //if(editTextGender.getText().toString()!=null){player.setGender(editTextGender.getText().toString());}
                 //else{player.setGender("");}
-                if(editTextEmail.getText().toString()!=null){player.setEmail(editTextEmail.getText().toString());}
-                else{player.setEmail("");}
+                if(editTextEmail.getText().toString()!=null){
+                    if(editTextEmail.getText().toString().length()>0&&isValidEmail(editTextEmail.getText().toString())){
+                        player.setEmail(editTextEmail.getText().toString());
+                    }
+                    else if(editTextEmail.getText().toString().length()>0 && !isValidEmail(editTextEmail.getText().toString())){
+                        Toast.makeText(this,"Please insert a valid email address or leave that field empty.", Toast.LENGTH_LONG).show();
+                        editTextEmail.setText("");
+                        return;
+                    }
+
+                }
+                else{
+                    player.setEmail("");
+                }
+
                 if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getBmpProfilePhoto()!=null){
                     player.setBmpProfilePhoto(
                             ((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getBmpProfilePhoto());
@@ -159,10 +193,24 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
         }
 
-        if(view == imgProfilePhoto){
+        if(view == imgProfilePhoto || view == txtUploadPhoto){
             selectImage();
         }
 
+        if(view == txtNext){
+            ll_WelcomeScreen.setVisibility(View.GONE);
+            llRegistartionView.setVisibility(View.VISIBLE);
+
+        }
+
+    }
+
+    public final static boolean isValidEmail(CharSequence target) {
+        if (TextUtils.isEmpty(target)) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
     }
 
     private void selectImage() {

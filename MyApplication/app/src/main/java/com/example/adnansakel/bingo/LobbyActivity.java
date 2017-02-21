@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.example.adnansakel.bingo.HttpHelper.MySingleton;
+import com.example.adnansakel.bingo.Model.Chat;
 import com.example.adnansakel.bingo.Util.AppConstants;
 import com.example.adnansakel.bingo.View.LobbyView;
 
@@ -33,10 +35,14 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
     Button btnStartGame;
     BingoServerCalls bingoServerCalls;
     Handler handler;
+    Handler chathandler;
     Runnable runnable;
 
     Spinner spinnerMsg;
     Button btnSendMsg;
+    Button btnLeaveGame;
+
+    LinearLayout ll_ChatSelection;
 
     //ImageView imgGender;
     //TextView txtNameAge;
@@ -53,7 +59,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         new LobbyView(findViewById(R.id.ll_lobby_view),((MyApplication)getApplication()).getBingoGameModel(),this);
         System.out.println("From Lobby"+((MyApplication) getApplication()).getBingoGameModel().getMyGame().getCallingNumberlist().toString());
         initialize();
-        checkforPlayers(2000);//checks for players after each two seconds;
+        checkforPlayers(1000);//checks for players after each two seconds;
 
     }
 
@@ -63,7 +69,10 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         btnStartGame = (Button)findViewById(R.id.btnStartGame);
         spinnerMsg = (Spinner)findViewById(R.id.spinner_Msg);
         btnSendMsg = (Button)findViewById(R.id.btnMsgSend);
+        btnLeaveGame = (Button)findViewById(R.id.btnLeaveGame);
+        ll_ChatSelection = (LinearLayout)findViewById(R.id.ll_ChatSelection);
         btnSendMsg.setOnClickListener(this);
+        btnLeaveGame.setOnClickListener(this);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.lobby_messages, android.R.layout.simple_spinner_item);
@@ -72,6 +81,15 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         // Apply the adapter to the spinner
         spinnerMsg.setAdapter(adapter);
         String msg = spinnerMsg.getSelectedItem().toString();
+        spinnerMsg.setSelection(0);
+
+        Chat chat = new Chat();
+        chat.setPlayerName("Bingo System");
+        chat.setPlayerID("");
+        chat.setTime("");
+        chat.setMessage("Welcome to game "+((MyApplication)getApplication()).getBingoGameModel().getMyGame().getGameName()+","+
+                "here you can see the messages from other users.");
+        ((MyApplication)getApplication()).getBingoGameModel().addLobbyChat(chat);
         //String[] msg = {"Hi", "Thank u","Good day!"};
         //SpinnerAdapter spadp = new Sp
         //imgGender = (ImageView)findViewById(R.id.imgGender);
@@ -113,6 +131,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
             btnStartGame.setVisibility(View.GONE);
         }
         handler = new Handler();
+        chathandler = new Handler();
 
         /*
         MySingleton.getInstance(this).getImageLoader().get(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+
@@ -134,9 +153,35 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         item_playerlist = getLayoutInflater().inflate(R.layout.list_view_item_lobby,null);
         llPlayerList.addView(item_playerlist,layoutParams);
 */
+        if(AppConstants.PLAY_WITHOUT_CHAT){
+            ll_ChatSelection.setVisibility(View.GONE);
+            ((ScrollView)findViewById(R.id.scrlChatList)).setVisibility(View.GONE);
+        }
+        else{
+            ll_ChatSelection.setVisibility(View.VISIBLE);
+            ((ScrollView)findViewById(R.id.scrlChatList)).setVisibility(View.VISIBLE);
+        }
 
     }
 
+    private void sendLobbyChat(final Chat chat){
+        runnable = new Runnable() {
+
+            @Override
+            public void run() {
+                // do your stuff - don't create a new runnable here!
+
+                System.out.println("Sending message.");
+
+                    bingoServerCalls.sendChatFromLobby(chat);
+                        chathandler.removeCallbacks(runnable);
+                        return;
+            }
+        };
+
+// start it with:
+        chathandler.post(runnable);
+    }
     private void checkforPlayers(final int milliseconds){
         runnable = new Runnable() {
 
@@ -146,7 +191,6 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
 
                     //System.out.println(counter);
                 try {
-
                     if(((MyApplication)getApplication()).getBingoGameModel().getPlayerlist().size()>4){
 
                         /*handler.removeCallbacks(this);
@@ -205,7 +249,37 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
 
         if(view == btnSendMsg){
             //Toast.makeText(this,spinnerMsg.getSelectedItem().toString(),Toast.LENGTH_LONG).show();
-            ((MyApplication)getApplication()).getBingoGameModel().addLobbyMessage(spinnerMsg.getSelectedItem().toString());
+            if(spinnerMsg.getSelectedItemPosition()>0){
+                Chat chat = new Chat();
+                chat.setPlayerName(""+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getName());
+                chat.setPlayerID(""+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getPlayerID());
+                chat.setMessage(spinnerMsg.getSelectedItem().toString());
+                ((MyApplication)getApplication()).getBingoGameModel().addLobbyChat(chat);
+                sendLobbyChat(chat);
+                //((MyApplication)getApplication()).getBingoGameModel().addLobbyChat(spinnerMsg.getSelectedItem().toString());
+            }
+
+        }
+
+        if(view == btnLeaveGame){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirmation");
+            builder.setMessage("Are you sure want to exit Lobby of this game?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    try {
+                        bingoServerCalls.removeFromGame(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer(),
+                                ((MyApplication)getApplication()).getBingoGameModel().getMyGame(),handler,runnable);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            builder.setNegativeButton("No", null);
+            builder.setCancelable(true);
+            builder.show();
         }
 
 

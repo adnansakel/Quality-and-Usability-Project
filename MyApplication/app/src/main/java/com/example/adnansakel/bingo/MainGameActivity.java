@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.adnansakel.bingo.HttpHelper.BingoServerClient;
+import com.example.adnansakel.bingo.Model.Chat;
 import com.example.adnansakel.bingo.Model.Game;
 import com.example.adnansakel.bingo.Model.Player;
 import com.example.adnansakel.bingo.Util.AppConstants;
@@ -63,11 +64,14 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     TextView txt_twentifour;
     TextView txt_twentifive;
     TextView txtCalledNumber;
+    TextView txtNextNumber;
     Button btnSayBingo;
     Button btnSayWellPlayed;
     Button btnSayUrOpinion;
     Button btnSayUhvNoChance;
     Button btnSayLoosing;
+    Button btnLeaveBingo;
+    Button btnEndGame;
 
     View llendgame;
 
@@ -76,6 +80,8 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     List<Integer> sequencenumberList;
 
     BingoServerCalls bingoServerCalls;
+
+    Handler chathandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +91,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         sequencenumberList = new ArrayList<Integer>();
         new MainGameView(findViewById(R.id.rl_main_game_view),((MyApplication)getApplication()).getBingoGameModel(),this);
         handler = new Handler();
+        chathandler = new Handler();
 
         //((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().setPlayerID("101");
         setShuffledNumberSequenceonCard();
@@ -161,17 +168,22 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         txt_twentifour = (TextView)findViewById(R.id.txt_24);
         txt_twentifive = (TextView)findViewById(R.id.txt_25);
         txtCalledNumber = (TextView)findViewById(R.id.txtCalledNumber);
+        txtNextNumber = (TextView)findViewById(R.id.txtNextNumber);
         btnSayBingo = (Button)findViewById(R.id.btn_say_bingo);
+        btnEndGame = (Button)findViewById(R.id.btnEndGame);
+        //btnLeaveBingo = (Button)findViewById(R.id.btnLeaveGame);
 
         btnSayLoosing = (Button)findViewById(R.id.btnSayLoosing);
         btnSayUhvNoChance = (Button)findViewById(R.id.btnSayNoChance);
         btnSayWellPlayed = (Button)findViewById(R.id.btnSayWellPlayed);
         btnSayUrOpinion = (Button)findViewById(R.id.btnSayOpinion);
-
+        btnLeaveBingo = (Button)findViewById(R.id.btn_leave_bingo);
         btnSayUrOpinion.setOnClickListener(this);
         btnSayWellPlayed.setOnClickListener(this);
         btnSayLoosing.setOnClickListener(this);
         btnSayUhvNoChance.setOnClickListener(this);
+        btnLeaveBingo.setOnClickListener(this);
+        btnEndGame.setOnClickListener(this);
         //txt_one = (TextView)findViewById(R.id.txt_one);
 
         txt_one.setOnClickListener(this);
@@ -207,7 +219,11 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         llendgame = findViewById(R.id.ll_endgame);
         btnSayBingo.setClickable(false);
         //llendgame.setVisibility(View.VISIBLE);
-
+        Chat chat = new Chat();
+        chat.setPlayerName("Bingo System");
+        chat.setMessage("Welcome to game "+((MyApplication)getApplication()).getBingoGameModel().getMyGame().getGameName()+","+
+        "here you can see the messages from other users."+"\n"+ "use the emojis to send message to them.");
+        ((MyApplication)getApplication()).getBingoGameModel().addMainGameChat(chat);
 
         /*
         sequencenumberList = ((MyApplication)getApplication()).getBingoGameModel().getShuffledNumberSequence();
@@ -261,13 +277,32 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         ((MyApplication)getApplication()).getBingoGameModel().getMyGame().setCallingNumberlist(numberSequence);//this is here for testing
         //the above block of code should be removed as the number sequence will be got from server
         */
-        ((MyApplication)getApplication()).getBingoGameModel().setShuffledCalledNumberSequence(
-                ((MyApplication)getApplication()).getBingoGameModel().getMyGame().getCallingNumberlist());
+
+        if(AppConstants.PLAY_WITH_LIMITED_CALLING_NUMBERS){
+            ((MyApplication)getApplication()).getBingoGameModel().setShuffledCalledNumberSequence(getLimitedCallingNumbers());
+        }
+        else{
+            ((MyApplication)getApplication()).getBingoGameModel().setShuffledCalledNumberSequence(
+                    ((MyApplication)getApplication()).getBingoGameModel().getMyGame().getCallingNumberlist());
+        }
+
         //MyGame should contain the calling number sequence got from server while in join game or create game;
         //this string should be got from server
 
         //return shuffledNumberSequence;
         //return "";
+    }
+
+    private List<Integer> getLimitedCallingNumbers(){
+        List<Integer> mlist = new ArrayList<Integer>();
+        for(int num_c: ((MyApplication)getApplication()).getBingoGameModel().getMyGame().getCallingNumberlist()){
+            for(int num_s: ((MyApplication)getApplication()).getBingoGameModel().getShuffledNumberSequence()){
+                if(num_c == num_s){
+                    mlist.add(num_c);
+                }
+            }
+        }
+        return mlist;
     }
 
     private void setShuffledNumberSequenceonCard(){
@@ -350,6 +385,14 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                         System.out.println("Indexes: " + (counter/5));
                         int index = counter/5;
                         int m = ((MyApplication)getApplication()).getBingoGameModel().getShuffledCalledNumberSequence().get(index);
+                        if(index+1 < 65){
+                            txtNextNumber.setText("Next: "+
+                                    ((MyApplication)getApplication()).getBingoGameModel().getShuffledCalledNumberSequence().get(index+1));
+
+                        }
+                        else{
+                            txtNextNumber.setText("Next: ");
+                        }
                         //txtCalledNumber.setText(""+m);
                         ((MyApplication)getApplication()).getBingoGameModel().setCalledNumber(m);
                         txtCalledNumber.setTextColor(Color.parseColor("#008000"));
@@ -398,6 +441,26 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
+    private void sendMainGameChat(final Chat chat){
+        runnable = new Runnable() {
+
+            @Override
+            public void run() {
+                // do your stuff - don't create a new runnable here!
+
+                //System.out.println(counter);
+
+                bingoServerCalls.sendChatFromMainGame(chat);
+                chathandler.removeCallbacks(runnable);
+                return;
+            }
+        };
+
+// start it with:
+        chathandler.post(runnable);
+    }
+
+
     @Override
     public void onClick(View view) {
         if(view == btnSayBingo){
@@ -410,23 +473,77 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == btnSayLoosing){
             String emoji = new String(Character.toChars(0x1F62B));
-            ((MyApplication)getApplication()).getBingoGameModel().addMainGameMessage("I am loosing "+emoji);
+            Chat chat = new Chat();
+            chat.setPlayerName(""+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getName());
+            chat.setPlayerID(""+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getPlayerID());
+            //chat.setMessage("I am loosing "+emoji);
+            chat.setMessage(AppConstants.MESSAGE_I_AM_LOOSING);
+
+            ((MyApplication)getApplication()).getBingoGameModel().addMainGameChat(chat);
+            sendMainGameChat(chat);
         }
         else if(view == btnSayUhvNoChance){
             String emoji = new String(Character.toChars(0x1F608));
-            ((MyApplication)getApplication()).getBingoGameModel().addMainGameMessage("You have no chance winning "+emoji);
+            Chat chat = new Chat();
+            chat.setPlayerName(""+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getName());
+            chat.setPlayerID(""+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getPlayerID());
+            //chat.setMessage("You have no chance winning "+emoji);
+            chat.setMessage(AppConstants.MESSAGE_NO_CHANCE_WINNING);
+            ((MyApplication)getApplication()).getBingoGameModel().addMainGameChat(chat);
+            sendMainGameChat(chat);
         }
         else if(view == btnSayWellPlayed){
             String emoji = new String(Character.toChars(0x1F642));
-            ((MyApplication)getApplication()).getBingoGameModel().addMainGameMessage("Well played "+emoji);
+            Chat chat = new Chat();
+            chat.setPlayerName(""+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getName());
+            chat.setPlayerID(""+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getPlayerID());
+            //chat.setMessage("Well played "+emoji);
+            chat.setMessage(AppConstants.MESSAGE_WELL_PLAYED);
+            ((MyApplication)getApplication()).getBingoGameModel().addMainGameChat(chat);
+            sendMainGameChat(chat);
+            //((MyApplication)getApplication()).getBingoGameModel().addMainGameMessage("Well played "+emoji);
         }
         else if(view == btnSayUrOpinion){
             String emoji = new String(Character.toChars(0x1F620));
-            ((MyApplication)getApplication()).getBingoGameModel().addMainGameMessage("That is only your opinion "+emoji);
+            Chat chat = new Chat();
+            chat.setPlayerName(""+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getName());
+            chat.setPlayerID(""+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getPlayerID());
+            //chat.setMessage("That is only your opinion "+emoji);
+            chat.setMessage(AppConstants.MESSAGE_ONLY_OPINION);
+            ((MyApplication)getApplication()).getBingoGameModel().addMainGameChat(chat);
+            sendMainGameChat(chat);
+            //((MyApplication)getApplication()).getBingoGameModel().addMainGameMessage("That is only your opinion "+emoji);
+        }
+        else if(view == btnLeaveBingo){
+            if(llendgame.getVisibility()==View.GONE){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Confirmation");
+                builder.setMessage("Are you sure want to exit this game?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(handler!=null && runnable!=null){
+                            handler.removeCallbacks(runnable);
+                        }
+                        MainGameActivity.this.finish();
+                    }
+                });
+                builder.setNegativeButton("No", null);
+                builder.setCancelable(true);
+                builder.show();
+            }
+            else{
+                handler.removeCallbacks(runnable);
+                MainGameActivity.this.finish();
+            }
+        }
+        else if(view == btnEndGame){
+            MainGameActivity.this.finish();
         }
         else{
             if(((TextView)view).getText().toString().matches("\\d+(?:\\.\\d+)?")
-                    //&& ((TextView)view).getText()==txtCalledNumber.getText().toString()
+                    && ((TextView)view).getText().toString().equals(txtCalledNumber.getText().toString())
                     ){
                 int id = view.getId();
                 String id_name = getResources().getResourceName(id);

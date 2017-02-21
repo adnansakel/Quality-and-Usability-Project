@@ -2,10 +2,16 @@ package com.example.adnansakel.bingo;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,11 +36,14 @@ import com.example.adnansakel.bingo.View.HomeView;
 
 import org.json.JSONException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btnCreateGame;
     Button btnJoinGame;
     Button btnHelp;
+    Button btnSettings;
     BingoServerCalls bingoServerCalls;
     TextToSpeech textToSpeechtest;
     Handler handler;
@@ -44,15 +54,23 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     TextView txtNameAge;
     String nameage = "";
     ImageView imgUserPhoto;
+
+    LinearLayout ll_editPhoto;
+
+    private static final int REQUEST_CAMERA = 0;
+    private static final int SELECT_FILE = 1;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         getSupportActionBar().setTitle("Bingo Home");
-        new HomeView(findViewById(R.id.rl_home_view),((MyApplication)getApplication()).getBingoGameModel());
+        new HomeView(findViewById(R.id.rl_home_view),((MyApplication)getApplication()).getBingoGameModel(),this);
         //System.out.println("Player at home: "+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getPlayerID());
         bingoServerCalls = new BingoServerCalls(((MyApplication)getApplication()).getBingoGameModel(),this);
         connectionCheck = new ConnectionCheck(this);
+        //System.out.println("Emoji "+ "\u1562");
         initialize();
         //handler = new Handler();
         //handlerTest();
@@ -111,19 +129,23 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         imgGender = (ImageView)findViewById(R.id.imgGender);
         imgUserPhoto = (ImageView)findViewById(R.id.imageUser);
         txtNameAge = (TextView)findViewById(R.id.txtNameAge);
-
+        ll_editPhoto = (LinearLayout)findViewById(R.id.lleditPhoto);
         btnHelp = (Button)findViewById(R.id.btnHelp);
+        btnSettings = (Button)findViewById(R.id.btnSettings);
+        btnSettings.setOnClickListener(this);
         btnHelp.setOnClickListener(this);
 
         btnCreateGame.setOnClickListener(this);
         btnJoinGame.setOnClickListener(this);
+        ll_editPhoto.setOnClickListener(this);
 
         if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getName()!=null){
             nameage = ((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getName();
             txtNameAge.setText(nameage);
         }
 
-        if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getAge()!=null){
+        if(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getAge()!=null&&
+                ((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getAge().length()>0){
             nameage = nameage+","+((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getAge();
             txtNameAge.setText(nameage);
         }
@@ -149,7 +171,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         ((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().getPlayerID(),
                 ImageLoader.getImageListener((ImageView)findViewById(R.id.imageUser),
                         R.drawable.user, R.drawable.user));
-
+        //((CircleImageView)findViewById(R.id.imageUser)).setbo
         /* //testing
         llAnimationTest = findViewById(R.id.llAnimationTest);
         llAnimationTest.setVisibility(View.INVISIBLE);
@@ -236,6 +258,116 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(view == btnHelp){
             startActivity(new Intent(HomeActivity.this,HelpActivity.class));
+        }
+        else if(view == ll_editPhoto){
+            selectImage();
+        }
+        else if(view == btnSettings){
+            startActivity(new Intent(HomeActivity.this,SettingsActivity.class));
+        }
+    }
+
+    private void selectImage() {
+        final CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Add Photo!");
+        builder.setCancelable(false);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Take Photo")) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+
+                } else if (items[item].equals("Choose from Library")) {
+                    Intent intent = new Intent(
+                            Intent.ACTION_PICK,
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(
+                            Intent.createChooser(intent, "Select File"),
+                            SELECT_FILE);
+
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                    //Intent intent = new Intent();
+                    //setResult(RESULT_CANCELED, intent);
+                    //finish();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CAMERA) {
+                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+
+                //imgUserPhoto.setImageBitmap(thumbnail);
+                //((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().setBmpProfilePhoto(thumbnail);
+                bingoServerCalls.uploadProfilePhoto(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer(),thumbnail);
+                /*
+                String encodeImage = Base64.encodeToString(bytes.toByteArray(), Base64.DEFAULT);
+
+                File destination = new File(Environment.getExternalStorageDirectory(),
+                        System.currentTimeMillis() + ".jpg");
+                FileOutputStream fo;
+                try {
+                    destination.createNewFile();
+                    fo = new FileOutputStream(destination);
+                    fo.write(bytes.toByteArray());
+                    fo.close();
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
+                //Intent intent = new Intent();
+                //intent.putExtra("encoded_image",encodeImage);
+                //setResult(RESULT_OK, intent);
+                //finish();
+
+            } else if (requestCode == SELECT_FILE) {
+                System.out.println("Photo selected");
+                Uri selectedImageUri = data.getData();
+                String[] projection = {MediaStore.MediaColumns.DATA};
+                CursorLoader cursorLoader = new CursorLoader(this, selectedImageUri, projection, null, null,
+                        null);
+                Cursor cursor = cursorLoader.loadInBackground();
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                cursor.moveToFirst();
+                String selectedImagePath = cursor.getString(column_index);
+                Bitmap bm;
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(selectedImagePath, options);
+                final int REQUIRED_SIZE = 200;
+                int scale = 1;
+                while (options.outWidth / scale / 2 >= REQUIRED_SIZE
+                        && options.outHeight / scale / 2 >= REQUIRED_SIZE)
+                    scale *= 2;
+                options.inSampleSize = scale;
+                options.inJustDecodeBounds = false;
+                bm = BitmapFactory.decodeFile(selectedImagePath, options);
+                //ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                //bm.compress(Bitmap.CompressFormat.JPEG, 10, bytes);
+                //imgUserPhoto.setImageBitmap(bm);
+                //((MyApplication)getApplication()).getBingoGameModel().getMyPlayer().setBmpProfilePhoto(bm);
+                bingoServerCalls.uploadProfilePhoto(((MyApplication)getApplication()).getBingoGameModel().getMyPlayer(),bm);
+                /*String encodeImage = Base64.encodeToString(bytes.toByteArray(), Base64.DEFAULT);
+                Intent intent = new Intent();
+                intent.putExtra("encoded_image",encodeImage);
+                setResult(RESULT_OK, intent);
+                finish();*/
+
+            }
+            else{
+                System.out.println("Photo not selected "+requestCode);
+            }
         }
     }
 

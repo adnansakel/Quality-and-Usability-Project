@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.adnansakel.bingo.HttpHelper.BingoServerClient;
 import com.example.adnansakel.bingo.Model.BingoGameModel;
+import com.example.adnansakel.bingo.Model.Chat;
 import com.example.adnansakel.bingo.Model.Game;
 import com.example.adnansakel.bingo.Model.Player;
 import com.example.adnansakel.bingo.Util.AppConstants;
@@ -156,7 +157,7 @@ public class BingoServerCalls {
                     //editUserinfo.putString(AppConstants.GENDER,(String)response.get(AppConstants.GENDER));
 
                     editUserinfo.commit();
-                    context.startActivity(new Intent(context, HomeActivity.class));
+                    context.startActivity(new Intent(context, RulesActivity.class));
                     ((RegistrationActivity)context).finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -501,6 +502,7 @@ public class BingoServerCalls {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
                 //System.out.println(""+response.toString());
+                System.out.print(response.toString());
                 try {
                 JSONArray mjsonArray = response.getJSONArray(AppConstants.GAME_PLAYER);
                 bingoGameModel.getPlayerlist().clear();
@@ -515,13 +517,28 @@ public class BingoServerCalls {
                             player.setPlayerID(jplayer.get(AppConstants.PLAYER_ID).toString());
                         }
 
-
-
                         bingoGameModel.addPlayer(player);
 
 
 
                 }
+
+                mjsonArray = response.getJSONArray(AppConstants.LOBBY_CHAT);
+
+                    for(int i = 0; i < mjsonArray.length(); i++){
+                        JSONObject jChat = mjsonArray.getJSONObject(i);
+
+                        Chat chat = new Chat();
+                        if(jChat.get(AppConstants.PLAYER_ID).toString()!=null&&jChat.get(AppConstants.TIME).toString()!=null){
+                            chat.setPlayerID(jChat.get(AppConstants.PLAYER_ID).toString());
+                            chat.setPlayerName(jChat.get(AppConstants.NAME).toString());
+                            chat.setTime(jChat.get(AppConstants.TIME).toString());
+                            chat.setMessage(jChat.get(AppConstants.MESSAGE).toString());
+                            if(bingoGameModel.isItNewLobbyChat(chat)){
+                                bingoGameModel.addLobbyChat(chat);
+                            }
+                        }
+                    }
 
                 if(response.get(AppConstants.GAME_STATUS).toString()!=null){
                     bingoGameModel.getMyGame().setStatus(response.get(AppConstants.GAME_STATUS).toString());
@@ -539,6 +556,7 @@ public class BingoServerCalls {
         });
     }
 
+    private String prev_longest_match="";
     public void postLongestMatch(Player myPlayer, int longestMatch)throws JSONException{
         JSONObject jsonObject = new JSONObject();
         //jsonObject.put(AppConstants.NAME,myPlayer.getName());
@@ -558,32 +576,64 @@ public class BingoServerCalls {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
-                    if(response.get(AppConstants.IF_BINGO).toString()!=null){
-                        if(response.get(AppConstants.IF_BINGO).toString().equals(AppConstants.TRUE)){
+                    System.out.print("If bingo response:"+response.toString());
+                    JSONObject gameObj = (JSONObject) response.get("game");
+                    if(gameObj.get(AppConstants.IF_BINGO).toString().length()>0&&gameObj.get(AppConstants.IF_BINGO).toString()!=null){
+                        if(gameObj.get(AppConstants.IF_BINGO).toString().equals(AppConstants.TRUE)){
                             AppConstants.IF_BINGO_FOUND = 1;
-                            System.out.println("Bingo found from other" + response.get(AppConstants.WINNER).toString());
-                            if(response.get(AppConstants.WINNER).toString()!=null){
+                            System.out.println("Bingo found from other" + gameObj.get(AppConstants.WINNER).toString());
+                            if(gameObj.get(AppConstants.WINNER).toString()!=null){
                                 System.out.println("winner found from other");
-                                bingoGameModel.getMyGame().setWinner(response.get(AppConstants.WINNER).toString());
-                                bingoGameModel.setWinner(response.get(AppConstants.WINNER).toString());
+                                bingoGameModel.getMyGame().setWinner(gameObj.get(AppConstants.WINNER).toString());
+                                bingoGameModel.setWinner(gameObj.get(AppConstants.WINNER).toString());
                             }
 
                             return;
                         }
                     }
-                    if(response.get(AppConstants.LONGEST_MATCH).toString()!=null && !response.get(AppConstants.LONGEST_MATCH).toString().equalsIgnoreCase("null")){
-                        String [] str = response.get(AppConstants.LONGEST_MATCH).toString().split(",");
-                        System.out.println("Longest match:" + response.get(AppConstants.LONGEST_MATCH).toString());
-                        String name = str[0];
-                        String score = str[1];//.replaceAll("\\s+","");
-                        System.out.println(name+" "+"needs"+Integer.valueOf(str[1])+"more match only!");
+                    System.out.println("!!!!!!!!!!!!!!!!!!+++++++++++++++++++++++++!!!!!!!!!!!!!!!!!!!!!");
+                    JSONArray mjsonArray = response.getJSONArray(AppConstants.MAINGAME_CHAT);
+                    System.out.println("Num of chats: "+mjsonArray.length());
+                    for(int i = 0; i < mjsonArray.length(); i++){
+                        JSONObject jChat = mjsonArray.getJSONObject(i);
+                        Chat chat = new Chat();
+                        System.out.println("Name:"+jChat.get(AppConstants.NAME)+", Message: "+jChat.get(AppConstants.MESSAGE));
+                        if(jChat.get(AppConstants.PLAYER_ID).toString()!=null&&jChat.get(AppConstants.TIME).toString()!=null){
+                            chat.setPlayerID(jChat.get(AppConstants.PLAYER_ID).toString());
+                            chat.setPlayerName(jChat.get(AppConstants.NAME).toString());
+                            chat.setTime(jChat.get(AppConstants.TIME).toString());
+                            chat.setMessage(jChat.get(AppConstants.MESSAGE).toString());
+                            System.out.println("ChatMessage: "+chat.getMessage());
+                            if(bingoGameModel.isItNewMainGameChat(chat)){
+                                System.out.println("ChatMessage new: "+chat.getMessage());
+                                bingoGameModel.addMainGameChat(chat);
+                            }
+                        }
+                    }
+                    if(gameObj.get(AppConstants.LONGEST_MATCH).toString()!=null && !gameObj.get(AppConstants.LONGEST_MATCH).toString().equalsIgnoreCase("null")){
+                        if(!gameObj.get(AppConstants.LONGEST_MATCH).toString().equals(AppConstants.LONGEST_MATCH_STR)){
+                            String [] str = gameObj.get(AppConstants.LONGEST_MATCH).toString().split(",");
+                            System.out.println("Longest match:" + gameObj.get(AppConstants.LONGEST_MATCH).toString());
+                            String name = str[0];
+                            String score = str[1];//.replaceAll("\\s+","");
+                            System.out.println(name+" "+"needs"+Integer.valueOf(str[1])+"more match only!");
 
 
-                        //Toast toast = Toast.makeText(context,name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!",Toast.LENGTH_SHORT);
-                        //toast.setGravity(Gravity.BOTTOM,0,0);
-                        //toast.show();
+                            //Toast toast = Toast.makeText(context,name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!",Toast.LENGTH_SHORT);
+                            //toast.setGravity(Gravity.BOTTOM,0,0);
+                            //toast.show();
+                            //bingoGameModel.setNotificationText(name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!");
+                            Chat chat = new Chat();
+                            chat.setPlayerName("Bingo System");
+                            chat.setPlayerID("");
+                            chat.setTime("");
+                            chat.setMessage(name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!");
+                            if(!chat.getMessage().equals(prev_longest_match)){
+                                bingoGameModel.addMainGameChat(chat);
+                            }
+                            prev_longest_match = name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!";
+                        }
 
-                        bingoGameModel.setNotificationText(name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!");
 
 
                     }
@@ -769,7 +819,143 @@ public class BingoServerCalls {
         });
     }
 
+    public void sendChatFromLobby(Chat chat){
 
+        JSONObject jsonObject = new JSONObject();
+        //jsonObject.put(AppConstants.PLAYER_ID,myPlayer.getPlayerID());
+        try {
+            jsonObject.put(AppConstants.NAME,""+chat.getPlayerName());
+            jsonObject.put(AppConstants.PLAYER_ID,""+chat.getPlayerID());
+            jsonObject.put(AppConstants.GAME_ID,""+bingoGameModel.getMyGame().getGameID());
+            //jsonObject.put(AppConstants.GAME_ID,myGame.getGameID());
+            jsonObject.put(AppConstants.MESSAGE,""+chat.getMessage());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        StringEntity entity = null;
+        try {
+            entity = new StringEntity(jsonObject.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
+
+        BingoServerClient.post(context,AppConstants.LOBBY_CHAT_URL,entity,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+
+                System.out.println(""+statusCode);
+            }
+        });
+    }
+
+    public void sendChatFromMainGame(Chat chat){
+
+        JSONObject jsonObject = new JSONObject();
+        //jsonObject.put(AppConstants.PLAYER_ID,myPlayer.getPlayerID());
+        try {
+            jsonObject.put(AppConstants.NAME,""+chat.getPlayerName());
+            jsonObject.put(AppConstants.PLAYER_ID,""+chat.getPlayerID());
+            jsonObject.put(AppConstants.GAME_ID,bingoGameModel.getMyGame().getGameID());
+            jsonObject.put(AppConstants.MESSAGE,""+chat.getMessage());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        StringEntity entity = null;
+        try {
+            entity = new StringEntity(jsonObject.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
+
+        BingoServerClient.post(context,AppConstants.MAINGAME_CHAT_URL,entity,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+
+
+
+                System.out.println(""+statusCode);
+            }
+        });
+    }
+
+
+    public void uploadProfilePhoto(Player player, final Bitmap bmpProfilePhoto){
+        progress = ProgressDialog.show(context, null,
+                null, true);
+        progress.setContentView(R.layout.progressdialogview);
+        progress.setCancelable(true);
+        JSONObject jsonObject = new JSONObject();
+        //jsonObject.put(AppConstants.PLAYER_ID,myPlayer.getPlayerID());
+        try {
+
+            jsonObject.put(AppConstants.PLAYER_ID,""+player.getPlayerID());
+            //jsonObject.put(AppConstants.GAME_ID,myGame.getGameID());
+            if(bmpProfilePhoto!=null){
+                System.out.println("Converted to byte array");
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bmpProfilePhoto.compress(Bitmap.CompressFormat.JPEG, 10, bytes);
+                jsonObject.put(AppConstants.PROFILE_PHOTO,Base64.encodeToString(bytes.toByteArray(), Base64.DEFAULT));
+
+            }
+            else{
+                Toast.makeText(context,"Sorry, could not update new profile photo",Toast.LENGTH_SHORT).show();
+                progress.dismiss();
+                return;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        StringEntity entity = null;
+        try {
+            entity = new StringEntity(jsonObject.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
+
+        BingoServerClient.post(context,AppConstants.PLAYER_PHOTO_UPDATE_URL,entity,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                if(progress!=null){progress.dismiss();}
+                //Update new photo
+                bingoGameModel.updateProfilePhoto(bmpProfilePhoto);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+
+                if(progress!=null){progress.dismiss();}
+                Toast.makeText(context,"Sorry, could not update new profile photo",Toast.LENGTH_SHORT).show();
+
+                System.out.println(""+statusCode);
+            }
+        });
+    }
 
 
 }

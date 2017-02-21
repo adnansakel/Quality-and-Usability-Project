@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.adnansakel.bingo.View.JoinGameView;
@@ -11,9 +12,10 @@ import com.example.adnansakel.bingo.View.JoinGameView;
 /**
  * Created by Adnan Sakel on 12/30/2016.
  */
-public class JoinGameActivity extends AppCompatActivity{
+public class JoinGameActivity extends AppCompatActivity implements View.OnClickListener {
     LinearLayout llGameList;
     BingoServerCalls bingoServerCalls;
+    Button btnRefreshGameList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +28,8 @@ public class JoinGameActivity extends AppCompatActivity{
 
     private void initialize(){
         llGameList = (LinearLayout)findViewById(R.id.llGamesAvailable);
+        btnRefreshGameList = (Button)findViewById(R.id.btnRefreshGameList);
+        btnRefreshGameList.setOnClickListener(this);
         bingoServerCalls.getAvailableGamelist();
         /*
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -38,6 +42,14 @@ public class JoinGameActivity extends AppCompatActivity{
         llGameList.addView(item_playerlist,layoutParams);
         */
 
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view == btnRefreshGameList){
+            bingoServerCalls.getAvailableGamelist();
+        }
 
     }
 }

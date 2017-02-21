@@ -52,13 +52,6 @@
             android:layout_marginRight="4dp"
             android:src="@mipmap/start_button" />
 
-        <ImageView
-            android:drawableLeft="@+id/restart_button_button_img"
-            android:layout_width="70dp"
-            android:layout_height="30dp"
-            android:scaleType="centerCrop"
-            android:layout_marginRight="10dp"
-            android:src="@mipmap/restart_button" />
 
         <TextView
             android:id="@+id/txt_first_buttons"
@@ -83,13 +76,6 @@
             android:gravity="left"
             android:padding="2dp">
 
-            <ImageView
-                android:id="@+id/quit_button_img"
-                android:layout_width="70dp"
-                android:layout_height="30dp"
-                android:scaleType="centerCrop"
-                android:layout_marginRight="4dp"
-                android:src="@mipmap/quit_button" />
 
             <ImageView
                 android:drawableLeft="@+id/leave_button_button_img"
@@ -208,6 +194,15 @@
             android:id="@+id/imageView2" />
 
     </LinearLayout>
+
+        <Button
+            android:id="@+id/btnLeaveHelp"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:background="@mipmap/leave_button"
+            />
 
     </LinearLayout>
 

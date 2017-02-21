@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:id="@+id/rl_registration"
-    android:background="#A5D6A7">
+    >
+
+    <LinearLayout
+        android:id="@+id/llRegistrationView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="#A5D6A7"
+        android:visibility="gone">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,8 +46,9 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="20dp"
-
-                    android:hint="Name *"/>
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:hint="Name *(Required)"/>
 
 
                 <EditText
@@ -50,7 +59,7 @@
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="10dp"
 
-                    android:hint="Email"/>
+                    android:hint="Email (optional)"/>
                 <EditText
                     android:id="@+id/editTextAge"
                     android:layout_width="match_parent"
@@ -58,8 +67,8 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="10dp"
-
-                    android:hint="Age"/>
+                    android:inputType="number"
+                    android:hint="Age (optional)"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -116,6 +125,13 @@
                     app:civ_border_width="1dp"
                     app:civ_border_color="#FF888888"
                     />
+                <TextView
+                    android:id="@+id/txtUploadPhoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="20sp"
+                    android:text="Upload photo"/>
                 <Button
                     android:id="@+id/btnPhotoUpload"
                     android:layout_width="match_parent"
@@ -155,5 +171,57 @@
         android:layout_height="match_parent"
         android:layout_weight="1"></LinearLayout>
 
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="visible"
+        android:id="@+id/ll_WelcomeScreen"
+        android:background="#aaA5D6A7">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginRight="100dp"
+                    android:text="Welcome to Bingo!"
+                    android:textColor="#ff7373"
+                    android:textSize="30sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="80dp"
+                    android:layout_marginRight="80dp"
+                    android:text="@string/welcome_text"
+                    android:textColor="#333333"
+                    android:textSize="25sp"/>
+                <TextView
+                    android:id="@+id/txtNext"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:gravity="center"
+                    android:text="NEXT"
+                    android:textColor="#00BFA5"
+                    android:textStyle="bold"
+                    android:textSize="25sp"/>
+                <View
+                    android:layout_width="65dp"
+                    android:layout_height="2dp"
 
-</LinearLayout>
+                    android:background="#00BFA5"/>
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+</RelativeLayout>

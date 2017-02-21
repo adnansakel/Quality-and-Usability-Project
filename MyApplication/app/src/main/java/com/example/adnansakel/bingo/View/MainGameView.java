@@ -19,6 +19,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.example.adnansakel.bingo.HttpHelper.MySingleton;
 import com.example.adnansakel.bingo.MainGameActivity;
 import com.example.adnansakel.bingo.Model.BingoGameModel;
+import com.example.adnansakel.bingo.Model.Chat;
 import com.example.adnansakel.bingo.Model.Player;
 import com.example.adnansakel.bingo.MyApplication;
 import com.example.adnansakel.bingo.R;
@@ -28,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Adnan Sakel on 11/26/2016.
@@ -61,9 +64,11 @@ public class MainGameView implements Observer {
     TextView txt_twentifour;
     TextView txt_twentifive;
     TextView txtCalledNumber;
+    TextView txtNextNumber;
     Button btnSayBingo;
     LinearLayout llPlayerList;
     LinearLayout llChatList;
+    LinearLayout llChat_emoji;
     ImageView imgCallingNUmberCircle;
 
     View llendgame;
@@ -117,6 +122,24 @@ public class MainGameView implements Observer {
 
         llPlayerList = (LinearLayout) view.findViewById(R.id.llPlayers);
         llChatList = (LinearLayout) view.findViewById(R.id.ll_chat_msg_maingame);
+        llChat_emoji = (LinearLayout)view.findViewById(R.id.llChat_emoji);
+        txtNextNumber = (TextView)view.findViewById(R.id.txtNextNumber);
+
+        if(AppConstants.PLAY_WITHOUT_CHAT){
+            llChatList.setVisibility(View.GONE);
+            llChat_emoji.setVisibility(View.GONE);
+        }
+        else{
+            llChatList.setVisibility(View.VISIBLE);
+            llChat_emoji.setVisibility(View.VISIBLE);
+        }
+
+        if(AppConstants.PLAY_WITHOUT_NEXT_NUMBER_HINT){
+            txtNextNumber.setVisibility(View.GONE);
+        }
+        else{
+            txtNextNumber.setVisibility(View.VISIBLE);
+        }
 
         llendgame = view.findViewById(R.id.ll_endgame);
         llendgame.setVisibility(View.GONE);
@@ -148,12 +171,16 @@ public class MainGameView implements Observer {
             item_playerlist.setTag(mplayer);
             //i++;
 
-            ImageView profPhotoImageView = (ImageView)item_playerlist.findViewById(R.id.imageViewPlayerImage);
+            CircleImageView profPhotoImageView = (CircleImageView)item_playerlist.findViewById(R.id.imageViewPlayerImage);
             // mNetworkImageView.setImageUrl(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+mplayer.getPlayerID(), MySingleton.getInstance(context).getImageLoader());
             //item_playerlist.setOnClickListener(this);
             MySingleton.getInstance(context).getImageLoader().get(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+mplayer.getPlayerID(),
                     ImageLoader.getImageListener(profPhotoImageView,
                             R.drawable.user, R.drawable.user));
+            if(mplayer.getPlayerID().equals(bingoGameModel.getMyGame().getCreatorID())){
+                profPhotoImageView.setBorderWidth(5);
+                profPhotoImageView.setBorderColor(Color.parseColor("#f1c405"));
+            }
             llPlayerList.addView(item_playerlist,layoutParams);
 
 
@@ -300,13 +327,16 @@ public class MainGameView implements Observer {
             }
 
             if(data.toString().equals(AppConstants.UPDATE_MAINGAME_MESSAGE_LIST)){
+                System.out.println("Should update main game chat list.");
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
                 View item_chatlist =  ((LayoutInflater)view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.item_lobby_message,null);
                 item_chatlist.setLayoutParams(layoutParams);
                 LinearLayout llChat = (LinearLayout)item_chatlist.findViewById(R.id.llChat);
 
-                if(bingoGameModel.getMaingameMessageList().size()%2==0){
+                Chat chat  = new Chat();
+                chat = bingoGameModel.getMaingameChatList().get(bingoGameModel.getMaingameChatList().size()-1);
+                if(!chat.getPlayerID().equals(bingoGameModel.getMyPlayer().getPlayerID())){
                     llChat.setGravity(Gravity.RIGHT);
                     ((LinearLayout)item_chatlist.findViewById(R.id.llMsgBackground)).setBackgroundResource(R.drawable.rect_backgroud_orange);
                 }
@@ -316,8 +346,21 @@ public class MainGameView implements Observer {
                 }
                 //llChat.setLayoutParams(layoutParams);
                 //llChat.setG
-                ((TextView)item_chatlist.findViewById(R.id.txtName)).setText("MyName");
-                ((TextView)item_chatlist.findViewById(R.id.txtMessage)).setText(bingoGameModel.getMaingameMessageList().get(bingoGameModel.getMaingameMessageList().size()-1));
+                String emoji="";
+                if(chat.getMessage().equals(AppConstants.MESSAGE_I_AM_LOOSING)){
+                    emoji = new String(Character.toChars(0x1F62B));
+                }
+                else if(chat.getMessage().equals(AppConstants.MESSAGE_NO_CHANCE_WINNING)){
+                    emoji = new String(Character.toChars(0x1F608));
+                }
+                else if(chat.getMessage().equals(AppConstants.MESSAGE_WELL_PLAYED)){
+                    emoji = new String(Character.toChars(0x1F642));
+                }
+                else if(chat.getMessage().equals(AppConstants.MESSAGE_ONLY_OPINION)){
+                    emoji = new String(Character.toChars(0x1F620));
+                }
+                ((TextView)item_chatlist.findViewById(R.id.txtName)).setText(chat.getPlayerName());
+                ((TextView)item_chatlist.findViewById(R.id.txtMessage)).setText(chat.getMessage()+emoji);
                 llChatList.addView(item_chatlist);
                 ScrollView ScrlChatList = ((ScrollView)this.view.findViewById(R.id.scrlChatList));
 
@@ -325,5 +368,6 @@ public class MainGameView implements Observer {
                 ScrlChatList.fullScroll(View.FOCUS_DOWN);
             }
         }
+
     }
 }

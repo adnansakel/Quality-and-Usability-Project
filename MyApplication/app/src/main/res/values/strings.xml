@@ -4,7 +4,13 @@
     <string name="join_game">Join Game</string>
     <string name="game_title">Hello Bingo!</string>
     <string name="game_notice">WOULD YOU LIKE TO?</string>
+    <string name="welcome_text">Here you can play Bingo with up to 5 other people.
+        This game is completely free to use.
+        The game requires a user name.
+        It does not need to be your real name.
+        Every other information like Age or a profile photo is completely optional.</string>
     <string-array name="lobby_messages">
+        <item>Select a message to send</item>
         <item>Hello</item>
         <item>Can we start ?</item>
         <item>Yes</item>

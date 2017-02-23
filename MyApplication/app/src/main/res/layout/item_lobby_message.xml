@@ -15,14 +15,30 @@
         android:id="@+id/llMsgBackground"
 
         >
-        <TextView
-            android:id="@+id/txtName"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#81b584"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:text="Name:"/>
+            android:orientation="horizontal">
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/imageViewPlayerImage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/user"
+                app:civ_border_width="1dp"
+                app:civ_border_color="#FF888888"/>
+            <TextView
+                android:id="@+id/txtName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#81b584"
+                android:textSize="13sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:textStyle="bold"
+                android:text="Name:"/>
+        </LinearLayout>
+
         <TextView
             android:id="@+id/txtMessage"
             android:layout_width="wrap_content"

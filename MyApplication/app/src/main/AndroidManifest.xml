@@ -27,11 +27,13 @@
         </activity>
         <activity android:name=".SettingsActivity"
             android:screenOrientation="landscape">
-
+        </activity>
+        <activity android:name=".MainGameActivity"
+            android:screenOrientation="landscape">
         </activity>
         <activity android:name=".HomeActivity"
             android:screenOrientation="landscape"></activity>
-        <activity android:name=".MainGameActivity"
+        <activity android:name=".PresGameStartActivity"
             android:screenOrientation="landscape"></activity>
         <activity android:name=".JoinGameActivity"
             android:screenOrientation="landscape"></activity>

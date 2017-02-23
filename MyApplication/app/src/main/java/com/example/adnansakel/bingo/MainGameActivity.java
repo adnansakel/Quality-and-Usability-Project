@@ -34,7 +34,7 @@ import java.util.Random;
 /**
  * Created by Adnan Sakel on 11/26/2016.
  */
-public class MainGameActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainGameActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener{
 
     Handler handler;
     boolean mStopHandler = false;
@@ -65,6 +65,8 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     TextView txt_twentifive;
     TextView txtCalledNumber;
     TextView txtNextNumber;
+
+    TextView txt_MessageHint;
     Button btnSayBingo;
     Button btnSayWellPlayed;
     Button btnSayUrOpinion;
@@ -173,6 +175,8 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         btnEndGame = (Button)findViewById(R.id.btnEndGame);
         //btnLeaveBingo = (Button)findViewById(R.id.btnLeaveGame);
 
+        txt_MessageHint = (TextView)findViewById(R.id.txt_MessageHint);
+
         btnSayLoosing = (Button)findViewById(R.id.btnSayLoosing);
         btnSayUhvNoChance = (Button)findViewById(R.id.btnSayNoChance);
         btnSayWellPlayed = (Button)findViewById(R.id.btnSayWellPlayed);
@@ -212,7 +216,15 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         txt_twentifour.setOnClickListener(this);
         txt_twentifive.setOnClickListener(this);
         btnSayBingo.setOnClickListener(this);
-
+        //btnSayUhvNoChance.setFocusable(true);
+        //btnSayUhvNoChance.setFocusable(true);
+        //btnSayUhvNoChance.setFocusableInTouchMode(true);
+        //btnSayUhvNoChance.requestFocus();
+        btnSayWellPlayed.setOnFocusChangeListener((View.OnFocusChangeListener) this);
+        btnSayUrOpinion.setOnFocusChangeListener((View.OnFocusChangeListener) this);
+        btnSayLoosing.setOnFocusChangeListener((View.OnFocusChangeListener) this);
+        btnSayUhvNoChance.setOnFocusChangeListener((View.OnFocusChangeListener) this);
+        txt_MessageHint.setVisibility(View.GONE);
         AppConstants.IF_BINGO_FOUND = 0;
         AppConstants.IF_WINNER_FOUND = 0;
 
@@ -440,9 +452,9 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-
+Runnable chatRunnable;
     private void sendMainGameChat(final Chat chat){
-        runnable = new Runnable() {
+        chatRunnable = new Runnable() {
 
             @Override
             public void run() {
@@ -451,13 +463,13 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                 //System.out.println(counter);
 
                 bingoServerCalls.sendChatFromMainGame(chat);
-                chathandler.removeCallbacks(runnable);
+                chathandler.removeCallbacks(chatRunnable);
                 return;
             }
         };
 
 // start it with:
-        chathandler.post(runnable);
+        chathandler.post(chatRunnable);
     }
 
 
@@ -596,5 +608,39 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
             MainGameActivity.super.onBackPressed();
         }
 
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus){
+            if(v == btnSayLoosing && hasFocus){
+                txt_MessageHint.setVisibility(View.VISIBLE);
+                txt_MessageHint.setText("I am loosing");
+            }
+            else if(v == btnSayUrOpinion && hasFocus){
+            txt_MessageHint.setVisibility(View.VISIBLE);
+            txt_MessageHint.setText("That is only your opinion");
+            }
+            else if(v == btnSayUhvNoChance && hasFocus){
+                txt_MessageHint.setVisibility(View.VISIBLE);
+                txt_MessageHint.setText("You have no chance winning");
+            }
+            else if(v == btnSayWellPlayed && hasFocus){
+                txt_MessageHint.setVisibility(View.VISIBLE);
+                txt_MessageHint.setText("Well played");
+            }
+            else{
+                txt_MessageHint.setVisibility(View.GONE);
+            }
+    }
+
+    @Override
+    protected void onDestroy(){
+        if(handler!=null && runnable!=null){
+            handler.removeCallbacks(runnable);
+        }
+        if(chathandler!=null && chatRunnable!=null){
+            chathandler.removeCallbacks(chatRunnable);
+        }
+        super.onDestroy();
     }
 }

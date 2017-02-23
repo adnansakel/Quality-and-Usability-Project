@@ -357,12 +357,15 @@ public class BingoServerCalls {
 
                     if(progress!=null){progress.dismiss();}
 
-                    //System.out.println(response.toString());
+                    System.out.println(response.toString());
                     bingoGameModel.getGamelist().clear();
                     for(int i = 0; i < response.length(); i++){
                         Game mgame = new Game();
                         try {
-                            JSONObject gameObj = response.getJSONObject(i);
+                            JSONObject gameObjwith_player_number = response.getJSONObject(i);
+                            JSONObject gameObj = gameObjwith_player_number.getJSONObject(AppConstants.GAME);
+                            int numofPlayers = (int) gameObjwith_player_number.get(AppConstants.NUMBER_OF_PLAYERS);
+                            mgame.setNumberOfPlayers(""+numofPlayers);
 
                             if(gameObj.get(AppConstants.GAME_ID).toString()!="null"){
                                 mgame.setGameID((String)gameObj.get(AppConstants.GAME_ID));
@@ -577,7 +580,7 @@ public class BingoServerCalls {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     System.out.print("If bingo response:"+response.toString());
-                    JSONObject gameObj = (JSONObject) response.get("game");
+                    JSONObject gameObj = (JSONObject) response.get(AppConstants.GAME);
                     if(gameObj.get(AppConstants.IF_BINGO).toString().length()>0&&gameObj.get(AppConstants.IF_BINGO).toString()!=null){
                         if(gameObj.get(AppConstants.IF_BINGO).toString().equals(AppConstants.TRUE)){
                             AppConstants.IF_BINGO_FOUND = 1;
@@ -796,7 +799,7 @@ public class BingoServerCalls {
                             if(runnable!=null)handler.removeCallbacks(runnable);
                         }
                         bingoGameModel.getMyGame().setStatus(AppConstants.INACTIVE);
-                        context.startActivity(new Intent(context,MainGameActivity.class));
+                        context.startActivity(new Intent(context,PresGameStartActivity.class).putExtra(AppConstants.LOBBY_WAS_FULL,false));
                         ((LobbyActivity)context).finish();
                     }
                     else{

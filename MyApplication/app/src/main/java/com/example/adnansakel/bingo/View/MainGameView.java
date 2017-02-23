@@ -126,11 +126,13 @@ public class MainGameView implements Observer {
         txtNextNumber = (TextView)view.findViewById(R.id.txtNextNumber);
 
         if(AppConstants.PLAY_WITHOUT_CHAT){
-            llChatList.setVisibility(View.GONE);
+            //llChatList.setVisibility(View.GONE);
+            ((ScrollView)view.findViewById(R.id.scrlChatList)).setVisibility(View.GONE);
             llChat_emoji.setVisibility(View.GONE);
         }
         else{
-            llChatList.setVisibility(View.VISIBLE);
+           // llChatList.setVisibility(View.VISIBLE);
+            ((ScrollView)view.findViewById(R.id.scrlChatList)).setVisibility(View.VISIBLE);
             llChat_emoji.setVisibility(View.VISIBLE);
         }
 
@@ -171,6 +173,8 @@ public class MainGameView implements Observer {
             item_playerlist.setTag(mplayer);
             //i++;
 
+            ((TextView)item_playerlist.findViewById(R.id.txtPlayerName)).setText(""+mplayer.getName());
+
             CircleImageView profPhotoImageView = (CircleImageView)item_playerlist.findViewById(R.id.imageViewPlayerImage);
             // mNetworkImageView.setImageUrl(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+mplayer.getPlayerID(), MySingleton.getInstance(context).getImageLoader());
             //item_playerlist.setOnClickListener(this);
@@ -178,7 +182,7 @@ public class MainGameView implements Observer {
                     ImageLoader.getImageListener(profPhotoImageView,
                             R.drawable.user, R.drawable.user));
             if(mplayer.getPlayerID().equals(bingoGameModel.getMyGame().getCreatorID())){
-                profPhotoImageView.setBorderWidth(5);
+                profPhotoImageView.setBorderWidth(15);
                 profPhotoImageView.setBorderColor(Color.parseColor("#f1c405"));
             }
             llPlayerList.addView(item_playerlist,layoutParams);
@@ -361,6 +365,12 @@ public class MainGameView implements Observer {
                 }
                 ((TextView)item_chatlist.findViewById(R.id.txtName)).setText(chat.getPlayerName());
                 ((TextView)item_chatlist.findViewById(R.id.txtMessage)).setText(chat.getMessage()+emoji);
+                CircleImageView profPhotoImageView = (CircleImageView) item_chatlist.findViewById(R.id.imageViewPlayerImage);
+                // mNetworkImageView.setImageUrl(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+mplayer.getPlayerID(), MySingleton.getInstance(context).getImageLoader());
+                //item_playerlist.setOnClickListener(this);
+                MySingleton.getInstance(context).getImageLoader().get(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+chat.getPlayerID(),
+                        ImageLoader.getImageListener(profPhotoImageView,
+                                R.drawable.user, R.drawable.user));
                 llChatList.addView(item_chatlist);
                 ScrollView ScrlChatList = ((ScrollView)this.view.findViewById(R.id.scrlChatList));
 

@@ -8,21 +8,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <TextView
-            android:id="@+id/txtGameID"
-            android:layout_weight="1"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Game ID"
-            android:textSize="25sp"
-            android:gravity="center"/>
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/txtGameID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Game ID"
+                android:textSize="20sp"
+                android:textColor="#EF7373"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/txtPlayerNeeded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="5 more Players needed"
+                android:textSize="15sp"
+                android:gravity="center"/>
+        </LinearLayout>
+
         <TextView
             android:id="@+id/txtCreatorName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="25sp"
+            android:textSize="20sp"
+            android:textColor="#016773"
             android:text="Name"/>
         <LinearLayout
             android:layout_width="match_parent"

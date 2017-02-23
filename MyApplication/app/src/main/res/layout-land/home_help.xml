@@ -164,6 +164,134 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:padding="2dp">
+
+
+            <ImageView
+
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:scaleType="centerCrop"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/loosing" />
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="#016773"
+                android:text="This emoji says ''I am  loosing''."
+                android:layout_weight="1.58"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:padding="2dp">
+
+
+            <ImageView
+
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:scaleType="centerCrop"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/u_have_no_chance" />
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="#016773"
+                android:text="This emoji says ''You have no chance winning''."
+                android:layout_weight="1.58"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:padding="2dp">
+
+
+            <ImageView
+
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:scaleType="centerCrop"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/ur_opinion" />
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="#016773"
+                android:text="This emoji says ''That is only your opinion''."
+                android:layout_weight="1.58"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:padding="2dp">
+
+
+            <ImageView
+
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:scaleType="centerCrop"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/well_played" />
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="#016773"
+                android:text="This emoji says ''Well played''."
+                android:layout_weight="1.58"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </LinearLayout>
         <TextView
             android:id="@+id/txt_game_rules"
             android:layout_width="match_parent"
@@ -189,9 +317,10 @@
             <ImageView
                 android:drawableLeft="@+id/bingo_rules_img"
                 android:layout_width="match_parent"
-                android:layout_height="130dp"
+                android:layout_marginLeft="30dp"
+                android:layout_height="110dp"
                 android:scaleType="centerCrop"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="30dp"
                 android:background="@drawable/bingo_pattern"
                 android:id="@+id/imageView2" />
 
@@ -199,11 +328,14 @@
 
         <Button
             android:id="@+id/btnLeaveHelp"
-            android:layout_width="wrap_content"
-            android:layout_height="70dp"
+            android:layout_width="110dp"
+            android:text="Back"
+            android:textColor="#ffffff"
+            android:layout_height="45dp"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:background="@mipmap/leave_button"
+            android:layout_marginTop="15dp"
+            android:textSize="20sp"
+            android:background="@drawable/green_rect_button"
             />
 
     </LinearLayout>

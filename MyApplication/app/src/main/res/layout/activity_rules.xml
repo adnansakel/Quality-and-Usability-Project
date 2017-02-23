@@ -47,6 +47,12 @@
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:layout_marginTop="10dp"
+                    android:text="# The host can start the game with any number of players (maximum 5). Or the game starts automatically when lobby is full with 5 players."/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:layout_marginTop="10dp"
                     android:text="# All you need to do is finding the bingo pattern before others to win this game of chance"/>
                 <TextView
                     android:layout_width="match_parent"

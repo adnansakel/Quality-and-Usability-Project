@@ -17,6 +17,7 @@ public class Game {
     private String CreationTime = "";
     private String Status = "";
     private String GameName = "";
+    private String numberOfPlayers = "";
 
     public String getGameID() {
         return GameID;
@@ -96,5 +97,13 @@ public class Game {
 
     public void setGameName(String gameName) {
         GameName = gameName;
+    }
+
+    public String getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public void setNumberOfPlayers(String numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rl_endgame_view"
+    android:background="#FFFDE7">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:weightSum="1">
+
+
+        <TextView
+            android:id="@+id/txt_game_loose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textColor="#016773"
+            android:textStyle="bold"
+            android:text="STARTING THE GAME ..."
+            android:layout_weight="1.58" />
+
+        <TextView
+            android:id="@+id/txt_NumberCounter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="120sp"
+            android:textColor="#EF7373"
+            android:textStyle="bold"
+            android:text="3"
+            android:layout_weight="1.58" />
+
+
+
+
+
+    </LinearLayout>
+</RelativeLayout>

@@ -117,6 +117,12 @@ int i = 0;
                 //llChat.setG
                 ((TextView)item_chatlist.findViewById(R.id.txtName)).setText(""+chat.getPlayerName());
                 ((TextView)item_chatlist.findViewById(R.id.txtMessage)).setText(""+chat.getMessage());
+                CircleImageView profPhotoImageView = (CircleImageView) item_chatlist.findViewById(R.id.imageViewPlayerImage);
+                // mNetworkImageView.setImageUrl(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+mplayer.getPlayerID(), MySingleton.getInstance(context).getImageLoader());
+                //item_playerlist.setOnClickListener(this);
+                MySingleton.getInstance(context).getImageLoader().get(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+chat.getPlayerID(),
+                        ImageLoader.getImageListener(profPhotoImageView,
+                                R.drawable.user, R.drawable.user));
                 llChatList.addView(item_chatlist);
                 ScrollView ScrlChatList = ((ScrollView)this.view.findViewById(R.id.scrlChatList));
 

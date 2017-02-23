@@ -32,10 +32,10 @@ public class AppConstants {
     public static String STATUS = "status";
     public static String GAME_LIST_UPDATED = "game list updated";
     public static String PLAYER_LIST_UPDATED = "player list updated";
-    public static String BASE_URL = "http://192.168.1.13:8080/bingodb";
+    public static String BASE_URL = "http://do4.pflegetab.de/bingodb";
     //"http://do4.pflegetab.de/bingodb";//TEL url
             //"http://192.168.43.171:8080/bingodb";
-    //"http://192.168.1.13:8080/bingodb";//"http://192.168.43.171:8080/bingodb";
+    //sudarson url//"http://192.168.1.13:8080/bingodb";//"http://192.168.43.171:8080/bingodb";
     public static String REGISTRATION_URL = "/player/registration/";
     public static String GAME_CREATION_URL = "/game/creation/";
     public static String GAME_LIST_URL = "/gamelist_to_join/";
@@ -73,6 +73,7 @@ public class AppConstants {
     public static String MESSAGE_NO_CHANCE_WINNING = "You have no chance winning ";
     public static String MESSAGE_WELL_PLAYED = "Well played ";
     public static String MESSAGE_ONLY_OPINION = "That is only your opinion ";
+    public static String LOBBY_WAS_FULL = "lobbywasfull";
     public static String CHATS = "chats";
     //public static String LOBBY_CHAT = "lobbyChat";
     public static String TIME = "time";
@@ -80,6 +81,8 @@ public class AppConstants {
     public static boolean PLAY_WITHOUT_CHAT = false;
     public static boolean PLAY_WITHOUT_NEXT_NUMBER_HINT = false;
     public static boolean PLAY_WITH_LIMITED_CALLING_NUMBERS = false;
+    public static String GAME = "game";
+    public static String NUMBER_OF_PLAYERS = "numberOfPlayers";
     public static int IF_WINNER_FOUND = 0;
     //public static int IMAGE_TAKEN = 9;
 

@@ -163,9 +163,9 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         }
 
     }
-
+Runnable chatRunnable;
     private void sendLobbyChat(final Chat chat){
-        runnable = new Runnable() {
+        chatRunnable = new Runnable() {
 
             @Override
             public void run() {
@@ -174,14 +174,15 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
                 System.out.println("Sending message.");
 
                     bingoServerCalls.sendChatFromLobby(chat);
-                        chathandler.removeCallbacks(runnable);
+                        chathandler.removeCallbacks(chatRunnable);
                         return;
             }
         };
 
 // start it with:
-        chathandler.post(runnable);
+        chathandler.post(chatRunnable);
     }
+
     private void checkforPlayers(final int milliseconds){
         runnable = new Runnable() {
 
@@ -207,7 +208,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
 
                     if(((MyApplication)getApplication()).getBingoGameModel().getMyGame().getStatus().equals(AppConstants.ACTIVE)){
                         handler.removeCallbacks(this);
-                        startActivity(new Intent(LobbyActivity.this,MainGameActivity.class));
+                        startActivity(new Intent(LobbyActivity.this,PresGameStartActivity.class).putExtra(AppConstants.LOBBY_WAS_FULL,true));
                         LobbyActivity.this.finish();
                         return;
                     }
@@ -306,6 +307,17 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         builder.setNegativeButton("No", null);
         builder.setCancelable(true);
         builder.show();
+    }
+
+    @Override
+    protected void onDestroy(){
+        if(handler!=null && runnable!=null){
+            handler.removeCallbacks(runnable);
+        }
+        if(chathandler!=null && chatRunnable!=null){
+            chathandler.removeCallbacks(chatRunnable);
+        }
+        super.onDestroy();
     }
 
 

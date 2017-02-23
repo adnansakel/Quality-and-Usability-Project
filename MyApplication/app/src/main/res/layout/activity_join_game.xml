@@ -30,9 +30,10 @@
                 android:background="#88ffffff"/>
             <Button
                 android:id="@+id/btnRefreshGameList"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_marginRight="5dp"
+                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/refresh"/>
         </RelativeLayout>

@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -34,7 +35,7 @@ import java.util.Random;
 /**
  * Created by Adnan Sakel on 11/26/2016.
  */
-public class MainGameActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener{
+public class MainGameActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     Handler handler;
     boolean mStopHandler = false;
@@ -116,7 +117,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         initialize();
         counter = 0;
         //((MyApplication)getApplication()).getBingoGameModel().setWinner("--Nobody");
-        callNumbersinInterval(1500);//must call this; commented for debugging
+        //callNumbersinInterval(1000);//must call this; commented for debugging
         //((MyApplication)getApplication()).getBingoGameModel().setNotificationText("Hello");
 
 
@@ -220,11 +221,17 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         //btnSayUhvNoChance.setFocusable(true);
         //btnSayUhvNoChance.setFocusableInTouchMode(true);
         //btnSayUhvNoChance.requestFocus();
+        /*
         btnSayWellPlayed.setOnFocusChangeListener((View.OnFocusChangeListener) this);
         btnSayUrOpinion.setOnFocusChangeListener((View.OnFocusChangeListener) this);
         btnSayLoosing.setOnFocusChangeListener((View.OnFocusChangeListener) this);
         btnSayUhvNoChance.setOnFocusChangeListener((View.OnFocusChangeListener) this);
-        txt_MessageHint.setVisibility(View.GONE);
+        */
+        btnSayWellPlayed.setOnTouchListener(this);
+        btnSayUrOpinion.setOnTouchListener(this);
+        btnSayLoosing.setOnTouchListener(this);
+        btnSayUhvNoChance.setOnTouchListener(this);
+        txt_MessageHint.setVisibility(View.INVISIBLE);
         AppConstants.IF_BINGO_FOUND = 0;
         AppConstants.IF_WINNER_FOUND = 0;
 
@@ -493,6 +500,7 @@ Runnable chatRunnable;
 
             ((MyApplication)getApplication()).getBingoGameModel().addMainGameChat(chat);
             sendMainGameChat(chat);
+            txt_MessageHint.setVisibility(View.INVISIBLE);
         }
         else if(view == btnSayUhvNoChance){
             String emoji = new String(Character.toChars(0x1F608));
@@ -503,6 +511,7 @@ Runnable chatRunnable;
             chat.setMessage(AppConstants.MESSAGE_NO_CHANCE_WINNING);
             ((MyApplication)getApplication()).getBingoGameModel().addMainGameChat(chat);
             sendMainGameChat(chat);
+            txt_MessageHint.setVisibility(View.INVISIBLE);
         }
         else if(view == btnSayWellPlayed){
             String emoji = new String(Character.toChars(0x1F642));
@@ -513,6 +522,7 @@ Runnable chatRunnable;
             chat.setMessage(AppConstants.MESSAGE_WELL_PLAYED);
             ((MyApplication)getApplication()).getBingoGameModel().addMainGameChat(chat);
             sendMainGameChat(chat);
+            txt_MessageHint.setVisibility(View.INVISIBLE);
             //((MyApplication)getApplication()).getBingoGameModel().addMainGameMessage("Well played "+emoji);
         }
         else if(view == btnSayUrOpinion){
@@ -524,6 +534,7 @@ Runnable chatRunnable;
             chat.setMessage(AppConstants.MESSAGE_ONLY_OPINION);
             ((MyApplication)getApplication()).getBingoGameModel().addMainGameChat(chat);
             sendMainGameChat(chat);
+            txt_MessageHint.setVisibility(View.INVISIBLE);
             //((MyApplication)getApplication()).getBingoGameModel().addMainGameMessage("That is only your opinion "+emoji);
         }
         else if(view == btnLeaveBingo){
@@ -610,6 +621,7 @@ Runnable chatRunnable;
 
     }
 
+    /*
     @Override
     public void onFocusChange(View v, boolean hasFocus){
             if(v == btnSayLoosing && hasFocus){
@@ -631,7 +643,7 @@ Runnable chatRunnable;
             else{
                 txt_MessageHint.setVisibility(View.GONE);
             }
-    }
+    }*/
 
     @Override
     protected void onDestroy(){
@@ -642,5 +654,36 @@ Runnable chatRunnable;
             chathandler.removeCallbacks(chatRunnable);
         }
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if(view == btnSayLoosing && motionEvent.getAction()==MotionEvent.ACTION_DOWN){
+            txt_MessageHint.setVisibility(View.VISIBLE);
+            txt_MessageHint.setText("I am loosing");
+        }
+        else if(view == btnSayUrOpinion && motionEvent.getAction()==MotionEvent.ACTION_DOWN){
+            txt_MessageHint.setVisibility(View.VISIBLE);
+            txt_MessageHint.setText("That is only your opinion");
+        }
+        else if(view == btnSayUhvNoChance && motionEvent.getAction()==MotionEvent.ACTION_DOWN){
+            txt_MessageHint.setVisibility(View.VISIBLE);
+            txt_MessageHint.setText("You have no chance winning");
+        }
+        else if(view == btnSayWellPlayed && motionEvent.getAction()==MotionEvent.ACTION_DOWN){
+            txt_MessageHint.setVisibility(View.VISIBLE);
+            txt_MessageHint.setText("Well played");
+        }
+        else{
+            txt_MessageHint.setVisibility(View.INVISIBLE);
+        }
+        if(motionEvent.getAction()==MotionEvent.ACTION_CANCEL||
+                motionEvent.getAction()==MotionEvent.ACTION_HOVER_EXIT||
+                motionEvent.getAction()==MotionEvent.ACTION_BUTTON_RELEASE||
+                motionEvent.getAction()==MotionEvent.ACTION_UP){
+
+            txt_MessageHint.setVisibility(View.INVISIBLE);
+        }
+        return false;
     }
 }

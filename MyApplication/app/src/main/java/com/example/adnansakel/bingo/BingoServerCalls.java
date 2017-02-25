@@ -157,7 +157,7 @@ public class BingoServerCalls {
                     //editUserinfo.putString(AppConstants.GENDER,(String)response.get(AppConstants.GENDER));
 
                     editUserinfo.commit();
-                    context.startActivity(new Intent(context, RulesActivity.class));
+                    context.startActivity(new Intent((RegistrationActivity)context, RulesActivity.class));
                     ((RegistrationActivity)context).finish();
                 } catch (JSONException e) {
                     e.printStackTrace();

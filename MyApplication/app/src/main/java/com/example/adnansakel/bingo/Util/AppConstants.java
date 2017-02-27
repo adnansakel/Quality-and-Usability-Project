@@ -79,11 +79,12 @@ public class AppConstants {
     public static String TIME = "time";
     public static String LONGEST_MATCH_STR = "";
     public static boolean PLAY_WITHOUT_CHAT = false;
-    public static boolean PLAY_WITHOUT_NEXT_NUMBER_HINT = false;
+    public static boolean PLAY_WITHOUT_NEXT_NUMBER_HINT = true;
     public static boolean PLAY_WITH_LIMITED_CALLING_NUMBERS = false;
     public static String GAME = "game";
     public static String NUMBER_OF_PLAYERS = "numberOfPlayers";
     public static int IF_WINNER_FOUND = 0;
+    public static int NUMBER_OF_CALLED_NUMBERS = 75;
     //public static int IMAGE_TAKEN = 9;
 
 

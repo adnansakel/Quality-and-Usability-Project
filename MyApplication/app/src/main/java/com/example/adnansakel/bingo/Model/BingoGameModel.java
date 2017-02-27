@@ -142,6 +142,12 @@ public class BingoGameModel extends Observable{
         return gamelist;
     }
 
+    public void removeAllPlayers(){
+        gamelist.clear();
+        this.setChanged();
+        this.notifyObservers(AppConstants.GAME_LIST_UPDATED);
+    }
+
     public void addGame(Game game){
         gamelist.add(game);
         this.setChanged();

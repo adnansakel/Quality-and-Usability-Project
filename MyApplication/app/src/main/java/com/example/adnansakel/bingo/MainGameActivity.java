@@ -385,13 +385,13 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void run() {
                 // do your stuff - don't create a new runnable here!
-                if(AppConstants.IF_WINNER_FOUND == 1 || counter > 5*65){
+                if(AppConstants.IF_WINNER_FOUND == 1 || counter > 5*AppConstants.NUMBER_OF_CALLED_NUMBERS){
                     handler.removeCallbacks(this);
                     //llBlur.setVisibility(View.GONE);
                     //progress.dismiss();
                     mStopHandler = true;
 
-                    if(counter>5*65){
+                    if(counter>5*AppConstants.NUMBER_OF_CALLED_NUMBERS){
                         //Toast.makeText(MainGameActivity.this,"Game over without a Bingo !!",Toast.LENGTH_LONG).show();
                         ((MyApplication)getApplication()).getBingoGameModel().setWinner("--Nobody");
 
@@ -400,11 +400,11 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                     return;
                 }
                 if(counter % 5 == 0){
-                    if(counter/5 < 65){
+                    if(counter/5 < AppConstants.NUMBER_OF_CALLED_NUMBERS){
                         System.out.println("Indexes: " + (counter/5));
                         int index = counter/5;
                         int m = ((MyApplication)getApplication()).getBingoGameModel().getShuffledCalledNumberSequence().get(index);
-                        if(index+1 < 65){
+                        if(index+1 < AppConstants.NUMBER_OF_CALLED_NUMBERS){
                             txtNextNumber.setText("Next: "+
                                     ((MyApplication)getApplication()).getBingoGameModel().getShuffledCalledNumberSequence().get(index+1));
 

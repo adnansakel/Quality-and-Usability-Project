@@ -201,119 +201,125 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="100dp"
                     android:layout_marginRight="100dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="10dp"
                     android:text="Welcome to "
-                    android:textColor="#ffffff"
+                    android:textColor="#EF7373"
                     android:textStyle="bold"
-                    android:textSize="40sp"/>
+                    android:textSize="30sp"/>
 
                 <ImageView
                     android:id="@+id/bingo_logo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
-                    android:layout_marginRight="5dp"
+                    android:layout_width="250dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                   android:layout_marginBottom="20dp"
                     android:src="@mipmap/bingo_logo" />
             </LinearLayout>
 
                 <RelativeLayout
-                    android:layout_width="1000dp"
+                    android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:layout_margin="15dp"
-                    android:background="@drawable/rect_backgroud_orange"
+                    android:layout_marginBottom="3dp"
+                    android:background="#aa00BFA5"
                     android:orientation="vertical"
                     android:padding="5dp"
                     android:paddingBottom="0dp">
 
                     <ImageView
                         android:id="@+id/chat_field"
-                        android:layout_width="70dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="60dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_height="60dp"
                         android:scaleType="centerCrop"
                         android:layout_marginRight="5dp"
                         android:src="@mipmap/bingo_field" />
 
                     <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="70dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="180dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_centerInParent="true"
                         android:text="Here you can play Bingo with up to four people."
-                        android:textColor="#000"
-                        android:textSize="30dp" />
+                        android:textColor="#ffffff"
+                        android:textSize="25sp" />
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_width="1000dp"
+                    android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:layout_margin="15dp"
-                    android:background="@drawable/rect_backgroud_orange"
+                    android:layout_marginBottom="3dp"
+                    android:background="#aa00BFA5"
                     android:orientation="vertical"
                     android:padding="5dp"
                     android:paddingBottom="0dp">
 
                     <ImageView
-                        android:id="@+id/bingo_field"
-                        android:layout_width="70dp"
-                        android:layout_height="wrap_content"
-                        android:scaleType="centerCrop"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:gravity="center"
+                        android:layout_marginRight="5dp"
                         android:src="@mipmap/chat_field" />
 
                     <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="70dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="180dp"
-                        android:text="You can also chat during the game and have fun."
-                        android:textColor="#000"
-                        android:textSize="30dp" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_centerInParent="true"
+                        android:text="You can also chat during the game and have fun"
+                        android:textColor="#ffffff"
+                        android:textSize="25sp" />
                 </RelativeLayout>
-
                 <RelativeLayout
-                    android:layout_width="1000dp"
+                    android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:layout_margin="15dp"
-                    android:background="@drawable/rect_backgroud_orange"
+                    android:layout_marginBottom="15dp"
+                    android:background="#aa00BFA5"
                     android:orientation="vertical"
                     android:padding="5dp"
                     android:paddingBottom="0dp">
 
                     <ImageView
-                        android:id="@+id/edit_field"
-                        android:layout_width="70dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
                         android:scaleType="centerCrop"
                         android:layout_marginRight="5dp"
                         android:src="@drawable/edit" />
 
                     <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="70dp"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginLeft="180dp"
-                        android:text="You also shoud register and enter your user name.
-It does not need to be your real name."
-                        android:textColor="#000"
-                        android:textSize="30dp" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_centerInParent="true"
+                        android:text="You shoud register and enter a user name to play the game"
+                        android:textColor="#ffffff"
+                        android:textSize="25sp" />
                 </RelativeLayout>
 
-                <Button
+
+                <TextView
                     android:id="@+id/txtNext"
-                    android:layout_width="140dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="420dp"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
                     android:gravity="center"
                     android:text="NEXT"
-                    android:background="@drawable/rect_background_green"
-                    android:textColor="#f8e8db"
+                    android:textColor="#00BFA5"
                     android:textStyle="bold"
+                    android:layout_gravity="center_horizontal"
                     android:textSize="25sp"/>
-
                 <View
                     android:layout_width="65dp"
-                    android:layout_height="2dp"
+                    android:layout_height="3dp"
                     android:background="#00BFA5"/>
+
             </LinearLayout>
         </ScrollView>
 

@@ -17,6 +17,7 @@ public class RulesActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rules);
         getSupportActionBar().setTitle("Bingo Rules");
+        getSupportActionBar().hide();
         txtNext = (TextView)findViewById(R.id.txtNext);
         txtNext.setOnClickListener(this);
     }

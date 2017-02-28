@@ -138,12 +138,28 @@
                         </LinearLayout>
 
                     </LinearLayout>
+                    <LinearLayout
 
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/txt_MessageHint"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Message Hing"
+                            android:gravity="center"
+                            android:textSize="18sp"
+                            android:background="#ffffff"
+                            />
+                    </LinearLayout>
                     <LinearLayout
                         android:id="@+id/llChat_emoji"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:layout_marginLeft="5dp"
                         android:orientation="horizontal">
                         <LinearLayout
@@ -191,21 +207,7 @@
                                 android:background="@drawable/loosing"/>
                         </LinearLayout>
                     </LinearLayout>
-                    <LinearLayout
 
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/txt_MessageHint"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Message Hing"
-                            android:gravity="center"
-                            android:textSize="18sp"
-                            android:background="#ffffff"
-                            />
-                    </LinearLayout>
 
                 </LinearLayout>
             </ScrollView>

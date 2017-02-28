@@ -301,8 +301,8 @@ public class MainGameView implements Observer {
                 if(bingoGameModel.getWinner().equals(bingoGameModel.getMyPlayer().getPlayerID())){
                     //You win
                     llendgame.setVisibility(View.VISIBLE);
-                    ((TextView)llendgame.findViewById(R.id.txt_endgame_winner)).setText("You Win");
-                    ((TextView)llendgame.findViewById(R.id.txt_congrats_console)).setText("Well played. Congrasulations !!");
+                    ((TextView)llendgame.findViewById(R.id.txt_endgame_winner)).setText("You Won");
+                    ((TextView)llendgame.findViewById(R.id.txt_congrats_console)).setText("Well played. Congratulations !!");
                     MySingleton.getInstance(context).getImageLoader().get(AppConstants.BASE_URL+AppConstants.PLAYER_PHOTO_URL+"/"+bingoGameModel.getWinner(),
                             ImageLoader.getImageListener(((ImageView)llendgame.findViewById(R.id.imageViewPlayerImage)),
                                     R.drawable.user, R.drawable.user));
@@ -315,10 +315,10 @@ public class MainGameView implements Observer {
                     String winnerName = bingoGameModel.getPlayerNamebyID(bingoGameModel.getWinner());
                     //Toast.makeText(context,"Winner is "+winnerName,Toast.LENGTH_LONG).show();
                     llendgame.setVisibility(View.VISIBLE);
-                    ((TextView)llendgame.findViewById(R.id.txt_endgame_winner)).setText(winnerName+" Wins");
+                    ((TextView)llendgame.findViewById(R.id.txt_endgame_winner)).setText(winnerName+" Won");
                     ((TextView)llendgame.findViewById(R.id.txt_congrats_console)).setText("Better luck next time.");
                     if(bingoGameModel.getWinner().equals("--Nobody")){
-                        ((TextView)llendgame.findViewById(R.id.txt_endgame_winner)).setText(bingoGameModel.getWinner()+" Wins");
+                        ((TextView)llendgame.findViewById(R.id.txt_endgame_winner)).setText(bingoGameModel.getWinner()+" Won");
                         ((LinearLayout)llendgame.findViewById(R.id.llUserImage)).setVisibility(View.GONE);
 
                     }

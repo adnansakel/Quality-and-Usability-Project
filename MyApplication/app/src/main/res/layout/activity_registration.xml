@@ -48,6 +48,7 @@
                     android:layout_marginTop="20dp"
                     android:maxLength="30"
                     android:maxLines="1"
+                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
                     android:hint="Name *(Required)"/>
 
 

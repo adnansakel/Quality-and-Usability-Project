@@ -106,7 +106,7 @@
                         android:id="@+id/bingo_pattern"
                         android:layout_width="800dp"
                         android:layout_height="110dp"
-                        android:layout_align="center"
+                        android:layout_gravity="center"
                         android:scaleType="centerCrop"
                         android:src="@drawable/bingo_pattern"
                         android:layout_alignParentTop="true"

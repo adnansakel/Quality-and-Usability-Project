@@ -174,7 +174,7 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="visible"
@@ -187,38 +187,131 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center">
-                <TextView
+                android:gravity="center"
+                android:hight="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:hight="20dp">
+
+            <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="100dp"
                     android:layout_marginRight="100dp"
-                    android:text="Welcome to Bingo!"
-                    android:textColor="#ff7373"
-                    android:textSize="30sp"/>
-                <TextView
+                    android:layout_marginBottom="5dp"
+                    android:text="Welcome to "
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:textSize="40sp"/>
+
+                <ImageView
+                    android:id="@+id/bingo_logo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginLeft="80dp"
-                    android:layout_marginRight="80dp"
-                    android:text="@string/welcome_text"
-                    android:textColor="#333333"
-                    android:textSize="25sp"/>
+                    android:scaleType="centerCrop"
+                    android:layout_marginRight="5dp"
+                    android:src="@mipmap/bingo_logo" />
+            </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="1000dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/rect_backgroud_orange"
+                    android:orientation="vertical"
+                    android:padding="5dp"
+                    android:paddingBottom="0dp">
+
+                    <ImageView
+                        android:id="@+id/chat_field"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        android:layout_marginRight="5dp"
+                        android:src="@mipmap/bingo_field" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="180dp"
+                        android:text="Here you can play Bingo with up to four people."
+                        android:textColor="#000"
+                        android:textSize="30dp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="1000dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/rect_backgroud_orange"
+                    android:orientation="vertical"
+                    android:padding="5dp"
+                    android:paddingBottom="0dp">
+
+                    <ImageView
+                        android:id="@+id/bingo_field"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/chat_field" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="180dp"
+                        android:text="You can also chat during the game and have fun."
+                        android:textColor="#000"
+                        android:textSize="30dp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="1000dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/rect_backgroud_orange"
+                    android:orientation="vertical"
+                    android:padding="5dp"
+                    android:paddingBottom="0dp">
+
+                    <ImageView
+                        android:id="@+id/edit_field"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/edit" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginLeft="180dp"
+                        android:text="You also shoud register and enter your user name.
+It does not need to be your real name."
+                        android:textColor="#000"
+                        android:textSize="30dp" />
+                </RelativeLayout>
+
                 <TextView
                     android:id="@+id/txtNext"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="140dp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="50dp"
                     android:gravity="center"
                     android:text="NEXT"
-                    android:textColor="#00BFA5"
+                    android:background="@drawable/rect_background_green"
+                    android:textColor="#f8e8db"
                     android:textStyle="bold"
                     android:textSize="25sp"/>
                 <View
                     android:layout_width="65dp"
                     android:layout_height="2dp"
-
                     android:background="#00BFA5"/>
             </LinearLayout>
         </ScrollView>

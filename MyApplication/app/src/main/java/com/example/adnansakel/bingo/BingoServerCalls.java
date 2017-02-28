@@ -654,7 +654,7 @@ public class BingoServerCalls {
 
     }
 
-    public void sayBingo(Player myPlayer) throws JSONException{
+    public void sayBingo(final Player myPlayer) throws JSONException{
 
         progress = ProgressDialog.show(context, null,
                 null, true);
@@ -663,6 +663,7 @@ public class BingoServerCalls {
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(AppConstants.WINNER,myPlayer.getPlayerID());
+        System.out.println("Winner should be:"+myPlayer.getPlayerID());
         jsonObject.put(AppConstants.IF_BINGO,AppConstants.TRUE);
         jsonObject.put(AppConstants.GAME_ID,bingoGameModel.getMyGame().getGameID());
 
@@ -679,15 +680,20 @@ public class BingoServerCalls {
 
                 if(progress != null){progress.dismiss();}
 
+                System.out.println("Say Bingo:"+response.toString());
+
+
+
                 try {
+                    postLongestMatch(myPlayer,bingoGameModel.getmyLongestMatch());//should br removed after server issue fixed
                     if(response.get(AppConstants.WINNER).toString()!=null && !response.get(AppConstants.WINNER).toString().equals("null")){
 
-                        bingoGameModel.setWinner(response.get(AppConstants.WINNER).toString());
+                    //    bingoGameModel.setWinner(response.get(AppConstants.WINNER).toString());//commented for the time being. Untill server issue fixed
                         //Toast.makeText(context,"Congrasulations !!!"+response.get(AppConstants.WINNER).toString(),Toast.LENGTH_LONG).show();
                     }
                     else{
                         //Toast.makeText(context,"Congrasulations !!!",Toast.LENGTH_LONG).show();
-                        bingoGameModel.setWinner("");
+                     //   bingoGameModel.setWinner("");//commented for the time being. Untill server issue fixed
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

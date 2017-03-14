@@ -685,7 +685,7 @@ public class BingoServerCalls {
 
 
                 try {
-                    postLongestMatch(myPlayer,bingoGameModel.getmyLongestMatch());//should br removed after server issue fixed
+                    postLongestMatchafterSayBingo(myPlayer,bingoGameModel.getmyLongestMatch());//should br removed after server issue fixed
                     if(response.get(AppConstants.WINNER).toString()!=null && !response.get(AppConstants.WINNER).toString().equals("null")){
 
                     //    bingoGameModel.setWinner(response.get(AppConstants.WINNER).toString());//commented for the time being. Untill server issue fixed
@@ -965,6 +965,100 @@ public class BingoServerCalls {
                 System.out.println(""+statusCode);
             }
         });
+    }
+
+    public void postLongestMatchafterSayBingo(final Player myPlayer, int longestMatch)throws JSONException{
+        JSONObject jsonObject = new JSONObject();
+        //jsonObject.put(AppConstants.NAME,myPlayer.getName());
+        jsonObject.put(AppConstants.LONGEST_MATCH,myPlayer.getName()+"_"+myPlayer.getPlayerID()+","+longestMatch);
+        jsonObject.put(AppConstants.GAME_ID,bingoGameModel.getMyGame().getGameID());
+
+
+        StringEntity entity = null;
+        try {
+            entity = new StringEntity(jsonObject.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
+        BingoServerClient.post(context,AppConstants.IFBINGO_URL,entity,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    System.out.print("If bingo response:"+response.toString());
+                    JSONObject gameObj = (JSONObject) response.get(AppConstants.GAME);
+                    if(gameObj.get(AppConstants.IF_BINGO).toString().length()>0&&gameObj.get(AppConstants.IF_BINGO).toString()!=null){
+                        if(gameObj.get(AppConstants.IF_BINGO).toString().equals(AppConstants.TRUE)){
+                            AppConstants.IF_BINGO_FOUND = 1;
+                            System.out.println("Bingo found from other" + gameObj.get(AppConstants.WINNER).toString());
+                            if(gameObj.get(AppConstants.WINNER).toString()!=null){
+                                System.out.println("winner found from other");
+                                bingoGameModel.getMyGame().setWinner(gameObj.get(AppConstants.WINNER).toString());
+                                bingoGameModel.setWinner(gameObj.get(AppConstants.WINNER).toString());
+                            }
+
+                            return;
+                        }
+                    }
+                    System.out.println("!!!!!!!!!!!!!!!!!!+++++++++++++++++++++++++!!!!!!!!!!!!!!!!!!!!!");
+                    JSONArray mjsonArray = response.getJSONArray(AppConstants.MAINGAME_CHAT);
+                    System.out.println("Num of chats: "+mjsonArray.length());
+                    for(int i = 0; i < mjsonArray.length(); i++){
+                        JSONObject jChat = mjsonArray.getJSONObject(i);
+                        Chat chat = new Chat();
+                        System.out.println("Name:"+jChat.get(AppConstants.NAME)+", Message: "+jChat.get(AppConstants.MESSAGE));
+                        if(jChat.get(AppConstants.PLAYER_ID).toString()!=null&&jChat.get(AppConstants.TIME).toString()!=null){
+                            chat.setPlayerID(jChat.get(AppConstants.PLAYER_ID).toString());
+                            chat.setPlayerName(jChat.get(AppConstants.NAME).toString());
+                            chat.setTime(jChat.get(AppConstants.TIME).toString());
+                            chat.setMessage(jChat.get(AppConstants.MESSAGE).toString());
+                            System.out.println("ChatMessage: "+chat.getMessage());
+                            if(bingoGameModel.isItNewMainGameChat(chat)){
+                                System.out.println("ChatMessage new: "+chat.getMessage());
+                                bingoGameModel.addMainGameChat(chat);
+                            }
+                        }
+                    }
+                    if(gameObj.get(AppConstants.LONGEST_MATCH).toString()!=null && !gameObj.get(AppConstants.LONGEST_MATCH).toString().equalsIgnoreCase("null")){
+                        if(!gameObj.get(AppConstants.LONGEST_MATCH).toString().equals(AppConstants.LONGEST_MATCH_STR)){
+                            String [] str = gameObj.get(AppConstants.LONGEST_MATCH).toString().split(",");
+                            System.out.println("Longest match:" + gameObj.get(AppConstants.LONGEST_MATCH).toString());
+                            String[] name_playerID = str[0].split("_");
+                            String name = name_playerID[0];
+                            String playerID = name_playerID[1];
+                            String score = str[1];//.replaceAll("\\s+","");
+                            System.out.println(name+" "+"needs"+Integer.valueOf(str[1])+"more match only!");
+
+
+                            //Toast toast = Toast.makeText(context,name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!",Toast.LENGTH_SHORT);
+                            //toast.setGravity(Gravity.BOTTOM,0,0);
+                            //toast.show();
+                            //bingoGameModel.setNotificationText(name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!");
+                            Chat chat = new Chat();
+                            chat.setPlayerName("Bingo System");
+                            chat.setPlayerID("");
+                            chat.setTime("");
+                            chat.setMessage(name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!");
+                            if(!chat.getMessage().equals(prev_longest_match)&&Integer.valueOf(score)>0
+                                    && !chat.getPlayerID().equals(myPlayer.getPlayerID())){
+                                bingoGameModel.addMainGameChat(chat);
+                            }
+                            prev_longest_match = name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!";
+                        }
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response){
+                System.out.println(""+statusCode);
+            }
+        });
+
     }
 
 

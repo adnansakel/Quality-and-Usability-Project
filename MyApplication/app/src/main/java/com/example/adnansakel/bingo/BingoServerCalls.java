@@ -630,7 +630,7 @@ public class BingoServerCalls {
                             //bingoGameModel.setNotificationText(name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!");
                             Chat chat = new Chat();
                             chat.setPlayerName("Bingo System");
-                            chat.setPlayerID(""+playerID);
+                            chat.setPlayerID("");
                             chat.setTime("");
                             chat.setMessage(name+" "+"needs "+(5-Integer.valueOf(score))+" more match only!");
                             if(!chat.getMessage().equals(prev_longest_match)&&Integer.valueOf(score)>0

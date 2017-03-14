@@ -278,18 +278,23 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
             } else if (requestCode == SELECT_FILE) {
                 System.out.println("Photo selected");
-                Uri selectedImageUri = data.getData();
-                String[] projection = {MediaStore.MediaColumns.DATA};
-                CursorLoader cursorLoader = new CursorLoader(this, selectedImageUri, projection, null, null,
-                        null);
-                Cursor cursor = cursorLoader.loadInBackground();
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+                // Get the cursor
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                // Move to first row
                 cursor.moveToFirst();
-                String selectedImagePath = cursor.getString(column_index);
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String imgDecodableString = cursor.getString(columnIndex);
+                cursor.close();
+                //ImageView imgView = (ImageView) findViewById(R.id.imgView);
                 Bitmap bm;
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
-                BitmapFactory.decodeFile(selectedImagePath, options);
+                BitmapFactory.decodeFile(imgDecodableString, options);
                 final int REQUIRED_SIZE = 200;
                 int scale = 1;
                 while (options.outWidth / scale / 2 >= REQUIRED_SIZE
@@ -297,7 +302,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                     scale *= 2;
                 options.inSampleSize = scale;
                 options.inJustDecodeBounds = false;
-                bm = BitmapFactory.decodeFile(selectedImagePath, options);
+                bm = BitmapFactory.decodeFile(imgDecodableString, options);
                 //ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 //bm.compress(Bitmap.CompressFormat.JPEG, 10, bytes);
                 imgProfilePhoto.setImageBitmap(bm);
